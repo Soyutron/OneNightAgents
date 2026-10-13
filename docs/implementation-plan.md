@@ -190,5 +190,5 @@ Step 3 のトレースを読み、以下を順に観察・改善する。各項�
 
 ## 8. リポジトリに関する注記
 
-- 現状のリポジトリには本プロジェクトのコードはなく、別プロジェクト（taxforge）由来の `Makefile`・`.mcp.json`・`.gitignore`・`CLAUDE.md` の Issue トラッカー参照（`docs/agents/*.md` は存在しない）が残っている。Step 1 着手時に `Makefile` を本プロジェクト用（`uv sync` / `uv run pytest` / `play` / `bench`）に置き換え、`.gitignore` に `runs/` と `.env` を確認し、`CLAUDE.md` の参照先を整理する。`.mcp.json` の `docs-langchain` / `reference-langchain` は本プロジェクトでも有用なので残す。
+- 現状のリポジトリには本プロジェクトのコードはない。別プロジェクト（taxforge）由来の `Makefile`・`AGENTS.md`・UI 向けスキル・`.mcp.json` の UI/DB 系サーバー・`CLAUDE.md` の Issue トラッカー参照は 2026-10-14 に削除済み。Step 1 着手時に `Makefile` を本プロジェクト用（`uv sync` / `uv run pytest` / `play` / `bench`）に新規作成する。`.gitignore` には `runs/` と `.env` を設定済み。`.mcp.json` には `docs-langchain` / `reference-langchain` / `langsmith-apac` を残している。
 - コーディング規約は `CLAUDE.md` のとおり（コメント・docstring は日本語、識別子は英語、過剰設計を避ける）。

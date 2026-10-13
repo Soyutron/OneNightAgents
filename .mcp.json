@@ -11,38 +11,6 @@
     "langsmith-apac": {
       "type": "http",
       "url": "https://apac.api.smith.langchain.com/mcp"
-    },
-    "next-devtools": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "next-devtools-mcp@latest"
-      ],
-      "env": {}
-    },
-    "shadcn": {
-      "command": "npx",
-      "args": [
-        "shadcn@latest",
-        "mcp"
-      ]
-    },
-    "storybook-mcp": {
-      "type": "http",
-      "url": "http://localhost:6006/mcp"
-    },
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest"
-      ],
-      "env": {}
-    },
-    "supabase": {
-      "type": "http",
-      "url": "https://mcp.supabase.com/mcp"
     }
   }
 }
