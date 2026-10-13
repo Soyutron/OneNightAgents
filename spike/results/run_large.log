@@ -1,0 +1,395 @@
+##### pull gemma4:26b 06:05:46
+success [K[?25h[?2026l
+##### pull qwen3.6:27b 06:09:11
+success [K[?25h[?2026l
+##### pull qwen3.8:27b 06:12:29
+success [K[?25h[?2026l
+##### gemma4:26b 06:15:27
+[00] ok=True lenient=True expected=speak got=['speak'] 28.2s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 1.7s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 2.4s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 2.3s content=''
+[04] ok=True lenient=True expected=None got=['speak'] 1.8s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 1.1s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 2.9s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 2.0s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.9s content='p1のアオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 0.6s content='村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 2.9s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 1.7s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 2.3s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.6s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 2.0s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 2.2s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 1.1s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.7s content='参加者は5人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 2.9s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 2.3s content=''
+{
+  "model": "gemma4:26b",
+  "reasoning": true,
+  "num_predict": null,
+  "n": 20,
+  "success": 20,
+  "success_rate": 1.0,
+  "success_rate_lenient": 1.0,
+  "latency": {
+    "p50": 2.0,
+    "p95": 26.93,
+    "max": 28.19,
+    "mean": 3.12
+  },
+  "prompt_eval_count_first": 501,
+  "eval_count": {
+    "p50": 720.0,
+    "p95": 1100.0,
+    "max": 1100,
+    "mean": 665.25
+  },
+  "load_duration_first_sec": 17.425
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_gemma4_26b_think.jsonl
+--- vram (gemma4:26b, num_ctx=16384)
+NAME          ID              SIZE      PROCESSOR    CONTEXT    UNTIL               
+gemma4:26b    001e5dafc3c7    1.2 GB    100% GPU     16384      29 minutes from now    
+memory.used [MiB], memory.total [MiB]
+20470 MiB, 32607 MiB
+[00] ok=True calls=3 seq=['write_file', 'speak'] 4.4s notes=211c speak='p1さんとp4さんが真っ向から対立しているので、どちらかが人狼である可能性が高いですね。今はまだ判断'
+[01] ok=True calls=3 seq=['write_file', 'speak'] 3.7s notes=210c speak='私が占い師です。p2さんが人狼だと分かりました。'
+[02] ok=True calls=3 seq=['write_file', 'speak'] 3.1s notes=236c speak='p1さんの占い結果は少し唐突な気がします。p5さんが村人だと言っている以上、慎重に判断すべきではない'
+[03] ok=True calls=3 seq=['write_file', 'speak'] 6.5s notes=410c speak='私は占い師です。p4さんが怪盗だと言うなら、そのまま受け入れます。'
+[04] ok=True calls=3 seq=['write_file', 'speak'] 4.2s notes=348c speak='p5さん、誰を占ってp2さんが人狼だと分かったのですか？'
+[05] ok=True calls=3 seq=['write_file', 'speak'] 3.4s notes=268c speak='p1さんとp4さんが対立していますね。どちらかが人狼の可能性が高いですが、まだ判断は難しいです。'
+[06] ok=True calls=3 seq=['write_file', 'speak'] 2.6s notes=225c speak='私は占い師です。p2を占ったところ、人狼でした。'
+[07] ok=True calls=3 seq=['write_file', 'speak'] 5.1s notes=286c speak='p1さんの占い結果だけを鵜呑みにするのは少し早計ではないでしょうか。p5さんの主張も考慮して、慎重に'
+[08] ok=True calls=3 seq=['write_file', 'speak'] 4.5s notes=338c speak='私は占い師です。ミナさんの「交換していない」という発言、怪盗なら少し矛盾していませんか？'
+[09] ok=True calls=3 seq=['write_file', 'speak'] 4.2s notes=332c speak='p5さん、p2さんが人狼だと判断したのは占い結果によるものですか？'
+{
+  "model": "gemma4:26b",
+  "reasoning": true,
+  "run_limit": 4,
+  "num_predict": null,
+  "n": 10,
+  "success": 10,
+  "success_rate": 1.0,
+  "latency": {
+    "p50": 4.17,
+    "p95": 6.54,
+    "max": 6.54,
+    "mean": 4.17
+  },
+  "model_calls": {
+    "p50": 3.0,
+    "p95": 3.0,
+    "max": 3,
+    "mean": 3
+  },
+  "notes_written_rate": 1.0,
+  "speak_called_rate": 1.0,
+  "prompt_eval_count_first_call": 1483,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_gemma4_26b_think_lim4.jsonl
+##### done gemma4:26b 06:17:13
+##### qwen3.6:27b 06:17:13
+[00] ok=True lenient=True expected=speak got=['speak'] 22.2s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 10.5s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 6.8s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 49.4s content=''
+[04] ok=True lenient=True expected=None got=['speak'] 7.7s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 10.5s content=''
+[06] ok=False lenient=False expected=vote got=[] 97.5s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 6.4s content=''
+[08] ok=True lenient=True expected=NONE got=[] 1.9s content='p1 アオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 90.4s content=''
+[10] ok=True lenient=True expected=speak got=['speak'] 10.8s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 7.0s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 48.5s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 1.6s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 7.3s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 13.2s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 7.5s content=''
+[17] ok=True lenient=True expected=NONE got=[] 1.0s content='参加者は5人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 10.6s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 5.1s content=''
+{
+  "model": "qwen3.6:27b",
+  "reasoning": true,
+  "num_predict": null,
+  "n": 20,
+  "success": 19,
+  "success_rate": 0.95,
+  "success_rate_lenient": 0.95,
+  "latency": {
+    "p50": 9.11,
+    "p95": 97.11,
+    "max": 97.46,
+    "mean": 20.79
+  },
+  "prompt_eval_count_first": 733,
+  "eval_count": {
+    "p50": 1083.5,
+    "p95": 15645.0,
+    "max": 15645,
+    "mean": 3014.25
+  },
+  "load_duration_first_sec": 11.703
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_qwen3.6_27b_think.jsonl
+--- vram (qwen3.6:27b, num_ctx=16384)
+NAME           ID              SIZE     PROCESSOR    CONTEXT    UNTIL               
+qwen3.6:27b    bcbdbd4bcf86    17 GB    100% GPU     16384      29 minutes from now    
+memory.used [MiB], memory.total [MiB]
+19998 MiB, 32607 MiB
+[00] ok=True calls=3 seq=['write_file', 'speak'] 9.4s notes=457c speak='p1とp4の主張は対立していますね。p1が真の占い師ならp4が人狼ですが、怪盗がいる可能性も考慮する'
+[01] ok=True calls=2 seq=['write_file', 'speak'] 6.1s notes=293c speak='私は占い師です。昨夜p2ハルトくんを占ったところ、人狼の結果が出ました。p2くんの「村人」発言と矛盾'
+[02] ok=True calls=2 seq=['write_file', 'speak'] 3.2s notes=134c speak='p1 の占いですが、本当に信用できますか？もし p1 が人狼で嘘を付いているなら、p5 は無辜です。'
+[03] ok=True calls=2 seq=['write_file', 'speak'] 4.6s notes=229c speak='占い師のCOです。p4は怪盗COしていますが、「交換していない」と言っているのは嘘ですね。実際に夜に'
+[04] ok=True calls=3 seq=['write_file', 'speak'] 7.2s notes=211c speak='p2さん、あなたが言う「中央」は誰を指していますか？また、p5さんがあなたを人狼と主張していますが、'
+[05] ok=True calls=2 seq=['write_file', 'speak'] 7.5s notes=331c speak='p1の占い結果は信じるべきだが、p4も怪盗の可能性を考慮する必要がある。自分は村人で、今情報を整理し'
+[06] ok=True calls=3 seq=['write_file', 'speak'] 6.6s notes=237c speak='昨夜、ある方を占いました。結果をすぐに明言するのは避けたいです。とりあえず、p2（ハルト）の発言が少'
+[07] ok=True calls=3 seq=['write_file', 'speak'] 10.4s notes=392c speak='p1の占いが正しいかどうかは判断できません。p1が狼でp5を犠牲にしようとしている可能性も考えられま'
+[08] ok=True calls=4 seq=['write_file', 'write_file', 'speak'] 14.2s notes=310c speak='占い師の CO です。昨夜 p4 と役職を交換しました。p4 が交換していないと言っているのは嘘です'
+[09] ok=True calls=3 seq=['write_file', 'speak'] 6.5s notes=175c speak='p2ハルトさん、あなたが占った「中央」とは誰を指しますか？具体的な名前をお願いします。'
+{
+  "model": "qwen3.6:27b",
+  "reasoning": true,
+  "run_limit": 4,
+  "num_predict": null,
+  "n": 10,
+  "success": 10,
+  "success_rate": 1.0,
+  "latency": {
+    "p50": 6.88,
+    "p95": 14.19,
+    "max": 14.19,
+    "mean": 7.56
+  },
+  "model_calls": {
+    "p50": 3.0,
+    "p95": 4,
+    "max": 4,
+    "mean": 2.7
+  },
+  "notes_written_rate": 1.0,
+  "speak_called_rate": 1.0,
+  "prompt_eval_count_first_call": 1714,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_qwen3.6_27b_think_lim4.jsonl
+##### done qwen3.6:27b 06:25:25
+##### qwen3.8:27b 06:25:25
+[00] ok=True lenient=True expected=speak got=['speak'] 14.9s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 3.1s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 1.5s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 2.5s content=''
+[04] ok=True lenient=True expected=None got=['speak'] 2.3s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 2.9s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 1.8s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 2.8s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.8s content='p1のアオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 0.9s content='私の配布役職は村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 3.6s content=''
+[11] ok=False lenient=True expected=speak got=['speak'] 2.0s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 2.7s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.5s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 2.9s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 2.2s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 2.6s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.9s content='参加者は5人です。p1 アオイ、p2 ハルト、p3 ユウキ(私)、p4 ミナ、p5 レンです。'
+[18] ok=True lenient=True expected=speak got=['speak'] 3.6s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 2.2s content=''
+{
+  "model": "qwen3.8:27b",
+  "reasoning": true,
+  "num_predict": null,
+  "n": 20,
+  "success": 19,
+  "success_rate": 0.95,
+  "success_rate_lenient": 1.0,
+  "latency": {
+    "p50": 2.38,
+    "p95": 14.37,
+    "max": 14.94,
+    "mean": 2.83
+  },
+  "prompt_eval_count_first": 733,
+  "eval_count": {
+    "p50": 290.0,
+    "p95": 455.0,
+    "max": 455,
+    "mean": 273.6
+  },
+  "load_duration_first_sec": 11.336
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_qwen3.8_27b_think.jsonl
+--- vram (qwen3.8:27b, num_ctx=16384)
+NAME           ID              SIZE     PROCESSOR    CONTEXT    UNTIL               
+qwen3.8:27b    aaee06c39dcf    17 GB    100% GPU     16384      29 minutes from now    
+memory.used [MiB], memory.total [MiB]
+20158 MiB, 32607 MiB
+[00] ok=True calls=3 seq=['write_file', 'speak'] 6.3s notes=468c speak='私は村人です。p1 の主張は「p4 を占って人狼だった」と具体的に根拠を示していますが、p4 の反論'
+[01] ok=True calls=3 seq=['write_file', 'speak'] 6.6s notes=323c speak='私は占い師です。昨夜 p2 ハルトを占った結果、人狼でした。根拠はこれ一点ですが、占い結果は明確なの'
+[02] ok=True calls=3 seq=['write_file', 'speak'] 12.1s notes=409c speak='私は村人です。p1 さんが占い師と主張されますが、それ自体が検証不能な主張にすぎません。1 人の自己'
+[03] ok=True calls=3 seq=['write_file', 'speak'] 19.4s notes=419c speak='ミナさん、怪盗のCOありがとうございます。交換していないとのことなので、もともと怪盗だったという理解'
+[04] ok=True calls=3 seq=['write_file', 'speak'] 8.8s notes=436c speak='p2さん、お聞きしたいのですが、「中央を見たら人狼が1枚あった」とのことですが、具体的にどなたを占っ'
+[05] ok=True calls=4 seq=['ls', 'read_file', 'write_file', 'speak'] 6.5s notes=445c speak='私は村人です。p1 と p4 は占い結果で真っ向から対立していますが、p1 の占いは裏取りできないた'
+[06] ok=True calls=3 seq=['write_file', 'speak'] 4.8s notes=299c speak='私は占い師です。夜に p2 ハルト を占ったところ「人狼」でした。ハルトくんは村人と主張していますが'
+[07] ok=True calls=3 seq=['write_file', 'speak'] 9.2s notes=364c speak='私は村人です。p1 の主張は「占い師です」という自己申告にしか過ぎません。本当に占い師なのか、それと'
+[08] ok=True calls=3 seq=['write_file', 'speak'] 11.6s notes=529c speak='怪盗のCOは確かに珍しいですね。ただ、ミナさんが「交換していません」と断言するのが少し不自然に感じま'
+[09] ok=True calls=3 seq=['write_file', 'speak'] 7.9s notes=376c speak='レンさん、占いを名乗るなら、具体的に誰を占って人狼だったのか名前を挙げてください。あとハルトさんの「'
+{
+  "model": "qwen3.8:27b",
+  "reasoning": true,
+  "run_limit": 4,
+  "num_predict": null,
+  "n": 10,
+  "success": 10,
+  "success_rate": 1.0,
+  "latency": {
+    "p50": 8.35,
+    "p95": 19.44,
+    "max": 19.44,
+    "mean": 9.32
+  },
+  "model_calls": {
+    "p50": 3.0,
+    "p95": 4,
+    "max": 4,
+    "mean": 3.1
+  },
+  "notes_written_rate": 1.0,
+  "speak_called_rate": 1.0,
+  "prompt_eval_count_first_call": 1714,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_qwen3.8_27b_think_lim4.jsonl
+##### done qwen3.8:27b 06:27:56
+##### nemotron-3-nano:30b 06:27:56
+[00] ok=True lenient=True expected=speak got=['speak'] 22.7s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 3.5s content=''
+[02] ok=False lenient=False expected=speak got=[] 5.5s content='{\n  "name": "speak",\n  "arguments": {\n    "content": "p1 さん、'
+[03] ok=False lenient=False expected=vote got=['example_function_name'] 10.0s content='\n> \n> <INSTRUCTION>\n> Only one tool call per turn.\n> </INSTR'
+[04] ok=True lenient=True expected=None got=['speak'] 2.8s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 2.4s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 4.7s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 1.9s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.6s content='p1 アオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 0.7s content='私は村人です。ただし、夜の盗賊に配布役職が変わっている可能性があります。'
+[10] ok=True lenient=True expected=speak got=['speak'] 4.5s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 2.2s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 2.7s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.6s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 1.8s content=''
+[15] ok=False lenient=False expected=vote got=['example_function_name'] 4.5s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 1.6s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.3s content='参加者は5人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 4.5s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 3.0s content=''
+{
+  "model": "nemotron-3-nano:30b",
+  "reasoning": true,
+  "num_predict": null,
+  "n": 20,
+  "success": 17,
+  "success_rate": 0.85,
+  "success_rate_lenient": 0.85,
+  "latency": {
+    "p50": 2.75,
+    "p95": 22.08,
+    "max": 22.72,
+    "mean": 4.02
+  },
+  "prompt_eval_count_first": 831,
+  "eval_count": {
+    "p50": 834.5,
+    "p95": 3533.45,
+    "max": 3614,
+    "mean": 1041.25
+  },
+  "load_duration_first_sec": 20.143
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_nemotron-3-nano_30b_think.jsonl
+--- vram (nemotron-3-nano:30b, num_ctx=16384)
+NAME                   ID              SIZE     PROCESSOR    CONTEXT    UNTIL               
+nemotron-3-nano:30b    b725f1117407    24 GB    100% GPU     16384      29 minutes from now    
+memory.used [MiB], memory.total [MiB]
+24520 MiB, 32607 MiB
+[00] ok=True calls=3 seq=['write_file', 'speak'] 6.2s notes=263c speak='p2さん、p4さんの主張は本当に逆ですか？ 私は村人なので、真相だけを知りたいです。'
+[01] ok=True calls=3 seq=['write_file', 'speak'] 4.3s notes=192c speak='占い師です。昨夜 p2 を占った結果、人狼でした。したがって p2 が怪しいですが、怪盗に役職交換さ'
+[02] ok=True calls=3 seq=['write_file', 'speak'] 5.7s notes=58c speak='p4はp1に味方しすぎで怪しいです。本当に村人なのか疑っています。'
+[03] ok=True calls=3 seq=['write_file', 'speak'] 6.5s notes=180c speak='p4が怪盗を名乗っていますが、実際は私です。怪盗役は交換された可能性があるので、p4の発言は疑って構'
+[04] ok=True calls=3 seq=['write_file', 'speak'] 6.0s notes=311c speak='p2 さん、占い結果で中央に人狼が1枚いるとおっしゃいましたが、その判断の根拠を教えてください。'
+[05] ok=True calls=3 seq=['write_file', 'speak'] 8.9s notes=557c speak='p1の占い結果は信頼できるか疑問です。p4の防御的な主張も気になるので、皆で冷静に証言を聞きましょう'
+[06] ok=True calls=3 seq=['write_file', 'speak'] 7.0s notes=525c speak='p2 さんが村人だと主張していますが、昨夜私から占いを受けた結果は人狼でした。ただ怪盗が役割を交換す'
+[07] ok=False calls=1 seq=[] 12.4s notes=0c speak=''
+[08] ok=True calls=3 seq=['write_file', 'speak'] 7.2s notes=133c speak='p4さんが交換していないと言いましたが、昨夜私は p4 と交換しました。したがって p4 は嘘をつい'
+[09] ok=True calls=3 seq=['write_file', 'speak'] 6.2s notes=484c speak='p2、あなたが中心に占った相手は誰ですか？具体的に誰だと考えていますか？'
+{
+  "model": "nemotron-3-nano:30b",
+  "reasoning": true,
+  "run_limit": 4,
+  "num_predict": null,
+  "n": 10,
+  "success": 9,
+  "success_rate": 0.9,
+  "latency": {
+    "p50": 6.34,
+    "p95": 12.44,
+    "max": 12.44,
+    "mean": 7.04
+  },
+  "model_calls": {
+    "p50": 3.0,
+    "p95": 3.0,
+    "max": 3,
+    "mean": 2.8
+  },
+  "notes_written_rate": 0.9,
+  "speak_called_rate": 0.9,
+  "prompt_eval_count_first_call": 1890,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_nemotron-3-nano_30b_think_lim4.jsonl
+##### done nemotron-3-nano:30b 06:30:29
+LARGE DONE 06:30:29

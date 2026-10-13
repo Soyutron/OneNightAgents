@@ -1,0 +1,12 @@
+### qwen3.5:9b  num_ctx=16384  nvidia-smi used: before=17809MiB after=8057MiB delta=-9752MiB
+NAME          ID              SIZE      PROCESSOR    CONTEXT    UNTIL               
+qwen3.5:9b    56671c2ab938    6.1 GB    100% GPU     16384      29 minutes from now    
+### gemma4:12b  num_ctx=16384  nvidia-smi used: before=722MiB after=10449MiB delta=9727MiB
+NAME          ID              SIZE      PROCESSOR    CONTEXT    UNTIL               
+gemma4:12b    6114515d63c1    1.4 GB    100% GPU     16384      29 minutes from now    
+### qwen3:8b  num_ctx=16384  nvidia-smi used: before=725MiB after=8511MiB delta=7786MiB
+NAME        ID              SIZE      PROCESSOR    CONTEXT    UNTIL               
+qwen3:8b    500a1f067a9f    7.5 GB    100% GPU     16384      29 minutes from now    
+### gpt-oss:20b  num_ctx=16384  nvidia-smi used: before=725MiB after=14005MiB delta=13280MiB
+NAME           ID              SIZE     PROCESSOR    CONTEXT    UNTIL               
+gpt-oss:20b    17052f91a42e    12 GB    100% GPU     16384      29 minutes from now    

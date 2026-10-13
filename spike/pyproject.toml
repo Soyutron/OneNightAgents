@@ -1,0 +1,12 @@
+[project]
+name = "onenight-spike"
+version = "0.0.0"
+description = "Step 0 技術スパイク用の使い捨てスクリプト"
+requires-python = ">=3.12"
+dependencies = [
+    "deepagents",
+    "langchain>=1.0,<2.0",
+    "langchain-core>=1.0,<2.0",
+    "langchain-ollama",
+    "langsmith>=0.3.0",
+]

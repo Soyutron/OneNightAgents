@@ -1,0 +1,15 @@
+{"reasoning": false, "i": 0, "content": "どっちも怪しいね。どっちかが嘘ついてると思う。", "content_chars": 23, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.35, "eval_count": 16}
+{"reasoning": false, "i": 1, "content": "私が占い師。ハルトは人狼だよ。", "content_chars": 15, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.09, "eval_count": 12}
+{"reasoning": false, "i": 2, "content": "さっきのレンの言動、ちょっと怪しくなかった？ 自分の身を守るために嘘ついてるっぽくて、俺はちょっと疑ってるな。", "content_chars": 55, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.19, "eval_count": 33}
+{"reasoning": false, "i": 3, "content": "うーん、まだ誰ともはっきりは言ってないかな。今は様子を見てる感じ。", "content_chars": 33, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.15, "eval_count": 20}
+{"reasoning": false, "i": 4, "content": "私はレンに投票する。さっきからずっと挙動不審だし、怪しいよ。", "content_chars": 30, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.16, "eval_count": 21}
+{"reasoning": true, "i": 0, "content": "どっちかが嘘ついてるね。アオイの言い分、ちょっと怪しいかも。", "content_chars": 30, "has_think_tag": false, "reasoning_chars": 999, "wall_sec": 1.43, "eval_count": 384}
+{"reasoning": true, "i": 1, "content": "占い師です。ハルトさん、人狼でした。", "content_chars": 18, "has_think_tag": false, "reasoning_chars": 762, "wall_sec": 1.0, "eval_count": 281}
+{"reasoning": true, "i": 2, "content": "レン、さっきからちょっと動き怪しくない？人狼の可能性あると思うな。", "content_chars": 33, "has_think_tag": false, "reasoning_chars": 1207, "wall_sec": 1.64, "eval_count": 401}
+{"reasoning": true, "i": 3, "content": "まだ誰も絞り込めてないかな。みんなの反応をよく見てる最中だから。", "content_chars": 32, "has_think_tag": false, "reasoning_chars": 1512, "wall_sec": 1.94, "eval_count": 497}
+{"reasoning": true, "i": 4, "content": "ハルトに投票する。さっきの言動、ちょっと怪しいなと思って。", "content_chars": 29, "has_think_tag": false, "reasoning_chars": 1146, "wall_sec": 1.7, "eval_count": 432}
+{"reasoning": null, "i": 0, "content": "どっちかが嘘ついてるね。アオイの言い分、ちょっと怪しいかも。", "content_chars": 30, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.47, "eval_count": 384}
+{"reasoning": null, "i": 1, "content": "占い師です。ハルトさん、人狼でした。", "content_chars": 18, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.98, "eval_count": 281}
+{"reasoning": null, "i": 2, "content": "レン、さっきからちょっと動き怪しくない？人狼の可能性あると思うな。", "content_chars": 33, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.6, "eval_count": 401}
+{"reasoning": null, "i": 3, "content": "まだ誰も絞り込めてないかな。みんなの反応をよく見てる最中だから。", "content_chars": 32, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.89, "eval_count": 497}
+{"reasoning": null, "i": 4, "content": "ハルトに投票する。さっきの言動、ちょっと怪しいなと思って。", "content_chars": 29, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.67, "eval_count": 432}

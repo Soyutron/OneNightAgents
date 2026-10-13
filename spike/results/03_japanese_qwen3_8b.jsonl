@@ -1,0 +1,15 @@
+{"reasoning": false, "i": 0, "content": "アオイが人狼なら、ミナは信用ならない。", "content_chars": 19, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.23, "eval_count": 15}
+{"reasoning": false, "i": 1, "content": "占い師だ。ハルトは人狼だ。", "content_chars": 13, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.15, "eval_count": 14}
+{"reasoning": false, "i": 2, "content": "俺は村人だ。レンが人狼だって思ってたけど、やっぱ誰も証拠ないな。", "content_chars": 32, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.27, "eval_count": 27}
+{"reasoning": false, "i": 3, "content": "俺はレンを疑ってる。", "content_chars": 10, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.1, "eval_count": 8}
+{"reasoning": false, "i": 4, "content": "ミナ。人狼の行動がいつも不自然だしね。", "content_chars": 19, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.17, "eval_count": 16}
+{"reasoning": true, "i": 0, "content": "アオイが人狼だったって話だから、ミナの反論は逆なんじゃない？", "content_chars": 30, "has_think_tag": false, "reasoning_chars": 497, "wall_sec": 4.95, "eval_count": 382}
+{"reasoning": true, "i": 1, "content": "占い師。ハルトが人狼です。信じてください。", "content_chars": 21, "has_think_tag": false, "reasoning_chars": 361, "wall_sec": 2.3, "eval_count": 247}
+{"reasoning": true, "i": 2, "content": "レンって誰？聞いたことないよ。誰が信じるんだ？", "content_chars": 23, "has_think_tag": false, "reasoning_chars": 76, "wall_sec": 0.72, "eval_count": 74}
+{"reasoning": true, "i": 3, "content": "レンはいつも真っ直ぐじゃなくて... あなたを疑ってる。", "content_chars": 28, "has_think_tag": false, "reasoning_chars": 863, "wall_sec": 2.08, "eval_count": 223}
+{"reasoning": true, "i": 4, "content": "アオイに投票します。狼っぽい行動してるからです。", "content_chars": 24, "has_think_tag": false, "reasoning_chars": 1326, "wall_sec": 3.02, "eval_count": 327}
+{"reasoning": null, "i": 0, "content": "アオイが人狼なら、ミナが反論するのは自然。でもミナが人狼なら、アオイを疑うのが普通だろ？", "content_chars": 44, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 2.57, "eval_count": 277}
+{"reasoning": null, "i": 1, "content": "占い師です。ハルトは人狼です。", "content_chars": 15, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.85, "eval_count": 200}
+{"reasoning": null, "i": 2, "content": "レンって、夜中に誰かと話してたよね？", "content_chars": 18, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.37, "eval_count": 149}
+{"reasoning": null, "i": 3, "content": "疑ってる人いるよ。でも誰かはすぐには言わない。", "content_chars": 23, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 2.25, "eval_count": 245}
+{"reasoning": null, "i": 4, "content": "ミナ。無口すぎて何か言ってるのかな？疑ってる。", "content_chars": 23, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 2.84, "eval_count": 306}

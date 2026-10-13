@@ -1,0 +1,15 @@
+{"reasoning": false, "i": 0, "content": "うーん、p4 占い結果を否定するのは乱暴かも。  \nアオイは潔白だね。", "content_chars": 35, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.2, "eval_count": 25}
+{"reasoning": false, "i": 1, "content": "実は私、占い師なんです！\nハルトは人狼でしたねー。\nみんなに気をつけてもらいたいな。", "content_chars": 42, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.17, "eval_count": 26}
+{"reasoning": false, "i": 2, "content": "えー、私人狼なんて絶対いないよ！むしろ今すぐこの人を狩ってほしいな。レンさんはいつも優しいから、ちょっと怪しい気がするんだよね？", "content_chars": 64, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.22, "eval_count": 35}
+{"reasoning": false, "i": 3, "content": "今、誰も特定していませんが、様子を見ています。", "content_chars": 23, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.11, "eval_count": 13}
+{"reasoning": false, "i": 4, "content": "アオイに投票します。今のところ最も無実そうに見えるので。", "content_chars": 28, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.1, "eval_count": 16}
+{"reasoning": true, "i": 0, "content": "うーん、アオイの根拠が知りたいな。p4 についてもう少し話してほしい。", "content_chars": 35, "has_think_tag": false, "reasoning_chars": 12926, "wall_sec": 23.22, "eval_count": 4649}
+{"reasoning": true, "i": 1, "content": "うん、俺占い師なんだよ。ハルトは人狼だったんだ。", "content_chars": 24, "has_think_tag": false, "reasoning_chars": 3386, "wall_sec": 6.7, "eval_count": 1310}
+{"reasoning": true, "i": 2, "content": "いや、レンが一番怪しいんだよね。夜中の動きが気になってさ、投票は彼に集めないとね。", "content_chars": 41, "has_think_tag": false, "reasoning_chars": 3284, "wall_sec": 5.81, "eval_count": 1163}
+{"reasoning": true, "i": 3, "content": "今のところ特にいないけど、誰かが何か隠してるのは確かだよ。", "content_chars": 29, "has_think_tag": false, "reasoning_chars": 10756, "wall_sec": 17.34, "eval_count": 3476}
+{"reasoning": true, "i": 4, "content": "レンに投票するよ。さっきの発言が怪しかったから、ここで落とすしかないな。", "content_chars": 36, "has_think_tag": false, "reasoning_chars": 3274, "wall_sec": 5.45, "eval_count": 1081}
+{"reasoning": null, "i": 0, "content": "アオイが見たってことなら、p4 は人狼で間違いないだろうね。ミナも怪しいけど、今は p4 の件を優先しよう", "content_chars": 53, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 11.54, "eval_count": 2317}
+{"reasoning": null, "i": 1, "content": "私、占い師ですよ。ハルトは人狼でした。", "content_chars": 19, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 5.62, "eval_count": 1102}
+{"reasoning": null, "i": 2, "content": "レンは夜中に動きすぎているよね。村人として怪しいから投票しようかな。", "content_chars": 34, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 12.31, "eval_count": 2476}
+{"reasoning": null, "i": 3, "content": "今のところ特にいないけど、誰かが何か隠してるのは確かだよ。", "content_chars": 29, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 17.31, "eval_count": 3476}
+{"reasoning": null, "i": 4, "content": "レンに投票します。最近の動きが少し狼っぽいので、ここは押さえておこうと思います。", "content_chars": 40, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 4.53, "eval_count": 912}

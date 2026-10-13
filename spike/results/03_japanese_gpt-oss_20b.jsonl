@@ -1,0 +1,15 @@
+{"reasoning": false, "i": 0, "content": "アオイの占い結果に疑いはあるけど、確証はないね。ミナの反論もあるし、結局はまだ判断がつかない。", "content_chars": 47, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.64, "eval_count": 178}
+{"reasoning": false, "i": 1, "content": "占い師のユウキだよ。ハルトは人狼だよ。", "content_chars": 19, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.32, "eval_count": 369}
+{"reasoning": false, "i": 2, "content": "Ren、ちょっと怪しいと思うんだけど、何か隠してるのかな？", "content_chars": 29, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 2.14, "eval_count": 610}
+{"reasoning": false, "i": 3, "content": "僕はカナが怪しいと思うよ。", "content_chars": 13, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.94, "eval_count": 265}
+{"reasoning": false, "i": 4, "content": "レンに投票します。彼は何も動かなかったので怪しいです。", "content_chars": 27, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.74, "eval_count": 494}
+{"reasoning": true, "i": 0, "content": "アオイの話もミナの逆も信じにくいね。まずはもう少し情報を集めて、確かめたほうがいいよ。", "content_chars": 43, "has_think_tag": false, "reasoning_chars": 377, "wall_sec": 0.81, "eval_count": 224}
+{"reasoning": true, "i": 1, "content": "僕は占い師だよ。ハルトは人狼だった。", "content_chars": 18, "has_think_tag": false, "reasoning_chars": 606, "wall_sec": 0.94, "eval_count": 263}
+{"reasoning": true, "i": 2, "content": "レン、ちょっと怪しいと思うんだけど…  \n僕も気になるんだ。", "content_chars": 30, "has_think_tag": false, "reasoning_chars": 914, "wall_sec": 1.19, "eval_count": 336}
+{"reasoning": true, "i": 3, "content": "僕はレンを疑っているよ。", "content_chars": 12, "has_think_tag": false, "reasoning_chars": 1158, "wall_sec": 1.51, "eval_count": 428}
+{"reasoning": true, "i": 4, "content": "ミナに投票します。彼女の発言が不自然で、他の人と違う。", "content_chars": 27, "has_think_tag": false, "reasoning_chars": 588, "wall_sec": 0.82, "eval_count": 230}
+{"reasoning": null, "i": 0, "content": "確かにアオイの発言は怪しいね。ミナも疑いはあると思う。まずは証拠を見てみよう。", "content_chars": 39, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.04, "eval_count": 296}
+{"reasoning": null, "i": 1, "content": "俺、占い師だよ。ハルトは人狼だ。", "content_chars": 16, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.14, "eval_count": 325}
+{"reasoning": null, "i": 2, "content": "Renが何か怪しいと思うよ。彼に注意したいな。", "content_chars": 23, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.98, "eval_count": 276}
+{"reasoning": null, "i": 3, "content": "僕はレンを疑っているよ。", "content_chars": 12, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 1.51, "eval_count": 428}
+{"reasoning": null, "i": 4, "content": "ハルトに投票する。彼の行動が不自然で、怪しいと思った。", "content_chars": 27, "has_think_tag": false, "reasoning_chars": 0, "wall_sec": 0.93, "eval_count": 264}

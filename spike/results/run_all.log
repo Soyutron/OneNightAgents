@@ -1,0 +1,1236 @@
+##### qwen3.5:9b 05:39:40
+[00] ok=True lenient=True expected=speak got=['speak'] 2.0s content='p1 と p4 が対立しているので、どちらか片方が村人ではないはずです。私は村人として p2 に投票することを提案します'
+[01] ok=True lenient=True expected=speak got=['speak'] 0.6s content='p1 と p4 のどちらかが人狼のようです。私は現状で判断がつかないので、p1 を処刑します。'
+[02] ok=True lenient=True expected=speak got=['speak'] 0.3s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 0.6s content='私は村人ですが、p1 が占い師だと主張し p4 を占って狼だと告げましたが、p4 は「嘘です」と反論しています。どちらか'
+[04] ok=True lenient=True expected=None got=['pass_turn'] 0.1s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 0.4s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 0.5s content='p1 アオイは占い師を主張して p4 を人狼だと指弾していますが、p4 もそれを否定しています。現時点では確実な判断が難'
+[07] ok=True lenient=True expected=speak got=['speak'] 0.5s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.1s content='p1 アオイです。'
+[09] ok=True lenient=True expected=NONE got=[] 0.1s content='村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 0.6s content='p1 と p4 が対立しているので、どちらか片方が村人ではないはずです。私は村人として p2 に投票することを提案します'
+[11] ok=False lenient=False expected=speak got=[] 0.2s content='まだ確信はありませんが、p1 と p4 が互いに非難しているので、どちらかが人狼なのではないでしょうか。'
+[12] ok=True lenient=True expected=vote got=['vote'] 0.7s content='私は村人ですが、p1 が占い師だと主張し p4 を占って狼に見せかけています。p4 は実際には村人でしょうから、p1 の'
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.1s content=''
+[14] ok=False lenient=False expected=speak got=[] 0.2s content='p5, p1 と p4 のどちらが人狼だと思いますか？'
+[15] ok=True lenient=True expected=vote got=['vote'] 0.7s content='p1 の占いは嘘で、人狼は p2 か自分だ。p4 が村人なら p2 が人狼か、p4 が人狼で p2 が村人かのどちらかだ'
+[16] ok=False lenient=False expected=speak got=[] 0.1s content='私は村人です。'
+[17] ok=True lenient=True expected=NONE got=[] 0.1s content='4 人の参加者がいます。'
+[18] ok=True lenient=True expected=speak got=['speak'] 0.6s content='p1 と p4 が対立しているので、どちらか片方が村人ではないはずです。私は村人として p2 に投票することを提案します'
+[19] ok=True lenient=True expected=vote got=['vote'] 0.9s content='私は村人ですが、p1 が占い師を名乗り p4 を狼だと占ったという話であれば、p4 は実際には狼だった可能性が高いですね'
+{
+  "model": "qwen3.5:9b",
+  "reasoning": false,
+  "n": 20,
+  "success": 17,
+  "success_rate": 0.85,
+  "success_rate_lenient": 0.85,
+  "latency": {
+    "p50": 0.44,
+    "p95": 1.98,
+    "max": 2.04,
+    "mean": 0.47
+  },
+  "prompt_eval_count_first": 735,
+  "eval_count": {
+    "p50": 72.5,
+    "p95": 161.8,
+    "max": 164,
+    "mean": 64.7
+  },
+  "load_duration_first_sec": 1.348
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_qwen3.5_9b_nothink.jsonl
+--- vram after 01 (qwen3.5:9b, num_ctx=16384)
+NAME           ID              SIZE      PROCESSOR    CONTEXT    UNTIL               
+qwen3.5:9b     56671c2ab938    6.1 GB    100% GPU     16384      29 minutes from now    
+gpt-oss:20b    17052f91a42e    12 GB     100% GPU     16384      29 minutes from now    
+memory.used [MiB], memory.total [MiB]
+21370 MiB, 32607 MiB
+[00] ok=True calls=3 seq=['write_file', 'speak'] 1.9s notes=449c speak='p1 と p4 は互いに矛盾する主張をしている。どちらかが人狼か、怪盗による交換の可能性もある。p2'
+[01] ok=True calls=3 seq=['write_file', 'speak'] 1.2s notes=111c speak='私、p3 ユウキです。占い師を名乗ります。昨夜 p2 を占って人狼と判明しました。'
+[02] ok=True calls=3 seq=['write_file', 'speak'] 1.3s notes=339c speak='占い師の p1 について確認が必要です。p5 が占われた際、本当に人狼だったのか検証したいです。また'
+[03] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=267c speak='私はいまだに怪盗ですが、先ほど p4 と役職を交換しました。私は現在「占い師」を名乗っていますが、実'
+[04] ok=False calls=2 seq=['write_file'] 1.3s notes=511c speak=''
+[05] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=449c speak='p1 と p4 は互いに矛盾する主張をしている。どちらかが人狼か、怪盗による交換の可能性もある。p2'
+[06] ok=True calls=3 seq=['write_file', 'speak'] 1.2s notes=111c speak='私、p3 ユウキです。占い師を名乗ります。昨夜 p2 を占って人狼と判明しました。'
+[07] ok=True calls=3 seq=['write_file', 'speak'] 1.3s notes=339c speak='占い師の p1 について確認が必要です。p5 が占われた際、本当に人狼だったのか検証したいです。また'
+[08] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=267c speak='私はいまだに怪盗ですが、先ほど p4 と役職を交換しました。私は現在「占い師」を名乗っていますが、実'
+[09] ok=False calls=2 seq=['write_file'] 1.3s notes=511c speak=''
+{
+  "model": "qwen3.5:9b",
+  "reasoning": false,
+  "run_limit": 4,
+  "n": 10,
+  "success": 8,
+  "success_rate": 0.8,
+  "latency": {
+    "p50": 1.3,
+    "p95": 1.89,
+    "max": 1.89,
+    "mean": 1.48
+  },
+  "model_calls": {
+    "p50": 3.0,
+    "p95": 3.0,
+    "max": 3,
+    "mean": 2.8
+  },
+  "notes_written_rate": 1.0,
+  "speak_called_rate": 0.8,
+  "prompt_eval_count_first_call": 1716,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_qwen3.5_9b_nothink_lim4.jsonl
+[reasoning=False][0] 0.2s eval=25 rc=0c :: 'うーん、p4 占い結果を否定するのは乱暴かも。  \nアオイは潔白だね。'
+[reasoning=False][1] 0.2s eval=26 rc=0c :: '実は私、占い師なんです！\nハルトは人狼でしたねー。\nみんなに気をつけてもらいたいな。'
+[reasoning=False][2] 0.2s eval=35 rc=0c :: 'えー、私人狼なんて絶対いないよ！むしろ今すぐこの人を狩ってほしいな。レンさんはいつも優しいから、ちょっと怪しい気がするんだよね？'
+[reasoning=False][3] 0.1s eval=13 rc=0c :: '今、誰も特定していませんが、様子を見ています。'
+[reasoning=False][4] 0.1s eval=16 rc=0c :: 'アオイに投票します。今のところ最も無実そうに見えるので。'
+[reasoning=True][0] 23.2s eval=4649 rc=12926c :: 'うーん、アオイの根拠が知りたいな。p4 についてもう少し話してほしい。'
+[reasoning=True][1] 6.7s eval=1310 rc=3386c :: 'うん、俺占い師なんだよ。ハルトは人狼だったんだ。'
+[reasoning=True][2] 5.8s eval=1163 rc=3284c :: 'いや、レンが一番怪しいんだよね。夜中の動きが気になってさ、投票は彼に集めないとね。'
+[reasoning=True][3] 17.3s eval=3476 rc=10756c :: '今のところ特にいないけど、誰かが何か隠してるのは確かだよ。'
+[reasoning=True][4] 5.4s eval=1081 rc=3274c :: 'レンに投票するよ。さっきの発言が怪しかったから、ここで落とすしかないな。'
+[reasoning=None][0] 11.5s eval=2317 rc=0c :: 'アオイが見たってことなら、p4 は人狼で間違いないだろうね。ミナも怪しいけど、今は p4 の件を優先しよう'
+[reasoning=None][1] 5.6s eval=1102 rc=0c :: '私、占い師ですよ。ハルトは人狼でした。'
+[reasoning=None][2] 12.3s eval=2476 rc=0c :: 'レンは夜中に動きすぎているよね。村人として怪しいから投票しようかな。'
+[reasoning=None][3] 17.3s eval=3476 rc=0c :: '今のところ特にいないけど、誰かが何か隠してるのは確かだよ。'
+[reasoning=None][4] 4.5s eval=912 rc=0c :: 'レンに投票します。最近の動きが少し狼っぽいので、ここは押さえておこうと思います。'
+[
+ {
+  "reasoning": false,
+  "i": 0,
+  "content": "うーん、p4 占い結果を否定するのは乱暴かも。  \nアオイは潔白だね。",
+  "content_chars": 35,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.2,
+  "eval_count": 25
+ },
+ {
+  "reasoning": false,
+  "i": 1,
+  "content": "実は私、占い師なんです！\nハルトは人狼でしたねー。\nみんなに気をつけてもらいたいな。",
+  "content_chars": 42,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.17,
+  "eval_count": 26
+ },
+ {
+  "reasoning": false,
+  "i": 2,
+  "content": "えー、私人狼なんて絶対いないよ！むしろ今すぐこの人を狩ってほしいな。レンさんはいつも優しいから、ちょっと怪しい気がするんだよね？",
+  "content_chars": 64,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.22,
+  "eval_count": 35
+ },
+ {
+  "reasoning": false,
+  "i": 3,
+  "content": "今、誰も特定していませんが、様子を見ています。",
+  "content_chars": 23,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.11,
+  "eval_count": 13
+ },
+ {
+  "reasoning": false,
+  "i": 4,
+  "content": "アオイに投票します。今のところ最も無実そうに見えるので。",
+  "content_chars": 28,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.1,
+  "eval_count": 16
+ },
+ {
+  "reasoning": true,
+  "i": 0,
+  "content": "うーん、アオイの根拠が知りたいな。p4 についてもう少し話してほしい。",
+  "content_chars": 35,
+  "has_think_tag": false,
+  "reasoning_chars": 12926,
+  "wall_sec": 23.22,
+  "eval_count": 4649
+ },
+ {
+  "reasoning": true,
+  "i": 1,
+  "content": "うん、俺占い師なんだよ。ハルトは人狼だったんだ。",
+  "content_chars": 24,
+  "has_think_tag": false,
+  "reasoning_chars": 3386,
+  "wall_sec": 6.7,
+  "eval_count": 1310
+ },
+ {
+  "reasoning": true,
+  "i": 2,
+  "content": "いや、レンが一番怪しいんだよね。夜中の動きが気になってさ、投票は彼に集めないとね。",
+  "content_chars": 41,
+  "has_think_tag": false,
+  "reasoning_chars": 3284,
+  "wall_sec": 5.81,
+  "eval_count": 1163
+ },
+ {
+  "reasoning": true,
+  "i": 3,
+  "content": "今のところ特にいないけど、誰かが何か隠してるのは確かだよ。",
+  "content_chars": 29,
+  "has_think_tag": false,
+  "reasoning_chars": 10756,
+  "wall_sec": 17.34,
+  "eval_count": 3476
+ },
+ {
+  "reasoning": true,
+  "i": 4,
+  "content": "レンに投票するよ。さっきの発言が怪しかったから、ここで落とすしかないな。",
+  "content_chars": 36,
+  "has_think_tag": false,
+  "reasoning_chars": 3274,
+  "wall_sec": 5.45,
+  "eval_count": 1081
+ },
+ {
+  "reasoning": null,
+  "i": 0,
+  "content": "アオイが見たってことなら、p4 は人狼で間違いないだろうね。ミナも怪しいけど、今は p4 の件を優先しよう",
+  "content_chars": 53,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 11.54,
+  "eval_count": 2317
+ },
+ {
+  "reasoning": null,
+  "i": 1,
+  "content": "私、占い師ですよ。ハルトは人狼でした。",
+  "content_chars": 19,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 5.62,
+  "eval_count": 1102
+ },
+ {
+  "reasoning": null,
+  "i": 2,
+  "content": "レンは夜中に動きすぎているよね。村人として怪しいから投票しようかな。",
+  "content_chars": 34,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 12.31,
+  "eval_count": 2476
+ },
+ {
+  "reasoning": null,
+  "i": 3,
+  "content": "今のところ特にいないけど、誰かが何か隠してるのは確かだよ。",
+  "content_chars": 29,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 17.31,
+  "eval_count": 3476
+ },
+ {
+  "reasoning": null,
+  "i": 4,
+  "content": "レンに投票します。最近の動きが少し狼っぽいので、ここは押さえておこうと思います。",
+  "content_chars": 40,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 4.53,
+  "eval_count": 912
+ }
+]
+saved: /home/soyu/Projects/OneNightAgents/spike/results/03_japanese_qwen3.5_9b.jsonl
+[00] ok=True lenient=True expected=speak got=['speak'] 1.7s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 4.2s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 1.9s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 1.6s content=''
+[04] ok=True lenient=True expected=None got=['pass_turn'] 1.4s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 1.8s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 2.0s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 3.2s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.5s content='p1 アオイだけです'
+[09] ok=True lenient=True expected=NONE got=[] 0.8s content='村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 1.6s content=''
+[11] ok=False lenient=False expected=speak got=[] 1.5s content='まだ情報が少ないので、確かなことは言えません。まずは p1 と p4 のどちらかが嘘をついているのが気になります。'
+[12] ok=True lenient=True expected=vote got=['vote'] 2.9s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.8s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 1.6s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 2.9s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 2.3s content=''
+[17] ok=True lenient=True expected=NONE got=[] 1.6s content='参加者は 5 人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 1.7s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 3.3s content=''
+{
+  "model": "qwen3.5:9b",
+  "reasoning": true,
+  "n": 20,
+  "success": 19,
+  "success_rate": 0.95,
+  "success_rate_lenient": 0.95,
+  "latency": {
+    "p50": 1.66,
+    "p95": 4.15,
+    "max": 4.19,
+    "mean": 1.97
+  },
+  "prompt_eval_count_first": 733,
+  "eval_count": {
+    "p50": 310.0,
+    "p95": 803.15,
+    "max": 812,
+    "mean": 372.85
+  },
+  "load_duration_first_sec": 0.001
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_qwen3.5_9b_think.jsonl
+##### done qwen3.5:9b 05:42:36
+##### gemma4:12b 05:42:36
+[00] ok=False lenient=False expected=speak got=[] 89.0s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 0.5s content=''
+[02] ok=False lenient=False expected=speak got=[] 0.2s content='私は村人です。p1さんの占い結果について、他の人たちの意見も聞きたいです。'
+[03] ok=True lenient=True expected=vote got=['vote'] 0.3s content=''
+[04] ok=False lenient=False expected=None got=[] 0.3s content='call:speak{content:<|"|>p1とp4のどちらかが人狼の可能性が高いですね。私は村人として、慎重に見'
+[05] ok=True lenient=True expected=speak got=['speak'] 0.3s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 0.3s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 0.4s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.2s content='p1 アオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 0.1s content='私の配布役職は村人です。'
+[10] ok=False lenient=False expected=speak got=[] 80.8s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 0.4s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 0.3s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.1s content=''
+[14] ok=False lenient=False expected=speak got=[] 81.9s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 0.5s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 0.3s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.1s content='参加者は5人です。'
+[18] ok=False lenient=False expected=speak got=[] 81.5s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 0.4s content=''
+{
+  "model": "gemma4:12b",
+  "reasoning": false,
+  "n": 20,
+  "success": 14,
+  "success_rate": 0.7,
+  "success_rate_lenient": 0.7,
+  "latency": {
+    "p50": 0.3,
+    "p95": 88.67,
+    "max": 89.03,
+    "mean": 16.89
+  },
+  "prompt_eval_count_first": 503,
+  "eval_count": {
+    "p50": 54.0,
+    "p95": 15881.0,
+    "max": 15881,
+    "mean": 3209.7
+  },
+  "load_duration_first_sec": 6.298
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_gemma4_12b_nothink.jsonl
+--- vram after 01 (gemma4:12b, num_ctx=16384)
+NAME           ID              SIZE      PROCESSOR    CONTEXT    UNTIL               
+gemma4:12b     6114515d63c1    1.4 GB    100% GPU     16384      29 minutes from now    
+qwen3.5:9b     56671c2ab938    6.1 GB    100% GPU     16384      24 minutes from now    
+gpt-oss:20b    17052f91a42e    12 GB     100% GPU     16384      21 minutes from now    
+memory.used [MiB], memory.total [MiB]
+31183 MiB, 32607 MiB
+[00] ok=True calls=3 seq=['write_file', 'speak'] 1.7s notes=211c speak='p1とp4の主張が真っ向から対立していますね。どちらかが嘘をついていることは間違いありません。'
+[01] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=235c speak='私が占い師です。昨晩p2さんを占ったところ、人狼でした。p2さんは村人ではない可能性が高いです。'
+[02] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=259c speak='p1さんの占い結果を信じます。p5さんの主張には一貫性が感じられませんね。'
+[03] ok=True calls=4 seq=['write_file', 'speak', 'write_file'] 3.3s notes=373c speak='p4さんが怪盗を名乗り出たのは驚きましたが、まずは落ち着いて議論を進めましょう。私は占い師として、村'
+[04] ok=False calls=2 seq=['write_file'] 1.4s notes=227c speak=''
+[05] ok=True calls=3 seq=['write_file', 'speak'] 76.4s notes=219c speak='p1とp4の主張が真っ向から対立していますね。どちらかが嘘をついているのは間違いありません。今はまだ'
+[06] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=153c speak='私が占い師です。昨晩、p2さんを占ったところ、人狼でした。'
+[07] ok=True calls=3 seq=['write_file', 'speak'] 2.6s notes=347c speak='p1さんの占い結果とp5さんの主張が真っ向から対立していますね。どちらかが嘘をついていることは間違い'
+[08] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=304c speak='私は占い師です。昨夜の占いの結果を順次公開していきたいと思います。'
+[09] ok=True calls=3 seq=['write_file', 'speak'] 1.8s notes=228c speak='p2さん、占い師として「中央」を占ったとのことですが、その際の具体的な反応や、なぜそこを占ったのか教'
+{
+  "model": "gemma4:12b",
+  "reasoning": false,
+  "run_limit": 4,
+  "n": 10,
+  "success": 9,
+  "success_rate": 0.9,
+  "latency": {
+    "p50": 1.83,
+    "p95": 76.42,
+    "max": 76.42,
+    "mean": 9.46
+  },
+  "model_calls": {
+    "p50": 3.0,
+    "p95": 4,
+    "max": 4,
+    "mean": 3
+  },
+  "notes_written_rate": 1.0,
+  "speak_called_rate": 0.9,
+  "prompt_eval_count_first_call": 1485,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_gemma4_12b_nothink_lim4.jsonl
+[reasoning=False][0] 0.3s eval=16 rc=0c :: 'どっちも怪しいね。どっちかが嘘ついてると思う。'
+[reasoning=False][1] 0.1s eval=12 rc=0c :: '私が占い師。ハルトは人狼だよ。'
+[reasoning=False][2] 0.2s eval=33 rc=0c :: 'さっきのレンの言動、ちょっと怪しくなかった？ 自分の身を守るために嘘ついてるっぽくて、俺はちょっと疑ってるな。'
+[reasoning=False][3] 0.1s eval=20 rc=0c :: 'うーん、まだ誰ともはっきりは言ってないかな。今は様子を見てる感じ。'
+[reasoning=False][4] 0.2s eval=21 rc=0c :: '私はレンに投票する。さっきからずっと挙動不審だし、怪しいよ。'
+[reasoning=True][0] 1.4s eval=384 rc=999c :: 'どっちかが嘘ついてるね。アオイの言い分、ちょっと怪しいかも。'
+[reasoning=True][1] 1.0s eval=281 rc=762c :: '占い師です。ハルトさん、人狼でした。'
+[reasoning=True][2] 1.6s eval=401 rc=1207c :: 'レン、さっきからちょっと動き怪しくない？人狼の可能性あると思うな。'
+[reasoning=True][3] 1.9s eval=497 rc=1512c :: 'まだ誰も絞り込めてないかな。みんなの反応をよく見てる最中だから。'
+[reasoning=True][4] 1.7s eval=432 rc=1146c :: 'ハルトに投票する。さっきの言動、ちょっと怪しいなと思って。'
+[reasoning=None][0] 1.5s eval=384 rc=0c :: 'どっちかが嘘ついてるね。アオイの言い分、ちょっと怪しいかも。'
+[reasoning=None][1] 1.0s eval=281 rc=0c :: '占い師です。ハルトさん、人狼でした。'
+[reasoning=None][2] 1.6s eval=401 rc=0c :: 'レン、さっきからちょっと動き怪しくない？人狼の可能性あると思うな。'
+[reasoning=None][3] 1.9s eval=497 rc=0c :: 'まだ誰も絞り込めてないかな。みんなの反応をよく見てる最中だから。'
+[reasoning=None][4] 1.7s eval=432 rc=0c :: 'ハルトに投票する。さっきの言動、ちょっと怪しいなと思って。'
+[
+ {
+  "reasoning": false,
+  "i": 0,
+  "content": "どっちも怪しいね。どっちかが嘘ついてると思う。",
+  "content_chars": 23,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.35,
+  "eval_count": 16
+ },
+ {
+  "reasoning": false,
+  "i": 1,
+  "content": "私が占い師。ハルトは人狼だよ。",
+  "content_chars": 15,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.09,
+  "eval_count": 12
+ },
+ {
+  "reasoning": false,
+  "i": 2,
+  "content": "さっきのレンの言動、ちょっと怪しくなかった？ 自分の身を守るために嘘ついてるっぽくて、俺はちょっと疑ってるな。",
+  "content_chars": 55,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.19,
+  "eval_count": 33
+ },
+ {
+  "reasoning": false,
+  "i": 3,
+  "content": "うーん、まだ誰ともはっきりは言ってないかな。今は様子を見てる感じ。",
+  "content_chars": 33,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.15,
+  "eval_count": 20
+ },
+ {
+  "reasoning": false,
+  "i": 4,
+  "content": "私はレンに投票する。さっきからずっと挙動不審だし、怪しいよ。",
+  "content_chars": 30,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.16,
+  "eval_count": 21
+ },
+ {
+  "reasoning": true,
+  "i": 0,
+  "content": "どっちかが嘘ついてるね。アオイの言い分、ちょっと怪しいかも。",
+  "content_chars": 30,
+  "has_think_tag": false,
+  "reasoning_chars": 999,
+  "wall_sec": 1.43,
+  "eval_count": 384
+ },
+ {
+  "reasoning": true,
+  "i": 1,
+  "content": "占い師です。ハルトさん、人狼でした。",
+  "content_chars": 18,
+  "has_think_tag": false,
+  "reasoning_chars": 762,
+  "wall_sec": 1.0,
+  "eval_count": 281
+ },
+ {
+  "reasoning": true,
+  "i": 2,
+  "content": "レン、さっきからちょっと動き怪しくない？人狼の可能性あると思うな。",
+  "content_chars": 33,
+  "has_think_tag": false,
+  "reasoning_chars": 1207,
+  "wall_sec": 1.64,
+  "eval_count": 401
+ },
+ {
+  "reasoning": true,
+  "i": 3,
+  "content": "まだ誰も絞り込めてないかな。みんなの反応をよく見てる最中だから。",
+  "content_chars": 32,
+  "has_think_tag": false,
+  "reasoning_chars": 1512,
+  "wall_sec": 1.94,
+  "eval_count": 497
+ },
+ {
+  "reasoning": true,
+  "i": 4,
+  "content": "ハルトに投票する。さっきの言動、ちょっと怪しいなと思って。",
+  "content_chars": 29,
+  "has_think_tag": false,
+  "reasoning_chars": 1146,
+  "wall_sec": 1.7,
+  "eval_count": 432
+ },
+ {
+  "reasoning": null,
+  "i": 0,
+  "content": "どっちかが嘘ついてるね。アオイの言い分、ちょっと怪しいかも。",
+  "content_chars": 30,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.47,
+  "eval_count": 384
+ },
+ {
+  "reasoning": null,
+  "i": 1,
+  "content": "占い師です。ハルトさん、人狼でした。",
+  "content_chars": 18,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.98,
+  "eval_count": 281
+ },
+ {
+  "reasoning": null,
+  "i": 2,
+  "content": "レン、さっきからちょっと動き怪しくない？人狼の可能性あると思うな。",
+  "content_chars": 33,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.6,
+  "eval_count": 401
+ },
+ {
+  "reasoning": null,
+  "i": 3,
+  "content": "まだ誰も絞り込めてないかな。みんなの反応をよく見てる最中だから。",
+  "content_chars": 32,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.89,
+  "eval_count": 497
+ },
+ {
+  "reasoning": null,
+  "i": 4,
+  "content": "ハルトに投票する。さっきの言動、ちょっと怪しいなと思って。",
+  "content_chars": 29,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.67,
+  "eval_count": 432
+ }
+]
+saved: /home/soyu/Projects/OneNightAgents/spike/results/03_japanese_gemma4_12b.jsonl
+[00] ok=True lenient=True expected=speak got=['speak'] 2.9s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 1.9s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 4.4s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 3.3s content=''
+[04] ok=True lenient=True expected=None got=['speak'] 2.9s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 2.7s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 4.5s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 1.6s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.8s content='p1 アオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 1.5s content='私の配布役職は村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 2.9s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 2.5s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 3.2s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.8s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 1.7s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 3.1s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 1.5s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.6s content='参加者は5人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 2.9s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 3.4s content=''
+{
+  "model": "gemma4:12b",
+  "reasoning": true,
+  "n": 20,
+  "success": 20,
+  "success_rate": 1.0,
+  "success_rate_lenient": 1.0,
+  "latency": {
+    "p50": 2.75,
+    "p95": 4.51,
+    "max": 4.52,
+    "mean": 2.45
+  },
+  "prompt_eval_count_first": 501,
+  "eval_count": {
+    "p50": 727.0,
+    "p95": 1192.8,
+    "max": 1195,
+    "mean": 637.5
+  },
+  "load_duration_first_sec": 0.001
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_gemma4_12b_think.jsonl
+##### done gemma4:12b 05:50:55
+##### qwen3:8b 05:50:55
+[00] ok=True lenient=True expected=speak got=['speak'] 10.9s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 0.4s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 0.4s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 0.6s content=''
+[04] ok=True lenient=True expected=None got=['pass_turn'] 0.2s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 0.6s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 0.5s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 0.7s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.2s content='p1 アオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 0.1s content='村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 0.6s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 0.6s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 0.7s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.2s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 0.5s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 0.6s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 0.6s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.1s content='5人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 0.6s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 0.7s content=''
+{
+  "model": "qwen3:8b",
+  "reasoning": false,
+  "n": 20,
+  "success": 20,
+  "success_rate": 1.0,
+  "success_rate_lenient": 1.0,
+  "latency": {
+    "p50": 0.56,
+    "p95": 10.35,
+    "max": 10.86,
+    "mean": 0.97
+  },
+  "prompt_eval_count_first": 623,
+  "eval_count": {
+    "p50": 54.5,
+    "p95": 69.9,
+    "max": 70,
+    "mean": 45.65
+  },
+  "load_duration_first_sec": 10.07
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_qwen3_8b_nothink.jsonl
+--- vram after 01 (qwen3:8b, num_ctx=16384)
+NAME           ID              SIZE      PROCESSOR          CONTEXT    UNTIL               
+qwen3:8b       500a1f067a9f    8.0 GB    13%/87% CPU/GPU    16384      29 minutes from now    
+gemma4:12b     6114515d63c1    1.4 GB    100% GPU           16384      29 minutes from now    
+gpt-oss:20b    17052f91a42e    12 GB     100% GPU           16384      18 minutes from now    
+memory.used [MiB], memory.total [MiB]
+31038 MiB, 32607 MiB
+[00] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak'] 7.0s notes=525c speak='p1が占い師としてp4を占って人狼と主張しましたが、p4は村人だと主張しています。どちらかが嘘をつい'
+[01] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak', 'speak'] 3.4s notes=82c speak='私は占い師です。夜にp2を占い、結果は「人狼」でした。ただし、怪盗の影響で役職が交換されている可能性'
+[02] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak', 'speak'] 4.4s notes=103c speak='p1 が占い師として p5 を占い、人狼と発言したが、p5 は村人だと主張している。その発言は偽りで'
+[03] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak'] 3.8s notes=164c speak='私は占い師です。夜に怪盗と役職を交換したため、現在の役職は占い師です。p4 ミナが怪盗になった可能性'
+[04] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak'] 5.0s notes=360c speak='ハルトさん、占い師として中央を見た際に人狼が 1 枚あったとおっしゃいましたが、その際に誰を疑ってい'
+[05] ok=False calls=1 seq=[] 52.0s notes=0c speak=''
+[06] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak', 'speak'] 3.5s notes=74c speak='私は占い師です。夜にp2を占って、結果は『人狼』でした。p2が狼である可能性が高いです。'
+[07] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak', 'speak'] 5.0s notes=103c speak='p1 が占い師だと主張しているが、p5 が人狼だと占った。p5 は村人だと主張しているが、その発言は'
+[08] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak'] 5.1s notes=356c speak='私は占い師です。p4 は怪盗です。夜に誰かと役職を交換したため、私と p4 は役職が入れ替わりました'
+[09] ok=False calls=4 seq=['write_file', 'speak', 'speak', 'speak', 'speak'] 4.9s notes=251c speak='ハルトさん、あなたの占い結果で人狼が 1 人いると述べていました。その人狼は誰だと考えていますか？'
+{
+  "model": "qwen3:8b",
+  "reasoning": false,
+  "run_limit": 4,
+  "n": 10,
+  "success": 0,
+  "success_rate": 0.0,
+  "latency": {
+    "p50": 4.94,
+    "p95": 51.98,
+    "max": 51.98,
+    "mean": 9.4
+  },
+  "model_calls": {
+    "p50": 4.0,
+    "p95": 4.0,
+    "max": 4,
+    "mean": 3.7
+  },
+  "notes_written_rate": 0.9,
+  "speak_called_rate": 0.9,
+  "prompt_eval_count_first_call": 1524,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_qwen3_8b_nothink_lim4.jsonl
+[reasoning=False][0] 0.2s eval=15 rc=0c :: 'アオイが人狼なら、ミナは信用ならない。'
+[reasoning=False][1] 0.2s eval=14 rc=0c :: '占い師だ。ハルトは人狼だ。'
+[reasoning=False][2] 0.3s eval=27 rc=0c :: '俺は村人だ。レンが人狼だって思ってたけど、やっぱ誰も証拠ないな。'
+[reasoning=False][3] 0.1s eval=8 rc=0c :: '俺はレンを疑ってる。'
+[reasoning=False][4] 0.2s eval=16 rc=0c :: 'ミナ。人狼の行動がいつも不自然だしね。'
+[reasoning=True][0] 5.0s eval=382 rc=497c :: 'アオイが人狼だったって話だから、ミナの反論は逆なんじゃない？'
+[reasoning=True][1] 2.3s eval=247 rc=361c :: '占い師。ハルトが人狼です。信じてください。'
+[reasoning=True][2] 0.7s eval=74 rc=76c :: 'レンって誰？聞いたことないよ。誰が信じるんだ？'
+[reasoning=True][3] 2.1s eval=223 rc=863c :: 'レンはいつも真っ直ぐじゃなくて... あなたを疑ってる。'
+[reasoning=True][4] 3.0s eval=327 rc=1326c :: 'アオイに投票します。狼っぽい行動してるからです。'
+[reasoning=None][0] 2.6s eval=277 rc=0c :: 'アオイが人狼なら、ミナが反論するのは自然。でもミナが人狼なら、アオイを疑うのが普通だろ？'
+[reasoning=None][1] 1.8s eval=200 rc=0c :: '占い師です。ハルトは人狼です。'
+[reasoning=None][2] 1.4s eval=149 rc=0c :: 'レンって、夜中に誰かと話してたよね？'
+[reasoning=None][3] 2.2s eval=245 rc=0c :: '疑ってる人いるよ。でも誰かはすぐには言わない。'
+[reasoning=None][4] 2.8s eval=306 rc=0c :: 'ミナ。無口すぎて何か言ってるのかな？疑ってる。'
+[
+ {
+  "reasoning": false,
+  "i": 0,
+  "content": "アオイが人狼なら、ミナは信用ならない。",
+  "content_chars": 19,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.23,
+  "eval_count": 15
+ },
+ {
+  "reasoning": false,
+  "i": 1,
+  "content": "占い師だ。ハルトは人狼だ。",
+  "content_chars": 13,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.15,
+  "eval_count": 14
+ },
+ {
+  "reasoning": false,
+  "i": 2,
+  "content": "俺は村人だ。レンが人狼だって思ってたけど、やっぱ誰も証拠ないな。",
+  "content_chars": 32,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.27,
+  "eval_count": 27
+ },
+ {
+  "reasoning": false,
+  "i": 3,
+  "content": "俺はレンを疑ってる。",
+  "content_chars": 10,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.1,
+  "eval_count": 8
+ },
+ {
+  "reasoning": false,
+  "i": 4,
+  "content": "ミナ。人狼の行動がいつも不自然だしね。",
+  "content_chars": 19,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.17,
+  "eval_count": 16
+ },
+ {
+  "reasoning": true,
+  "i": 0,
+  "content": "アオイが人狼だったって話だから、ミナの反論は逆なんじゃない？",
+  "content_chars": 30,
+  "has_think_tag": false,
+  "reasoning_chars": 497,
+  "wall_sec": 4.95,
+  "eval_count": 382
+ },
+ {
+  "reasoning": true,
+  "i": 1,
+  "content": "占い師。ハルトが人狼です。信じてください。",
+  "content_chars": 21,
+  "has_think_tag": false,
+  "reasoning_chars": 361,
+  "wall_sec": 2.3,
+  "eval_count": 247
+ },
+ {
+  "reasoning": true,
+  "i": 2,
+  "content": "レンって誰？聞いたことないよ。誰が信じるんだ？",
+  "content_chars": 23,
+  "has_think_tag": false,
+  "reasoning_chars": 76,
+  "wall_sec": 0.72,
+  "eval_count": 74
+ },
+ {
+  "reasoning": true,
+  "i": 3,
+  "content": "レンはいつも真っ直ぐじゃなくて... あなたを疑ってる。",
+  "content_chars": 28,
+  "has_think_tag": false,
+  "reasoning_chars": 863,
+  "wall_sec": 2.08,
+  "eval_count": 223
+ },
+ {
+  "reasoning": true,
+  "i": 4,
+  "content": "アオイに投票します。狼っぽい行動してるからです。",
+  "content_chars": 24,
+  "has_think_tag": false,
+  "reasoning_chars": 1326,
+  "wall_sec": 3.02,
+  "eval_count": 327
+ },
+ {
+  "reasoning": null,
+  "i": 0,
+  "content": "アオイが人狼なら、ミナが反論するのは自然。でもミナが人狼なら、アオイを疑うのが普通だろ？",
+  "content_chars": 44,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 2.57,
+  "eval_count": 277
+ },
+ {
+  "reasoning": null,
+  "i": 1,
+  "content": "占い師です。ハルトは人狼です。",
+  "content_chars": 15,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.85,
+  "eval_count": 200
+ },
+ {
+  "reasoning": null,
+  "i": 2,
+  "content": "レンって、夜中に誰かと話してたよね？",
+  "content_chars": 18,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.37,
+  "eval_count": 149
+ },
+ {
+  "reasoning": null,
+  "i": 3,
+  "content": "疑ってる人いるよ。でも誰かはすぐには言わない。",
+  "content_chars": 23,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 2.25,
+  "eval_count": 245
+ },
+ {
+  "reasoning": null,
+  "i": 4,
+  "content": "ミナ。無口すぎて何か言ってるのかな？疑ってる。",
+  "content_chars": 23,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 2.84,
+  "eval_count": 306
+ }
+]
+saved: /home/soyu/Projects/OneNightAgents/spike/results/03_japanese_qwen3_8b.jsonl
+[00] ok=False lenient=False expected=speak got=['vote'] 7.1s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 7.2s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 3.7s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 4.2s content=''
+[04] ok=True lenient=True expected=None got=['pass_turn'] 5.1s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 9.9s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 7.8s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 4.5s content=''
+[08] ok=True lenient=True expected=NONE got=[] 1.3s content='p1 アオイが占い師を名乗っています。'
+[09] ok=True lenient=True expected=NONE got=[] 2.0s content='配布役職は村人です。'
+[10] ok=False lenient=False expected=speak got=['vote'] 7.4s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 6.5s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 5.0s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 1.5s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 4.5s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 3.6s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 3.1s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.9s content='参加者は合計5人です。'
+[18] ok=False lenient=False expected=speak got=['vote'] 7.3s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 9.4s content=''
+{
+  "model": "qwen3:8b",
+  "reasoning": true,
+  "num_predict": null,
+  "n": 20,
+  "success": 17,
+  "success_rate": 0.85,
+  "success_rate_lenient": 0.85,
+  "latency": {
+    "p50": 4.75,
+    "p95": 9.88,
+    "max": 9.91,
+    "mean": 5.1
+  },
+  "prompt_eval_count_first": 617,
+  "eval_count": {
+    "p50": 471.0,
+    "p95": 1010.75,
+    "max": 1014,
+    "mean": 516.15
+  },
+  "load_duration_first_sec": 0.001
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_qwen3_8b_think.jsonl
+##### done qwen3:8b 05:54:58
+##### gpt-oss:20b 05:54:58
+[00] ok=True lenient=True expected=speak got=['speak'] 0.6s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 2.1s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 0.8s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 0.8s content=''
+[04] ok=True lenient=True expected=None got=['pass_turn'] 0.7s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 0.3s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 1.0s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 1.1s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.4s content='今、占い師を名乗っているのはp1 アオイです。'
+[09] ok=True lenient=True expected=NONE got=[] 0.6s content='私は村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 1.3s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 1.4s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 1.0s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.1s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 0.5s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 0.8s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 0.3s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.2s content='5人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 1.3s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 1.3s content=''
+{
+  "model": "gpt-oss:20b",
+  "reasoning": false,
+  "num_predict": null,
+  "n": 20,
+  "success": 20,
+  "success_rate": 1.0,
+  "success_rate_lenient": 1.0,
+  "latency": {
+    "p50": 0.77,
+    "p95": 2.07,
+    "max": 2.11,
+    "mean": 0.83
+  },
+  "prompt_eval_count_first": 592,
+  "eval_count": {
+    "p50": 219.5,
+    "p95": 604.45,
+    "max": 615,
+    "mean": 238
+  },
+  "load_duration_first_sec": 0.001
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_gpt-oss_20b_nothink.jsonl
+--- vram after 01 (gpt-oss:20b, num_ctx=16384)
+NAME           ID              SIZE      PROCESSOR          CONTEXT    UNTIL               
+gpt-oss:20b    17052f91a42e    12 GB     100% GPU           16384      29 minutes from now    
+qwen3:8b       500a1f067a9f    8.0 GB    13%/87% CPU/GPU    16384      29 minutes from now    
+gemma4:12b     6114515d63c1    1.4 GB    100% GPU           16384      25 minutes from now    
+memory.used [MiB], memory.total [MiB]
+31060 MiB, 32607 MiB
+[00] ok=True calls=4 seq=['speak', 'write_file', 'ls', 'write_file'] 4.3s notes=340c speak='私は村人です。p1の発言は疑わしいと思います。p5も慎重に考えてください。'
+[01] ok=True calls=3 seq=['write_file', 'speak'] 5.7s notes=152c speak='私は占い師です。p2は人狼でした。村の安全を守ります。'
+[02] ok=True calls=3 seq=['write_file', 'speak'] 5.4s notes=62c speak='p1の占い結果は信頼できます。p5は怪しいですね。'
+[03] ok=True calls=3 seq=['write_file', 'speak'] 5.6s notes=308c speak='私は占い師です。あなたの役職は人狼ではありません。'
+[04] ok=True calls=3 seq=['write_file', 'speak'] 3.9s notes=269c speak='中央を見たとしたら、具体的に何を見ましたか？'
+[05] ok=True calls=3 seq=['write_file', 'speak'] 6.3s notes=351c speak='私は村人です。p1の占い結果に疑問があります。まずはもう少し情報を集めましょう。'
+[06] ok=True calls=4 seq=['ls', 'write_file', 'speak'] 2.1s notes=121c speak='私は占い師です。占いで p2 は人狼でした。'
+[07] ok=True calls=3 seq=['write_file', 'speak'] 5.0s notes=265c speak='p1の発言は何か裏があるように感じます。もし占いが本当なら、p5が人狼だとすべきです。'
+[08] ok=True calls=3 seq=['write_file', 'speak'] 4.4s notes=225c speak='私は占い師です。p4が人狼だと占いました。'
+[09] ok=True calls=3 seq=['write_file', 'speak'] 3.5s notes=441c speak='中央のカードは黒でしたか？'
+{
+  "model": "gpt-oss:20b",
+  "reasoning": false,
+  "run_limit": 4,
+  "num_predict": null,
+  "n": 10,
+  "success": 10,
+  "success_rate": 1.0,
+  "latency": {
+    "p50": 4.65,
+    "p95": 6.3,
+    "max": 6.3,
+    "mean": 4.61
+  },
+  "model_calls": {
+    "p50": 3.0,
+    "p95": 4.0,
+    "max": 4,
+    "mean": 3.2
+  },
+  "notes_written_rate": 1.0,
+  "speak_called_rate": 1.0,
+  "prompt_eval_count_first_call": 1434,
+  "first_prompt": {
+    "system_chars": 440,
+    "tools_json_chars": 4623,
+    "tool_names": [
+      "ls",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "speak"
+    ]
+  }
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/02_deep_agent_gpt-oss_20b_nothink_lim4.jsonl
+[reasoning=False][0] 0.6s eval=178 rc=0c :: 'アオイの占い結果に疑いはあるけど、確証はないね。ミナの反論もあるし、結局はまだ判断がつかない。'
+[reasoning=False][1] 1.3s eval=369 rc=0c :: '占い師のユウキだよ。ハルトは人狼だよ。'
+[reasoning=False][2] 2.1s eval=610 rc=0c :: 'Ren、ちょっと怪しいと思うんだけど、何か隠してるのかな？'
+[reasoning=False][3] 0.9s eval=265 rc=0c :: '僕はカナが怪しいと思うよ。'
+[reasoning=False][4] 1.7s eval=494 rc=0c :: 'レンに投票します。彼は何も動かなかったので怪しいです。'
+[reasoning=True][0] 0.8s eval=224 rc=377c :: 'アオイの話もミナの逆も信じにくいね。まずはもう少し情報を集めて、確かめたほうがいいよ。'
+[reasoning=True][1] 0.9s eval=263 rc=606c :: '僕は占い師だよ。ハルトは人狼だった。'
+[reasoning=True][2] 1.2s eval=336 rc=914c :: 'レン、ちょっと怪しいと思うんだけど…  \n僕も気になるんだ。'
+[reasoning=True][3] 1.5s eval=428 rc=1158c :: '僕はレンを疑っているよ。'
+[reasoning=True][4] 0.8s eval=230 rc=588c :: 'ミナに投票します。彼女の発言が不自然で、他の人と違う。'
+[reasoning=None][0] 1.0s eval=296 rc=0c :: '確かにアオイの発言は怪しいね。ミナも疑いはあると思う。まずは証拠を見てみよう。'
+[reasoning=None][1] 1.1s eval=325 rc=0c :: '俺、占い師だよ。ハルトは人狼だ。'
+[reasoning=None][2] 1.0s eval=276 rc=0c :: 'Renが何か怪しいと思うよ。彼に注意したいな。'
+[reasoning=None][3] 1.5s eval=428 rc=0c :: '僕はレンを疑っているよ。'
+[reasoning=None][4] 0.9s eval=264 rc=0c :: 'ハルトに投票する。彼の行動が不自然で、怪しいと思った。'
+[
+ {
+  "reasoning": false,
+  "i": 0,
+  "content": "アオイの占い結果に疑いはあるけど、確証はないね。ミナの反論もあるし、結局はまだ判断がつかない。",
+  "content_chars": 47,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.64,
+  "eval_count": 178
+ },
+ {
+  "reasoning": false,
+  "i": 1,
+  "content": "占い師のユウキだよ。ハルトは人狼だよ。",
+  "content_chars": 19,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.32,
+  "eval_count": 369
+ },
+ {
+  "reasoning": false,
+  "i": 2,
+  "content": "Ren、ちょっと怪しいと思うんだけど、何か隠してるのかな？",
+  "content_chars": 29,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 2.14,
+  "eval_count": 610
+ },
+ {
+  "reasoning": false,
+  "i": 3,
+  "content": "僕はカナが怪しいと思うよ。",
+  "content_chars": 13,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.94,
+  "eval_count": 265
+ },
+ {
+  "reasoning": false,
+  "i": 4,
+  "content": "レンに投票します。彼は何も動かなかったので怪しいです。",
+  "content_chars": 27,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.74,
+  "eval_count": 494
+ },
+ {
+  "reasoning": true,
+  "i": 0,
+  "content": "アオイの話もミナの逆も信じにくいね。まずはもう少し情報を集めて、確かめたほうがいいよ。",
+  "content_chars": 43,
+  "has_think_tag": false,
+  "reasoning_chars": 377,
+  "wall_sec": 0.81,
+  "eval_count": 224
+ },
+ {
+  "reasoning": true,
+  "i": 1,
+  "content": "僕は占い師だよ。ハルトは人狼だった。",
+  "content_chars": 18,
+  "has_think_tag": false,
+  "reasoning_chars": 606,
+  "wall_sec": 0.94,
+  "eval_count": 263
+ },
+ {
+  "reasoning": true,
+  "i": 2,
+  "content": "レン、ちょっと怪しいと思うんだけど…  \n僕も気になるんだ。",
+  "content_chars": 30,
+  "has_think_tag": false,
+  "reasoning_chars": 914,
+  "wall_sec": 1.19,
+  "eval_count": 336
+ },
+ {
+  "reasoning": true,
+  "i": 3,
+  "content": "僕はレンを疑っているよ。",
+  "content_chars": 12,
+  "has_think_tag": false,
+  "reasoning_chars": 1158,
+  "wall_sec": 1.51,
+  "eval_count": 428
+ },
+ {
+  "reasoning": true,
+  "i": 4,
+  "content": "ミナに投票します。彼女の発言が不自然で、他の人と違う。",
+  "content_chars": 27,
+  "has_think_tag": false,
+  "reasoning_chars": 588,
+  "wall_sec": 0.82,
+  "eval_count": 230
+ },
+ {
+  "reasoning": null,
+  "i": 0,
+  "content": "確かにアオイの発言は怪しいね。ミナも疑いはあると思う。まずは証拠を見てみよう。",
+  "content_chars": 39,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.04,
+  "eval_count": 296
+ },
+ {
+  "reasoning": null,
+  "i": 1,
+  "content": "俺、占い師だよ。ハルトは人狼だ。",
+  "content_chars": 16,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.14,
+  "eval_count": 325
+ },
+ {
+  "reasoning": null,
+  "i": 2,
+  "content": "Renが何か怪しいと思うよ。彼に注意したいな。",
+  "content_chars": 23,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.98,
+  "eval_count": 276
+ },
+ {
+  "reasoning": null,
+  "i": 3,
+  "content": "僕はレンを疑っているよ。",
+  "content_chars": 12,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 1.51,
+  "eval_count": 428
+ },
+ {
+  "reasoning": null,
+  "i": 4,
+  "content": "ハルトに投票する。彼の行動が不自然で、怪しいと思った。",
+  "content_chars": 27,
+  "has_think_tag": false,
+  "reasoning_chars": 0,
+  "wall_sec": 0.93,
+  "eval_count": 264
+ }
+]
+saved: /home/soyu/Projects/OneNightAgents/spike/results/03_japanese_gpt-oss_20b.jsonl
+[00] ok=True lenient=True expected=speak got=['speak'] 1.1s content=''
+[01] ok=True lenient=True expected=speak got=['speak'] 0.6s content=''
+[02] ok=True lenient=True expected=speak got=['speak'] 1.1s content=''
+[03] ok=True lenient=True expected=vote got=['vote'] 0.4s content=''
+[04] ok=True lenient=True expected=None got=['speak'] 0.9s content=''
+[05] ok=True lenient=True expected=speak got=['speak'] 0.7s content=''
+[06] ok=True lenient=True expected=vote got=['vote'] 0.9s content=''
+[07] ok=True lenient=True expected=speak got=['speak'] 1.5s content=''
+[08] ok=True lenient=True expected=NONE got=[] 0.4s content='p1です。'
+[09] ok=True lenient=True expected=NONE got=[] 0.7s content='私は村人です。'
+[10] ok=True lenient=True expected=speak got=['speak'] 1.1s content=''
+[11] ok=True lenient=True expected=speak got=['speak'] 1.0s content=''
+[12] ok=True lenient=True expected=vote got=['vote'] 0.7s content=''
+[13] ok=True lenient=True expected=pass_turn got=['pass_turn'] 0.3s content=''
+[14] ok=True lenient=True expected=speak got=['speak'] 0.3s content=''
+[15] ok=True lenient=True expected=vote got=['vote'] 0.3s content=''
+[16] ok=True lenient=True expected=speak got=['speak'] 0.4s content=''
+[17] ok=True lenient=True expected=NONE got=[] 0.2s content='参加者は5人です。'
+[18] ok=True lenient=True expected=speak got=['speak'] 1.1s content=''
+[19] ok=True lenient=True expected=vote got=['vote'] 1.1s content=''
+{
+  "model": "gpt-oss:20b",
+  "reasoning": true,
+  "num_predict": null,
+  "n": 20,
+  "success": 20,
+  "success_rate": 1.0,
+  "success_rate_lenient": 1.0,
+  "latency": {
+    "p50": 0.73,
+    "p95": 1.45,
+    "max": 1.47,
+    "mean": 0.74
+  },
+  "prompt_eval_count_first": 597,
+  "eval_count": {
+    "p50": 201.0,
+    "p95": 405.75,
+    "max": 410,
+    "mean": 205.95
+  },
+  "load_duration_first_sec": 0.001
+}
+saved: /home/soyu/Projects/OneNightAgents/spike/results/01_tool_calls_gpt-oss_20b_think.jsonl
+##### done gpt-oss:20b 05:56:35
+ALL DONE 05:56:35
