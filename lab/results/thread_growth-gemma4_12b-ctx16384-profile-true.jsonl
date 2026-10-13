@@ -1,0 +1,20 @@
+{"model": "gemma4:12b", "num_ctx": 16384, "profile": true, "reasoning": "true", "turns": 16, "recall_ok": true, "journal_lines": 16, "max_prompt_tokens": 9497, "messages_in_state_end": 106, "total_wall": 42.9}
+{"turn": 0, "wall": 8.1, "calls": 2, "prompt_first": 1002, "prompt_last": 1218, "messages_in_state": 4, "final": "/facts.md にプロジェクトのコードネームとリリース日を書き込みました。"}
+{"turn": 1, "wall": 1.3, "calls": 3, "prompt_first": 1136, "prompt_last": 1337, "messages_in_state": 10, "final": "/journal.md に指定された内容を書き込みました。"}
+{"turn": 2, "wall": 1.9, "calls": 3, "prompt_first": 1290, "prompt_last": 1740, "messages_in_state": 16, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 3, "wall": 1.7, "calls": 3, "prompt_first": 1498, "prompt_last": 1947, "messages_in_state": 22, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 4, "wall": 2.1, "calls": 3, "prompt_first": 1748, "prompt_last": 2381, "messages_in_state": 28, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 5, "wall": 1.7, "calls": 3, "prompt_first": 2042, "prompt_last": 2542, "messages_in_state": 34, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 6, "wall": 1.9, "calls": 3, "prompt_first": 2378, "prompt_last": 2972, "messages_in_state": 40, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 7, "wall": 2.1, "calls": 3, "prompt_first": 2759, "prompt_last": 3417, "messages_in_state": 46, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 8, "wall": 2.2, "calls": 3, "prompt_first": 3182, "prompt_last": 3883, "messages_in_state": 52, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 9, "wall": 1.8, "calls": 3, "prompt_first": 3648, "prompt_last": 4214, "messages_in_state": 58, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 10, "wall": 1.9, "calls": 3, "prompt_first": 4157, "prompt_last": 4813, "messages_in_state": 64, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 11, "wall": 2.3, "calls": 3, "prompt_first": 4710, "prompt_last": 5371, "messages_in_state": 70, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 12, "wall": 2.0, "calls": 3, "prompt_first": 5309, "prompt_last": 6031, "messages_in_state": 76, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 13, "wall": 2.0, "calls": 3, "prompt_first": 5953, "prompt_last": 6704, "messages_in_state": 82, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 14, "wall": 3.1, "calls": 3, "prompt_first": 6641, "prompt_last": 7746, "messages_in_state": 88, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 15, "wall": 2.9, "calls": 3, "prompt_first": 7374, "prompt_last": 8212, "messages_in_state": 94, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 16, "wall": 2.3, "calls": 3, "prompt_first": 8154, "prompt_last": 9041, "messages_in_state": 100, "final": "/journal.md に指定された内容を追記しました。"}
+{"turn": 17, "wall": 0.8, "calls": 1, "prompt_first": 8963, "prompt_last": 8963, "messages_in_state": 102, "final": "プロジェクトのコードネームは ORCHID-7、リリース日は 2026-12-03 です。"}
+{"turn": 18, "wall": 0.8, "calls": 2, "prompt_first": 9019, "prompt_last": 9497, "messages_in_state": 106, "final": "16"}

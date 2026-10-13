@@ -1,0 +1,111 @@
+{'model': 'gemma4:26b', 'task': 'struct_invoice_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 6.6}
+{'model': 'gemma4:26b', 'task': 'struct_event_ja', 'method': 'json_schema', 'ok': 0, 'n': 3, 'sec_mean': 1.4}
+{'model': 'gemma4:26b', 'task': 'struct_order_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 1.7}
+{'model': 'gemma4:12b', 'task': 'struct_invoice_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 3.5}
+{'model': 'gemma4:12b', 'task': 'struct_event_ja', 'method': 'json_schema', 'ok': 0, 'n': 3, 'sec_mean': 1.5}
+{'model': 'gemma4:12b', 'task': 'struct_order_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 2.3}
+{'model': 'qwen3.5:9b', 'task': 'struct_invoice_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 101.7}
+{'model': 'qwen3.5:9b', 'task': 'struct_event_ja', 'method': 'json_schema', 'ok': 0, 'n': 3, 'sec_mean': 85.5}
+{'model': 'qwen3.5:9b', 'task': 'struct_order_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 105.3}
+{'model': 'gpt-oss:20b', 'task': 'struct_invoice_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 6.2}
+{'model': 'gpt-oss:20b', 'task': 'struct_event_ja', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 1.0}
+{'model': 'gpt-oss:20b', 'task': 'struct_order_en', 'method': 'json_schema', 'ok': 3, 'n': 3, 'sec_mean': 0.8}
+[
+ {
+  "model": "gemma4:26b",
+  "task": "struct_invoice_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 6.6
+ },
+ {
+  "model": "gemma4:26b",
+  "task": "struct_event_ja",
+  "method": "json_schema",
+  "ok": 0,
+  "n": 3,
+  "sec_mean": 1.4
+ },
+ {
+  "model": "gemma4:26b",
+  "task": "struct_order_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 1.7
+ },
+ {
+  "model": "gemma4:12b",
+  "task": "struct_invoice_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 3.5
+ },
+ {
+  "model": "gemma4:12b",
+  "task": "struct_event_ja",
+  "method": "json_schema",
+  "ok": 0,
+  "n": 3,
+  "sec_mean": 1.5
+ },
+ {
+  "model": "gemma4:12b",
+  "task": "struct_order_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 2.3
+ },
+ {
+  "model": "qwen3.5:9b",
+  "task": "struct_invoice_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 101.7
+ },
+ {
+  "model": "qwen3.5:9b",
+  "task": "struct_event_ja",
+  "method": "json_schema",
+  "ok": 0,
+  "n": 3,
+  "sec_mean": 85.5
+ },
+ {
+  "model": "qwen3.5:9b",
+  "task": "struct_order_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 105.3
+ },
+ {
+  "model": "gpt-oss:20b",
+  "task": "struct_invoice_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 6.2
+ },
+ {
+  "model": "gpt-oss:20b",
+  "task": "struct_event_ja",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 1.0
+ },
+ {
+  "model": "gpt-oss:20b",
+  "task": "struct_order_en",
+  "method": "json_schema",
+  "ok": 3,
+  "n": 3,
+  "sec_mean": 0.8
+ }
+]
+AFTER V2 DONE 07:28:08

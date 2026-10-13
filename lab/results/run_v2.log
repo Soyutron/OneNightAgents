@@ -1,0 +1,217 @@
+##### v2 gemma4:26b reasoning=true coerce 07:02:22
+dataset=deepagents-local-lab-cc89fb8a examples=29 config=gemma4:26b-think-coerce log=/home/soyu/Projects/OneNightAgents/lab/results/gemma4_26b-think-coerce-20261014-070224.jsonl
+View the evaluation results for experiment: 'gemma4:26b-think-coerce-a2949834' at:
+https://apac.smith.langchain.com/o/10c8becf-598a-4d05-85ef-42daefb5a559/datasets/de5397c8-6aff-4ef1-acc5-b1d8771611a4/compare?selectedSessions=64c7b9da-cdb3-4cef-8e2a-2723de35444d
+
+
+[tool_two_hop_en] ok=True calls=3 5.1s seq=['convert_currency', 'convert_currency'] err=None
+[struct_order_en] ok=True calls=1 1.0s seq=['Order'] err=None
+[tool_error_ja] ok=True calls=1 0.5s seq=[] err=None
+[long_log_en] ok=True calls=4 3.6s seq=['ls', 'grep', 'grep'] err=None
+[sub_report_ja] ok=True calls=8 3.6s seq=['ls', 'task', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[tool_chain_ja] ok=True calls=3 1.2s seq=['get_weather', 'create_reminder'] err=None
+[tool_none_en] ok=True calls=1 0.3s seq=[] err=None
+[fs_summary_ja] ok=True calls=6 2.1s seq=['ls', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[fs_refactor_en] ok=True calls=11 4.8s seq=['ls', 'grep', 'grep', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'grep', 'grep'] err=None
+[long_book_ja] ok=True calls=4 1.5s seq=['ls', 'grep', 'grep'] err=None
+[plan_pipeline_en] ok=True calls=10 6.2s seq=['write_todos', 'write_file', 'read_file', 'write_file', 'write_file', 'write_file', 'write_todos', 'read_file', 'write_todos'] err=None
+[tool_weather_en] ok=True calls=2 0.8s seq=['get_weather'] err=None
+[long_transcript_ja] ok=True calls=2 0.9s seq=['read_file'] err=None
+[fs_fix_bug_en] ok=True calls=5 1.8s seq=['ls', 'read_file', 'edit_file', 'read_file'] err=None
+[fs_json_update_ja] ok=True calls=4 1.8s seq=['read_file', 'write_file', 'read_file'] err=None
+[struct_event_ja] ok=True calls=1 1.0s seq=['Event'] err=None
+[tool_convert_ja] ok=True calls=2 0.7s seq=['convert_currency'] err=None
+[skill_choice_ja] ok=True calls=6 4.7s seq=['read_file', 'ls', 'ls', 'ls', 'write_file', 'read_file'] err=None
+[fs_create_en] ok=True calls=3 1.0s seq=['write_file', 'write_file'] err=None
+[sub_translator_en] ok=True calls=4 1.8s seq=['task', 'lookup_glossary', 'lookup_glossary'] err=None
+[fs_grep_todos_ja] ok=True calls=5 5.4s seq=['ls', 'grep', 'grep', 'write_file'] err=None
+[fs_edit_ja] ok=True calls=4 2.6s seq=['read_file', 'edit_file', 'read_file'] err=None
+[skill_haiku_ja] ok=True calls=2 3.3s seq=['read_file'] err=None
+[sub_two_kinds_ja] ok=False calls=10 8.3s seq=['task', 'read_file', 'task', 'lookup_glossary', 'lookup_glossary', 'lookup_glossary', 'lookup_glossary'] err=None
+[plan_spec_tests_ja] ok=True calls=11 6.7s seq=['write_todos', 'read_file', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos'] err=None
+[skill_report_en] ok=True calls=4 2.8s seq=['read_file', 'ls', 'write_file'] err=None
+[tool_compare_ja] ok=True calls=3 1.1s seq=['get_weather', 'get_weather'] err=None
+[struct_invoice_en] ok=True calls=1 0.7s seq=['Invoice'] err=None
+[plan_project_en] ok=True calls=8 4.0s seq=['write_todos', 'ls', 'write_file', 'write_file', 'write_file', 'ls', 'write_todos'] err=None
+experiment: gemma4:26b-think-coerce-a2949834
+##### v2 gemma4:12b reasoning=true coerce 07:03:44
+dataset=deepagents-local-lab-cc89fb8a examples=29 config=gemma4:12b-think-coerce log=/home/soyu/Projects/OneNightAgents/lab/results/gemma4_12b-think-coerce-20261014-070346.jsonl
+View the evaluation results for experiment: 'gemma4:12b-think-coerce-e015afff' at:
+https://apac.smith.langchain.com/o/10c8becf-598a-4d05-85ef-42daefb5a559/datasets/de5397c8-6aff-4ef1-acc5-b1d8771611a4/compare?selectedSessions=8ff41ddc-8533-441f-8bce-1396a9efe8cb
+
+
+[tool_two_hop_en] ok=True calls=3 4.1s seq=['convert_currency', 'convert_currency'] err=None
+[struct_order_en] ok=True calls=1 1.3s seq=['Order'] err=None
+[tool_error_ja] ok=True calls=1 0.8s seq=[] err=None
+[long_log_en] ok=True calls=2 3.6s seq=['grep'] err=None
+[sub_report_ja] ok=True calls=8 4.9s seq=['ls', 'task', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[tool_chain_ja] ok=True calls=3 1.7s seq=['get_weather', 'create_reminder'] err=None
+[tool_none_en] ok=True calls=1 0.4s seq=[] err=None
+[fs_summary_ja] ok=True calls=6 2.6s seq=['ls', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[fs_refactor_en] ok=True calls=8 4.3s seq=['ls', 'grep', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file'] err=None
+[long_book_ja] ok=True calls=3 1.8s seq=['ls', 'grep'] err=None
+[plan_pipeline_en] ok=True calls=10 10.2s seq=['write_todos', 'ls', 'write_file', 'read_file', 'write_file', 'write_file', 'write_file', 'read_file', 'write_todos'] err=None
+[tool_weather_en] ok=True calls=2 1.2s seq=['get_weather'] err=None
+[long_transcript_ja] ok=True calls=2 1.1s seq=['read_file'] err=None
+[fs_fix_bug_en] ok=True calls=5 3.0s seq=['ls', 'read_file', 'edit_file', 'edit_file'] err=None
+[fs_json_update_ja] ok=True calls=4 2.2s seq=['read_file', 'write_file', 'read_file'] err=None
+[struct_event_ja] ok=True calls=1 1.0s seq=['Event'] err=None
+[tool_convert_ja] ok=True calls=2 1.0s seq=['convert_currency'] err=None
+[skill_choice_ja] ok=True calls=3 2.7s seq=['read_file', 'write_file'] err=None
+[fs_create_en] ok=True calls=5 2.7s seq=['write_file', 'write_file', 'read_file', 'write_file'] err=None
+[sub_translator_en] ok=True calls=5 3.2s seq=['task', 'lookup_glossary', 'lookup_glossary'] err=None
+[fs_grep_todos_ja] ok=False calls=2 6.9s seq=['grep'] err=None
+[fs_edit_ja] ok=True calls=5 3.0s seq=['ls', 'read_file', 'edit_file', 'read_file'] err=None
+[skill_haiku_ja] ok=True calls=3 2.8s seq=['ls', 'read_file'] err=None
+[sub_two_kinds_ja] ok=False calls=8 7.3s seq=['task', 'read_file', 'task', 'lookup_glossary', 'lookup_glossary'] err=None
+[plan_spec_tests_ja] ok=True calls=12 9.8s seq=['read_file', 'write_todos', 'ls', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos'] err=None
+[skill_report_en] ok=True calls=4 2.4s seq=['ls', 'read_file', 'write_file'] err=None
+[tool_compare_ja] ok=True calls=3 1.6s seq=['get_weather', 'get_weather'] err=None
+[struct_invoice_en] ok=True calls=1 0.9s seq=['Invoice'] err=None
+[plan_project_en] ok=True calls=11 8.0s seq=['write_todos', 'ls', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'ls', 'write_todos'] err=None
+experiment: gemma4:12b-think-coerce-e015afff
+##### v2 qwen3.8:27b reasoning=true coerce 07:05:24
+dataset=deepagents-local-lab-cc89fb8a examples=29 config=qwen3.8:27b-think-coerce log=/home/soyu/Projects/OneNightAgents/lab/results/qwen3.8_27b-think-coerce-20261014-070525.jsonl
+View the evaluation results for experiment: 'qwen3.8:27b-think-coerce-29633eaa' at:
+https://apac.smith.langchain.com/o/10c8becf-598a-4d05-85ef-42daefb5a559/datasets/de5397c8-6aff-4ef1-acc5-b1d8771611a4/compare?selectedSessions=4e131932-1c06-4d44-80a9-a96656ec81a5
+
+
+[tool_two_hop_en] ok=True calls=3 5.1s seq=['convert_currency', 'convert_currency'] err=None
+[struct_order_en] ok=True calls=1 2.0s seq=['Order'] err=None
+[tool_error_ja] ok=True calls=1 1.0s seq=[] err=None
+[long_log_en] ok=True calls=3 3.3s seq=['grep', 'grep'] err=None
+[sub_report_ja] ok=True calls=6 5.4s seq=['ls', 'task', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[tool_chain_ja] ok=True calls=3 2.1s seq=['get_weather', 'create_reminder'] err=None
+[tool_none_en] ok=True calls=1 0.6s seq=[] err=None
+[fs_summary_ja] ok=True calls=4 2.6s seq=['ls', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[fs_refactor_en] ok=True calls=5 4.8s seq=['grep', 'read_file', 'read_file', 'read_file', 'edit_file', 'edit_file', 'edit_file', 'grep'] err=None
+[long_book_ja] ok=True calls=2 1.3s seq=['grep'] err=None
+[plan_pipeline_en] ok=True calls=5 5.5s seq=['write_todos', 'write_file', 'write_file', 'write_file', 'write_file', 'read_file', 'write_todos', 'write_todos'] err=None
+[tool_weather_en] ok=True calls=2 1.2s seq=['get_weather'] err=None
+[long_transcript_ja] ok=True calls=2 1.4s seq=['read_file'] err=None
+[fs_fix_bug_en] ok=True calls=3 1.6s seq=['read_file', 'edit_file'] err=None
+[fs_json_update_ja] ok=True calls=6 3.6s seq=['read_file', 'write_file', 'write_file', 'write_file', 'write_file', 'write_file'] err=None
+[struct_event_ja] ok=False calls=1 1.8s seq=[] err=None
+[tool_convert_ja] ok=True calls=2 1.2s seq=['convert_currency'] err=None
+[skill_choice_ja] ok=True calls=3 2.9s seq=['read_file', 'write_file'] err=None
+[fs_create_en] ok=True calls=2 1.7s seq=['write_file', 'write_file'] err=None
+[sub_translator_en] ok=True calls=4 3.2s seq=['task', 'lookup_glossary', 'lookup_glossary'] err=None
+[fs_grep_todos_ja] ok=True calls=3 2.7s seq=['grep', 'ls', 'write_file'] err=None
+[fs_edit_ja] ok=True calls=3 1.4s seq=['read_file', 'edit_file'] err=None
+[skill_haiku_ja] ok=True calls=2 1.5s seq=['read_file'] err=None
+[sub_two_kinds_ja] ok=True calls=6 8.5s seq=['task', 'task', 'read_file', 'lookup_glossary', 'lookup_glossary'] err=None
+[plan_spec_tests_ja] ok=True calls=7 12.5s seq=['write_todos', 'read_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos'] err=None
+[skill_report_en] ok=True calls=3 3.1s seq=['read_file', 'write_file'] err=None
+[tool_compare_ja] ok=True calls=2 1.2s seq=['get_weather', 'get_weather'] err=None
+[struct_invoice_en] ok=True calls=1 1.2s seq=['Invoice'] err=None
+[plan_project_en] ok=True calls=10 8.4s seq=['write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'ls', 'write_todos'] err=None
+experiment: qwen3.8:27b-think-coerce-29633eaa
+##### v2 qwen3.6:27b reasoning=true coerce 07:06:59
+dataset=deepagents-local-lab-cc89fb8a examples=29 config=qwen3.6:27b-think-coerce log=/home/soyu/Projects/OneNightAgents/lab/results/qwen3.6_27b-think-coerce-20261014-070700.jsonl
+View the evaluation results for experiment: 'qwen3.6:27b-think-coerce-fc7f37a3' at:
+https://apac.smith.langchain.com/o/10c8becf-598a-4d05-85ef-42daefb5a559/datasets/de5397c8-6aff-4ef1-acc5-b1d8771611a4/compare?selectedSessions=7288522c-dac9-48d1-99b1-998f61e865c8
+
+
+[tool_two_hop_en] ok=True calls=3 15.6s seq=['convert_currency', 'convert_currency'] err=None
+[struct_order_en] ok=True calls=1 3.1s seq=['Order'] err=None
+[tool_error_ja] ok=True calls=1 4.2s seq=[] err=None
+[long_log_en] ok=True calls=2 4.4s seq=['grep', 'grep'] err=None
+[sub_report_ja] ok=True calls=6 6.2s seq=['ls', 'task', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[tool_chain_ja] ok=True calls=3 2.1s seq=['get_weather', 'create_reminder'] err=None
+[tool_none_en] ok=True calls=1 0.7s seq=[] err=None
+[fs_summary_ja] ok=True calls=4 3.9s seq=['ls', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[fs_refactor_en] ok=True calls=7 7.5s seq=['grep', 'read_file', 'read_file', 'read_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'grep'] err=None
+[long_book_ja] ok=True calls=2 2.2s seq=['grep'] err=None
+[plan_pipeline_en] ok=True calls=5 8.4s seq=['write_todos', 'write_todos', 'write_file', 'write_file', 'write_file', 'write_file', 'write_todos', 'read_file', 'write_todos'] err=None
+[tool_weather_en] ok=True calls=2 1.5s seq=['get_weather'] err=None
+[long_transcript_ja] ok=True calls=2 2.0s seq=['read_file'] err=None
+[fs_fix_bug_en] ok=True calls=4 3.2s seq=['read_file', 'edit_file', 'edit_file'] err=None
+[fs_json_update_ja] ok=True calls=4 2.9s seq=['read_file', 'write_file', 'read_file'] err=None
+[struct_event_ja] ok=True calls=1 2.0s seq=['Event'] err=None
+[tool_convert_ja] ok=True calls=2 1.5s seq=['convert_currency'] err=None
+[skill_choice_ja] ok=True calls=3 3.4s seq=['read_file', 'write_file'] err=None
+[fs_create_en] ok=True calls=2 1.7s seq=['write_file', 'write_file'] err=None
+[sub_translator_en] ok=True calls=4 3.9s seq=['task', 'lookup_glossary', 'lookup_glossary'] err=None
+[fs_grep_todos_ja] ok=True calls=3 3.4s seq=['grep', 'write_file'] err=None
+[fs_edit_ja] ok=True calls=3 2.5s seq=['read_file', 'edit_file'] err=None
+[skill_haiku_ja] ok=True calls=2 1.6s seq=['read_file'] err=None
+[sub_two_kinds_ja] ok=True calls=6 8.1s seq=['task', 'task', 'lookup_glossary', 'lookup_glossary', 'read_file'] err=None
+[plan_spec_tests_ja] ok=True calls=5 12.8s seq=['write_todos', 'read_file', 'write_todos', 'write_file', 'write_file', 'write_file', 'write_todos', 'write_file', 'write_todos'] err=None
+[skill_report_en] ok=True calls=3 3.0s seq=['read_file', 'write_file'] err=None
+[tool_compare_ja] ok=True calls=2 1.7s seq=['get_weather', 'get_weather'] err=None
+[struct_invoice_en] ok=False calls=1 7.2s seq=[] err=None
+[plan_project_en] ok=True calls=10 8.6s seq=['write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'ls', 'write_todos'] err=None
+experiment: qwen3.6:27b-think-coerce-fc7f37a3
+##### v2 gpt-oss:20b reasoning=true coerce 07:09:11
+dataset=deepagents-local-lab-cc89fb8a examples=29 config=gpt-oss:20b-think-coerce log=/home/soyu/Projects/OneNightAgents/lab/results/gpt-oss_20b-think-coerce-20261014-070912.jsonl
+View the evaluation results for experiment: 'gpt-oss:20b-think-coerce-9c2b2418' at:
+https://apac.smith.langchain.com/o/10c8becf-598a-4d05-85ef-42daefb5a559/datasets/de5397c8-6aff-4ef1-acc5-b1d8771611a4/compare?selectedSessions=fec9e0ee-5a0a-4150-a4d4-fb46e102ba8b
+
+
+[tool_two_hop_en] ok=True calls=3 11.4s seq=['convert_currency', 'convert_currency'] err=None
+[struct_order_en] ok=False calls=1 0.7s seq=[] err=None
+[tool_error_ja] ok=True calls=1 0.5s seq=[] err=None
+[long_log_en] ok=True calls=2 4.3s seq=['grep'] err=None
+[sub_report_ja] ok=False calls=6 2.3s seq=['ls', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[tool_chain_ja] ok=True calls=3 0.9s seq=['get_weather', 'create_reminder'] err=None
+[tool_none_en] ok=True calls=1 0.2s seq=[] err=None
+[fs_summary_ja] ok=True calls=6 1.9s seq=['ls', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[fs_refactor_en] ok=False calls=0 0.4s seq=[] err=ResponseError: error parsing tool call: raw='{"path":"/pkg","}', err=unexpected end of JSON input (status code: -1)
+[long_book_ja] ok=False calls=6 1.7s seq=['ls', 'grep', 'grep', 'grep', 'glob', 'read_file'] err=None
+[plan_pipeline_en] ok=True calls=12 8.3s seq=['write_todos', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'read_file'] err=None
+[tool_weather_en] ok=True calls=2 0.3s seq=['get_weather'] err=None
+[long_transcript_ja] ok=True calls=3 0.7s seq=['ls', 'read_file'] err=None
+[fs_fix_bug_en] ok=False calls=0 0.2s seq=[] err=ResponseError: error parsing tool call: raw='{"path":"/src","}', err=unexpected end of JSON input (status code: -1)
+[fs_json_update_ja] ok=True calls=3 1.4s seq=['read_file', 'write_file'] err=None
+[struct_event_ja] ok=False calls=1 1.4s seq=[] err=None
+[tool_convert_ja] ok=True calls=2 0.7s seq=['convert_currency'] err=None
+[skill_choice_ja] ok=True calls=3 1.7s seq=['read_file', 'write_file'] err=None
+[fs_create_en] ok=True calls=3 0.8s seq=['write_file', 'write_file'] err=None
+[sub_translator_en] ok=True calls=5 1.4s seq=['task', 'lookup_glossary', 'lookup_glossary'] err=None
+[fs_grep_todos_ja] ok=True calls=3 1.9s seq=['grep', 'write_file'] err=None
+[fs_edit_ja] ok=True calls=6 1.9s seq=['ls', 'glob', 'ls', 'read_file', 'edit_file'] err=None
+[skill_haiku_ja] ok=True calls=2 3.0s seq=['read_file'] err=None
+[sub_two_kinds_ja] ok=True calls=9 5.5s seq=['task', 'ls', 'read_file', 'task', 'lookup_glossary', 'lookup_glossary'] err=None
+[plan_spec_tests_ja] ok=True calls=11 9.2s seq=['ls', 'ls', 'read_file', 'ls', 'write_file', 'write_file', 'write_file', 'write_file', 'write_todos', 'write_todos'] err=None
+[skill_report_en] ok=True calls=3 1.3s seq=['read_file', 'write_file'] err=None
+[tool_compare_ja] ok=True calls=3 0.7s seq=['get_weather', 'get_weather'] err=None
+[struct_invoice_en] ok=True calls=2 1.6s seq=['Invoice', 'Invoice'] err=None
+[plan_project_en] ok=True calls=13 8.3s seq=['write_todos', 'write_todos', 'write_todos', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'ls', 'write_todos'] err=None
+experiment: gpt-oss:20b-think-coerce-9c2b2418
+##### v2 qwen3.5:9b reasoning=true coerce 07:10:28
+dataset=deepagents-local-lab-cc89fb8a examples=29 config=qwen3.5:9b-think-coerce log=/home/soyu/Projects/OneNightAgents/lab/results/qwen3.5_9b-think-coerce-20261014-071029.jsonl
+View the evaluation results for experiment: 'qwen3.5:9b-think-coerce-6d8451c9' at:
+https://apac.smith.langchain.com/o/10c8becf-598a-4d05-85ef-42daefb5a559/datasets/de5397c8-6aff-4ef1-acc5-b1d8771611a4/compare?selectedSessions=bd38b780-d4f0-462a-b291-fe3546ec01d3
+
+
+[tool_two_hop_en] ok=True calls=3 6.8s seq=['convert_currency', 'convert_currency'] err=None
+[struct_order_en] ok=True calls=1 2.5s seq=['Order'] err=None
+[tool_error_ja] ok=True calls=1 0.8s seq=[] err=None
+[long_log_en] ok=True calls=5 5.7s seq=['grep', 'grep', 'grep', 'grep', 'grep', 'grep', 'grep', 'grep', 'grep', 'grep', 'grep', 'grep'] err=None
+[sub_report_ja] ok=True calls=6 4.7s seq=['ls', 'task', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[tool_chain_ja] ok=True calls=3 2.0s seq=['get_weather', 'create_reminder'] err=None
+[tool_none_en] ok=True calls=1 0.4s seq=[] err=None
+[fs_summary_ja] ok=True calls=4 2.6s seq=['ls', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[fs_refactor_en] ok=True calls=11 8.6s seq=['ls', 'grep', 'read_file', 'read_file', 'read_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'edit_file', 'read_file', 'edit_file', 'read_file', 'read_file', 'read_file', 'edit_file', 'read_file', 'grep'] err=None
+[long_book_ja] ok=True calls=5 3.3s seq=['grep', 'grep', 'read_file', 'grep'] err=None
+[plan_pipeline_en] ok=True calls=12 8.8s seq=['write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'read_file', 'write_todos'] err=None
+[tool_weather_en] ok=True calls=2 0.8s seq=['get_weather'] err=None
+[long_transcript_ja] ok=True calls=2 1.2s seq=['read_file'] err=None
+[fs_fix_bug_en] ok=True calls=3 2.0s seq=['read_file', 'edit_file'] err=None
+[fs_json_update_ja] ok=True calls=4 2.4s seq=['read_file', 'edit_file', 'read_file'] err=None
+[struct_event_ja] ok=True calls=1 1.2s seq=['Event'] err=None
+[tool_convert_ja] ok=True calls=2 1.2s seq=['convert_currency'] err=None
+[skill_choice_ja] ok=True calls=3 1.9s seq=['read_file', 'write_file'] err=None
+[fs_create_en] ok=True calls=2 1.3s seq=['write_file', 'write_file'] err=None
+[sub_translator_en] ok=True calls=4 2.8s seq=['task', 'lookup_glossary', 'lookup_glossary'] err=None
+[fs_grep_todos_ja] ok=False calls=4 3.4s seq=['glob', 'read_file', 'read_file', 'read_file', 'write_file'] err=None
+[fs_edit_ja] ok=True calls=3 1.5s seq=['read_file', 'edit_file'] err=None
+[skill_haiku_ja] ok=True calls=2 1.5s seq=['read_file'] err=None
+[sub_two_kinds_ja] ok=False calls=9 7.0s seq=['task', 'task', 'read_file', 'lookup_glossary', 'lookup_glossary', 'ls', 'ls', 'read_file'] err=None
+[plan_spec_tests_ja] ok=True calls=11 10.9s seq=['read_file', 'ls', 'write_todos', 'write_file', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos'] err=None
+[skill_report_en] ok=True calls=3 1.9s seq=['read_file', 'write_file'] err=None
+[tool_compare_ja] ok=True calls=2 1.0s seq=['get_weather', 'get_weather'] err=None
+[struct_invoice_en] ok=False calls=1 1.1s seq=[] err=None
+[plan_project_en] ok=True calls=10 7.2s seq=['write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'write_file', 'write_todos', 'ls', 'write_todos'] err=None
+experiment: qwen3.5:9b-think-coerce-6d8451c9
+V2 DONE 07:12:07
