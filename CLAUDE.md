@@ -1,0 +1,40 @@
+## Coding Style
+
+- コード内のコメントは日本語で記述してください。
+- docstring も日本語で記述してください。
+- 変数名、関数名、クラス名は英語で記述してください。
+
+## 実装方針
+- 過剰設計を避け、現在の要件を満たす最小限の実装を優先する。
+- 将来必要になるかもしれないという理由だけで、抽象化・汎用化・フォールバック・設定項目・独自ヘルパーを追加しない。
+- 既存のライブラリやフレームワークの標準機能で解決できる場合は、独自実装を増やさない。
+- 単純な処理は単純なまま保ち、明確な必要性が出てから抽象化する。
+- 修正時は対象の問題に必要な範囲だけ変更し、無関係なリファクタリングを同時に行わない。
+
+## コメント
+- コードから自明な内容はコメントに書かない。
+- コメントは「なぜこの実装なのか」など、コードだけでは分からない情報に限定する。
+- 長い説明や設計背景はコメントに書かず、必要に応じてドキュメントへ分離する。
+- コメントは簡潔にする。
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in GitHub Issues (Soyutron/taxforge), using the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default label vocabulary: needs-triage, needs-info, ready-for-agent, ready-for-human, wontfix. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout (root `CONTEXT.md` + `docs/adr/`). See `docs/agents/domain.md`.
+
+<!-- OPENWIKI:START -->
+
+## OpenWiki
+
+See [AGENTS.md](AGENTS.md) for OpenWiki agent instructions.
+
+<!-- OPENWIKI:END -->

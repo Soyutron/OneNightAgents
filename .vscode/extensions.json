@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "ms-python.python", // Python 本体(言語サポート・デバッグ・テスト)
+    "charliermarsh.ruff", // Lint / フォーマット
+    "astral-sh.ty", // 型チェック(既定でPylanceの言語サーバーを無効化する)
+    "tamasfe.even-better-toml" // TOML(pyproject.toml 等)のサポート
+  ]
+}

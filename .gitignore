@@ -1,0 +1,41 @@
+.env
+
+.playwright-mcp
+
+# Supabase CLIの作業用ディレクトリ
+supabase/.temp
+
+# Monkey テストのログ(scripts/monkey-loop.sh)
+logs/
+
+# issue-agent の worktree(scripts/issue-agent.sh)
+.claude/worktrees/
+
+# Wiki の Mermaid 検証用の Node 依存(npm install --prefix tax-agents/scripts)
+tax-agents/scripts/node_modules/
+
+# 環境変数・認証情報(.env.example は雛形なので除外しない)
+.env.*
+!.env.example
+*.pem
+*.key
+supabase/signing_keys.json
+
+# 個人用の Claude Code 設定
+.claude/settings.local.json
+
+# ローカル LLM のモデルファイル
+models/
+*.gguf
+*.safetensors
+*.ggml
+*.pt
+*.pth
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
