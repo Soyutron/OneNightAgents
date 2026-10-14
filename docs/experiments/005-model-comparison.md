@@ -50,7 +50,9 @@
 
 seed 3 の p1 の各判断の `prompt_eval_count` を並べると、思考が 4096 トークンに達した判断の直後に +4,300、もう一度達して +4,400 と跳ね、7 判断目で 16,328 と `num_ctx=16384` に達した。以後は 1 呼び出しの出力が 37〜452 トークンの文章だけになり、ツールを呼ばなくなった。
 
-原因は langchain-ollama の `_convert_messages_to_ollama_messages`(chat_models.py 1080 行付近)が、履歴中の AIMessage の `additional_kwargs["reasoning_content"]` を `thinking` として**毎回送り返す**こと。暴走した 4096 トークンの思考(content は空)もスレッドに残るので、以後の全呼び出しで固定費になる。gemma4 でも同じ跳ね(+2,500〜2,600)が 4096 到達の直後に出ている(np4096-5 seed 1 p4、seed 2 p3)。Ollama は `num_ctx` を超えた分を先頭から切り捨てるので、system prompt とツール定義が失われ、文章だけ返すようになる。Deep Agents の要約(summarization)は seed 3 の p1 で 1 回発火した(「## SESSION INTENT …」660 トークン)が、要約後も直近メッセージの思考が残って 16K 近いままだった。
+原因は langchain-ollama の `_convert_messages_to_ollama_messages`(chat_models.py 1080 行付近)が、履歴中の AIMessage の `additional_kwargs["reasoning_content"]` を `thinking` として**毎回送り返す**こと。暴走した 4096 トークンの思考(content は空)もスレッドに残るので、以後の全呼び出しで固定費になる。Ollama は `num_ctx` を超えた分を先頭から切り捨てるので、system prompt とツール定義が失われ、文章だけ返すようになる。
+
+(006 で訂正)gemma4 で見えた「4096 到達直後の +2,500」は、同じ判断内の 2 回目の呼び出しに現在の思考が乗った分で、次の判断では元に戻っていた。gemma4 のテンプレートは過去ターンの `thinking` をプロンプトに描画しないらしく、固定費にならない。qwen3.8 は描画するので、上の連鎖は qwen 固有。Deep Agents の要約(summarization)は seed 3 の p1 で 1 回発火した(「## SESSION INTENT …」660 トークン)が、要約後も直近メッセージの思考が残って 16K 近いままだった。
 
 対策: 送信時に「最後の HumanMessage より前」の AIMessage から `reasoning_content` を外す `drop_past_reasoning`(`llm/metrics.py`)。現在の判断内のツール呼び出しの連続性(gpt-oss は同一ターン内で思考の受け渡しが必要)は保つ。効果は 006 で測る。
 
