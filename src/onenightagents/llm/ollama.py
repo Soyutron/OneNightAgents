@@ -9,7 +9,7 @@ def make_llm(
     model: str,
     *,
     num_ctx: int = 16384,
-    num_predict: int = 2048,
+    num_predict: int = 4096,
     reasoning: bool | None = True,
     temperature: float = 0.7,
     seed: int | None = None,

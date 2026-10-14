@@ -238,7 +238,7 @@ def add_game_options(p: argparse.ArgumentParser) -> None:
     p.add_argument("--model", default="gemma4:26b")
     p.add_argument("--reasoning", action=argparse.BooleanOptionalAction, default=True)
     p.add_argument("--num-ctx", type=int, default=16384)
-    p.add_argument("--num-predict", type=int, default=2048)
+    p.add_argument("--num-predict", type=int, default=4096)
     p.add_argument("--temperature", type=float, default=0.7)
     p.add_argument("--timeout", type=float, default=60.0, help="1 判断の制限時間(秒)")
     p.add_argument("--personas", default=None, help="ペルソナ YAML のディレクトリ(例: configs/personas)")
