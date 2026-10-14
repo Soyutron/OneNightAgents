@@ -48,8 +48,10 @@ def test_load_personas_renders_in_file_order() -> None:
     assert personas is not None and len(personas) == 5
     assert personas[0].startswith("あなたは「演技派」タイプです。")  # actor.yaml が先頭
     config = make_config("g", 1, 5, 2, "deep", personas)
-    assert config.players[0].persona == personas[0]
-    assert "演技派" in build_system_prompt("太郎", "p1", config.players[0].persona)
+    assert sorted(p.persona for p in config.players) == sorted(personas)  # 全員に別のペルソナ
+    assert config == make_config("g", 1, 5, 2, "deep", personas)  # seed で決定的
+    assert [p.persona for p in make_config("g", 2, 5, 2, "deep", personas).players] != [p.persona for p in config.players]
+    assert "タイプです" in build_system_prompt("太郎", "p1", config.players[0].persona)
     assert load_personas(None) is None
 
 

@@ -40,12 +40,15 @@ def make_config(
     personas: list[str] | None = None,
     **overrides,
 ) -> GameConfig:
+    # 席とペルソナの対応を固定すると同じ席が毎回標的になる(002)ので、seed で並べ替える
+    if personas:
+        order = random.Random(seed).sample(personas, len(personas))
     players = [
         PlayerConfig(
             id=f"p{i + 1}",
             display_name=DISPLAY_NAMES[i],
             kind=kind,
-            persona=personas[i % len(personas)] if personas else None,
+            persona=order[i % len(order)] if personas else None,
         )
         for i in range(num_players)
     ]
