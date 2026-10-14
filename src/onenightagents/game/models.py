@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+import operator
 from enum import StrEnum
-from typing import Literal
+from typing import Annotated, Literal, TypedDict
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -95,3 +96,65 @@ class GameResult(BaseModel):
     winner: Literal["village", "werewolf", "none"]
     final_roles: dict[str, Role]
     center: list[Role]
+
+
+# --- 議論の進行(docs/game-design.md 5.3) ---------------------------------------------
+
+
+class Turn(BaseModel):
+    """GM がプレイヤーに与える 1 回の発言機会。"""
+
+    speaker: str
+    round: int  # 0 はオープニング、1 以降は自由ラウンド
+    pass_allowed: bool
+    reply_to_turn: int | None = None  # 応答ターンなら、問われた発言の番号
+    chain: int = 0  # 応答の連鎖の深さ(元の発言が 0)
+
+
+class TurnCursor(BaseModel):
+    """議論の進行位置。scheduler が読み書きする。"""
+
+    round: int = 0
+    seat_index: int = 0  # ラウンド内の席順で次に発言する位置
+    pending_reply: Turn | None = None
+    replied_this_round: list[str] = Field(default_factory=list)
+    passes_this_round: int = 0
+    finished: bool = False
+
+
+# --- プレイヤーへの要求(候補と制約を明示し、できることを推測させない) -----------------------
+
+
+class NightRequest(BaseModel):
+    role: Role
+    candidates: list[str]
+
+
+class SpeakRequest(BaseModel):
+    turn: Turn
+    others: list[str]  # 宛先に選べるプレイヤー
+
+
+class VoteRequest(BaseModel):
+    candidates: list[str]
+
+
+class NotesRequest(BaseModel):
+    """夜明け後・投票前の推理メモ更新の要求。"""
+
+
+# --- ゲーム状態(LangGraph の state。正解情報を含む) ------------------------------------
+
+
+class GameState(TypedDict, total=False):
+    config: GameConfig
+    phase: str
+    initial_roles: dict[str, Role]
+    current_roles: dict[str, Role]
+    center: list[Role]
+    night: NightRecord
+    utterances: Annotated[list[Utterance], operator.add]
+    delivered_upto: dict[str, int]  # 各プレイヤーに送信済みの発言番号(差分送信用)
+    votes: list[Vote]
+    result: GameResult | None
+    cursor: TurnCursor
