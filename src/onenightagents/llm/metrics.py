@@ -1,12 +1,12 @@
-"""モデル呼び出しごとの壁時計時間と Ollama の response_metadata を記録するミドルウェア。"""
+"""モデル呼び出しを包むミドルウェア: 計測と、過去の思考の履歴からの除去。"""
 
 from __future__ import annotations
 
 import time
 from typing import Any
 
-from langchain.agents.middleware import AgentMiddleware
-from langchain_core.messages import AIMessage
+from langchain.agents.middleware import AgentMiddleware, wrap_model_call
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 
 
 class MetricsMiddleware(AgentMiddleware):
@@ -43,3 +43,24 @@ class MetricsMiddleware(AgentMiddleware):
 
 def _ns(value: int | None) -> float | None:
     return round(value / 1e9, 3) if value else None
+
+
+def _without_reasoning(message: BaseMessage) -> BaseMessage:
+    if isinstance(message, AIMessage) and "reasoning_content" in message.additional_kwargs:
+        kwargs = {k: v for k, v in message.additional_kwargs.items() if k != "reasoning_content"}
+        return message.model_copy(update={"additional_kwargs": kwargs})
+    return message
+
+
+@wrap_model_call
+async def drop_past_reasoning(request, handler):
+    """過去の判断の思考(reasoning_content)を送信時だけ履歴から外す。
+
+    langchain-ollama は AIMessage の reasoning_content を thinking として毎回送り返すので、
+    暴走した思考(数千トークン)がゲーム終了まで毎回コンテキストに乗る(005)。
+    現在の判断(最後の HumanMessage 以降)の思考はツール呼び出しの連続性のために残す。
+    """
+    messages = list(request.messages)
+    last_human = max((i for i, m in enumerate(messages) if isinstance(m, HumanMessage)), default=-1)
+    stripped = [_without_reasoning(m) if i < last_human else m for i, m in enumerate(messages)]
+    return await handler(request.override(messages=stripped))

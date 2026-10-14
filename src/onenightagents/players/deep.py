@@ -15,7 +15,7 @@ from langchain_core.messages import BaseMessage
 from langgraph.checkpoint.memory import InMemorySaver
 
 from onenightagents.game.models import NightRequest, Role, SpeakRequest, VoteRequest
-from onenightagents.llm.metrics import MetricsMiddleware
+from onenightagents.llm.metrics import MetricsMiddleware, drop_past_reasoning
 from onenightagents.players.base import ActionNotSubmitted, NightAction, SpeechAction, VoteAction
 from onenightagents.players.mailbox import ActionMailbox, build_tools, coerce_tool_args
 from onenightagents.players.prompts import build_system_prompt
@@ -60,6 +60,7 @@ class DeepAgentPlayer:
                 ModelCallLimitMiddleware(run_limit=model_call_limit, exit_behavior="end"),
                 coerce_tool_args,
                 ModelRetryMiddleware(max_retries=1),
+                drop_past_reasoning,
                 self._metrics,
             ],
             checkpointer=InMemorySaver(),
