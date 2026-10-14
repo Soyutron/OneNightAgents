@@ -1,9 +1,10 @@
-"""CLI: play(1 ゲームを観戦)/ bench(複数 seed を連続実行)/ summarize(runs/ の集計)。"""
+"""CLI: play(1 ゲームを観戦)/ bench(複数 seed を連続実行)/ summarize(runs/ の集計)/ replay(役職付きの発言ログ)。"""
 
 from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import random
 import time
 from collections.abc import Callable
@@ -189,6 +190,42 @@ def summarize(args: argparse.Namespace) -> None:
     print(format_report([summarize_game(d) for d in dirs]))
 
 
+def replay(args: argparse.Namespace) -> None:
+    """終了したゲームの発言・投票を、真の役職を添えて表示する(観察用)。"""
+    for run_dir in find_game_dirs([Path(p) for p in args.paths]):
+        events = [json.loads(line) for line in (run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()]
+        roles = next(e["data"]["initial_roles"] for e in events if e["event"] == "roles_assigned")
+        ended = next(e["data"] for e in events if e["event"] == "game_ended")
+        final = ended["result"]["final_roles"]
+        night = ended["night"]
+
+        def tag(pid: str) -> str:
+            r0, r1 = ROLE_NAMES[roles[pid]], ROLE_NAMES[final[pid]]
+            return f"{pid}({r0}→{r1})" if r0 != r1 else f"{pid}({r0})"
+
+        print(f"\n===== {run_dir}")
+        print(
+            f"中央: {', '.join(ROLE_NAMES[r] for r in ended['result']['center'])} / "
+            f"占い: {night['seer_target']} → {_role_names(night['seer_result'])} / "
+            f"怪盗: {night['thief_target']} → {_role_names(night['thief_new_role'])}"
+        )
+        for e in events:
+            d = e["data"]
+            if e["event"] == "utterance":
+                if d["is_pass"]:
+                    print(f"#{d['turn']} R{d['round']} {tag(d['speaker'])}: (パス)")
+                    continue
+                meta = (f" →{d['addressed_to']}" if d["addressed_to"] else "") + (
+                    f" CO:{ROLE_NAMES[d['claimed_role']]}" if d["claimed_role"] else ""
+                )
+                print(f"#{d['turn']} R{d['round']} {tag(d['speaker'])}:{meta} {d['content']}")
+            elif e["event"] == "turn_skipped":
+                print(f"  [フォールバック] {d['player']}: {d['reason']}")
+        for v in ended["votes"]:
+            print(f"  投票 {tag(v['voter'])} → {v['target']}: {v['reason']}")
+        print(f"  処刑: {ended['result']['executed'] or 'なし'} / 勝者: {ended['result']['winner']}")
+
+
 def add_game_options(p: argparse.ArgumentParser) -> None:
     p.add_argument("--players", type=int, default=5)
     p.add_argument("--seed", type=int, default=1)
@@ -216,13 +253,17 @@ def main() -> None:
     b.add_argument("--name", default=None, help="runs/ 配下のディレクトリ名")
     z = sub.add_parser("summarize", help="runs/ のログを集計する")
     z.add_argument("paths", nargs="+")
+    r = sub.add_parser("replay", help="終了したゲームを役職付きで表示する")
+    r.add_argument("paths", nargs="+")
     args = parser.parse_args()
     if args.command == "play":
         asyncio.run(play(args))
     elif args.command == "bench":
         asyncio.run(bench(args))
-    else:
+    elif args.command == "summarize":
         summarize(args)
+    else:
+        replay(args)
 
 
 if __name__ == "__main__":

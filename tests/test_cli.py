@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 
 from onenightagents.analysis.summarize import find_game_dirs, format_report, summarize_game, summarize_games
-from onenightagents.cli import bench, load_personas, make_config
+from onenightagents.cli import bench, load_personas, make_config, replay
 from onenightagents.players.prompts import build_system_prompt
 
 
@@ -51,3 +51,11 @@ def test_load_personas_renders_in_file_order() -> None:
     assert config.players[0].persona == personas[0]
     assert "演技派" in build_system_prompt("太郎", "p1", config.players[0].persona)
     assert load_personas(None) is None
+
+
+async def test_replay_prints_roles_and_votes(tmp_path: Path, capsys) -> None:
+    await bench(bench_args(tmp_path, games=1))
+    capsys.readouterr()
+    replay(argparse.Namespace(paths=[str(tmp_path / "b")]))
+    out = capsys.readouterr().out
+    assert "中央:" in out and "投票 p1(" in out and "勝者:" in out
