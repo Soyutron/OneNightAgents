@@ -30,7 +30,7 @@ from onenightagents.game.models import (
     Vote,
     VoteRequest,
 )
-from onenightagents.players.base import NightAction, SpeechAction, VoteAction
+from onenightagents.players.base import ActionNotSubmitted, NightAction, SpeechAction, VoteAction
 
 A = TypeVar("A", NightAction, SpeechAction, VoteAction)
 
@@ -68,6 +68,9 @@ async def _request_action(
             action = await asyncio.wait_for(call([HumanMessage(text)]), timeout)
         except TimeoutError:
             error = "制限時間内に行動が提出されませんでした"
+            continue
+        except ActionNotSubmitted:
+            error = "ツールで行動が提出されませんでした。必ず対応するツールを呼んで提出してください"
             continue
         error = validate(action)
         if error is None:

@@ -10,6 +10,10 @@ from pydantic import BaseModel
 from onenightagents.game.models import NightRequest, Role, SpeakRequest, VoteRequest
 
 
+class ActionNotSubmitted(Exception):
+    """プレイヤーがツールで行動を提出しないまま終了した。GM が再要求 → フォールバックする。"""
+
+
 class NightAction(BaseModel):
     target: str | None  # 占い師: プレイヤー ID か CENTER。怪盗: プレイヤー ID か None(交換しない)
 

@@ -46,7 +46,7 @@ class GameConfig(BaseModel):
     players: list[PlayerConfig]
     max_free_rounds: int = 2
     reply_chain_limit: int = 2
-    llm_timeout_sec: float = 30.0
+    llm_timeout_sec: float = 60.0
     model_call_limit: int = 4
 
     @model_validator(mode="after")

@@ -104,7 +104,7 @@ class SleepyPlayer(RandomPlayer):
 
 @pytest.mark.asyncio
 async def test_timeout_falls_back(tmp_path: Path) -> None:
-    config = make_config("g", 2, 3, 1).model_copy(update={"llm_timeout_sec": 0.01})
+    config = make_config("g", 2, 3, 1, llm_timeout_sec=0.01)
     players = {p.id: SleepyPlayer(p.id, random.Random(i)) for i, p in enumerate(config.players)}
     ctx = GameContext(players=players, recorder=Recorder(tmp_path), rng=random.Random(2))
     final = await build_graph().ainvoke({"config": config}, config={"recursion_limit": RECURSION_LIMIT}, context=ctx)
