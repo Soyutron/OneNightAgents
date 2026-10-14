@@ -1,13 +1,18 @@
-"""CLI: play(1 ゲームを実行して観戦表示)。"""
+"""CLI: play(1 ゲームを観戦)/ bench(複数 seed を連続実行)/ summarize(runs/ の集計)。"""
 
 from __future__ import annotations
 
 import argparse
 import asyncio
 import random
+import time
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 
+import yaml
+
+from onenightagents.analysis.summarize import find_game_dirs, format_report, summarize_game
 from onenightagents.engine.context import GameContext
 from onenightagents.engine.graph import build_graph
 from onenightagents.engine.recorder import Event, Recorder
@@ -16,6 +21,7 @@ from onenightagents.game.models import GameConfig, PlayerConfig
 from onenightagents.llm.ollama import make_llm
 from onenightagents.players.base import Player
 from onenightagents.players.deep import DeepAgentPlayer
+from onenightagents.players.prompts import render_persona
 from onenightagents.players.scripted import RandomPlayer
 
 DISPLAY_NAMES = ["太郎", "花子", "次郎", "美咲", "健太", "さくら", "大輔"]
@@ -25,10 +31,32 @@ RECURSION_LIMIT = 500
 
 
 def make_config(
-    game_id: str, seed: int, num_players: int, max_free_rounds: int, kind: str = "scripted", **overrides
+    game_id: str,
+    seed: int,
+    num_players: int,
+    max_free_rounds: int,
+    kind: str = "scripted",
+    personas: list[str] | None = None,
+    **overrides,
 ) -> GameConfig:
-    players = [PlayerConfig(id=f"p{i + 1}", display_name=DISPLAY_NAMES[i], kind=kind) for i in range(num_players)]
+    players = [
+        PlayerConfig(
+            id=f"p{i + 1}",
+            display_name=DISPLAY_NAMES[i],
+            kind=kind,
+            persona=personas[i % len(personas)] if personas else None,
+        )
+        for i in range(num_players)
+    ]
     return GameConfig(game_id=game_id, seed=seed, players=players, max_free_rounds=max_free_rounds, **overrides)
+
+
+def load_personas(directory: str | None) -> list[str] | None:
+    """ペルソナ YAML をファイル名順に読み、system prompt 用の文章にする。"""
+    if not directory:
+        return None
+    files = sorted(Path(directory).glob("*.yaml"))
+    return [render_persona(yaml.safe_load(f.read_text(encoding="utf-8"))) for f in files] or None
 
 
 def make_players(config: GameConfig, recorder: Recorder, args: argparse.Namespace) -> dict[str, Player]:
@@ -115,33 +143,57 @@ def print_event(ev: Event, reveal: bool) -> None:
             print(f"=== 最終役職: {roles} / 中央: {', '.join(ROLE_NAMES[x] for x in r['center'])}")
 
 
-async def play(args: argparse.Namespace) -> None:
-    game_id = f"{datetime.now():%Y%m%d-%H%M%S}-seed{args.seed}"
+async def run_game(
+    game_id: str, seed: int, run_dir: Path, args: argparse.Namespace, on_event: Callable[[Event], None] | None
+) -> dict:
     kind = "scripted" if args.kind == "random" else "deep"
-    config = make_config(game_id, args.seed, args.players, args.max_rounds, kind, llm_timeout_sec=args.timeout)
-    recorder = Recorder(Path(args.run_dir) / game_id, lambda ev: print_event(ev, args.reveal))
-    ctx = GameContext(players=make_players(config, recorder, args), recorder=recorder, rng=random.Random(config.seed))
-    graph = build_graph()
+    config = make_config(
+        game_id, seed, args.players, args.max_rounds, kind, load_personas(args.personas), llm_timeout_sec=args.timeout
+    )
+    recorder = Recorder(run_dir, on_event)
+    ctx = GameContext(players=make_players(config, recorder, args), recorder=recorder, rng=random.Random(seed))
     # LangSmith でゲーム単位に絞り込むためのメタデータ(docs/architecture.md 10.1)
     run_config = {
         "recursion_limit": RECURSION_LIMIT,
         "run_name": game_id,
-        "metadata": {"game_id": game_id, "seed": args.seed},
+        "metadata": {"game_id": game_id, "seed": seed, "model": args.model, "kind": kind},
         "tags": ["onenightagents"],
     }
-    await graph.ainvoke({"config": config}, config=run_config, context=ctx)
-    print(f"ログ: {recorder.run_dir}")
+    return await build_graph().ainvoke({"config": config}, config=run_config, context=ctx)
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(prog="onenightagents")
-    sub = parser.add_subparsers(dest="command", required=True)
-    p = sub.add_parser("play", help="1 ゲームを実行する")
+async def play(args: argparse.Namespace) -> None:
+    game_id = f"{datetime.now():%Y%m%d-%H%M%S}-seed{args.seed}"
+    run_dir = Path(args.run_dir) / game_id
+    await run_game(game_id, args.seed, run_dir, args, lambda ev: print_event(ev, args.reveal))
+    print(f"ログ: {run_dir}")
+
+
+async def bench(args: argparse.Namespace) -> None:
+    """seed を変えて連続実行し、最後に集計を出す。"""
+    bench_id = args.name or f"{datetime.now():%Y%m%d-%H%M%S}-bench"
+    bench_dir = Path(args.run_dir) / bench_id
+    for seed in range(args.seed, args.seed + args.games):
+        game_id = f"{bench_id}/seed{seed}"
+        t0 = time.perf_counter()
+        final = await run_game(game_id, seed, bench_dir / f"seed{seed}", args, None)
+        r = final["result"]
+        print(f"seed={seed} winner={r.winner} executed={r.executed} {time.perf_counter() - t0:.0f}s", flush=True)
+    print()
+    print(format_report([summarize_game(d) for d in find_game_dirs([bench_dir])]))
+    print(f"ログ: {bench_dir}")
+
+
+def summarize(args: argparse.Namespace) -> None:
+    dirs = find_game_dirs([Path(p) for p in args.paths])
+    print(format_report([summarize_game(d) for d in dirs]))
+
+
+def add_game_options(p: argparse.ArgumentParser) -> None:
     p.add_argument("--players", type=int, default=5)
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--max-rounds", type=int, default=2)
     p.add_argument("--run-dir", default="runs")
-    p.add_argument("--reveal", action="store_true", help="秘密情報(配役・夜・投票・メモ)も表示する")
     p.add_argument("--kind", choices=["random", "deep"], default="deep")
     p.add_argument("--model", default="gemma4:26b")
     p.add_argument("--reasoning", action=argparse.BooleanOptionalAction, default=True)
@@ -149,9 +201,28 @@ def main() -> None:
     p.add_argument("--num-predict", type=int, default=2048)
     p.add_argument("--temperature", type=float, default=0.7)
     p.add_argument("--timeout", type=float, default=60.0, help="1 判断の制限時間(秒)")
+    p.add_argument("--personas", default=None, help="ペルソナ YAML のディレクトリ(例: configs/personas)")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(prog="onenightagents")
+    sub = parser.add_subparsers(dest="command", required=True)
+    p = sub.add_parser("play", help="1 ゲームを実行して観戦する")
+    add_game_options(p)
+    p.add_argument("--reveal", action="store_true", help="秘密情報(配役・夜・投票・メモ)も表示する")
+    b = sub.add_parser("bench", help="seed を変えて複数ゲームを実行し集計する")
+    add_game_options(b)
+    b.add_argument("--games", type=int, default=5)
+    b.add_argument("--name", default=None, help="runs/ 配下のディレクトリ名")
+    z = sub.add_parser("summarize", help="runs/ のログを集計する")
+    z.add_argument("paths", nargs="+")
     args = parser.parse_args()
     if args.command == "play":
         asyncio.run(play(args))
+    elif args.command == "bench":
+        asyncio.run(bench(args))
+    else:
+        summarize(args)
 
 
 if __name__ == "__main__":

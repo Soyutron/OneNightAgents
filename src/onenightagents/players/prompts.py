@@ -34,3 +34,17 @@ def build_system_prompt(display_name: str, player_id: str, persona_text: str | N
             "## あなたの性格と方針\n" + (persona_text or "特に指定はありません。自分なりに勝利を目指してください。"),
         ]
     )
+
+
+def render_persona(persona: dict[str, str]) -> str:
+    """configs/personas/*.yaml の項目を system prompt 用の文章にする。"""
+    lines = [
+        f"あなたは「{persona['name']}」タイプです。",
+        f"- 考え方: {persona['style']}",
+        f"- リスクの取り方: {persona['risk']}",
+        f"- 発言量: {persona['talkativeness']}",
+        f"- 嘘や騙りへの姿勢: {persona['deception']}",
+    ]
+    if persona.get("notes"):
+        lines.append(f"- 方針: {persona['notes']}")
+    return "\n".join(lines)
