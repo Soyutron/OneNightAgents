@@ -80,6 +80,8 @@ def summarize_game(run_dir: Path) -> dict[str, Any]:
         "lies": len(lies),
         "confessions": len(confessions),
         "repeats": repeats,
+        # 終了時に占い師だった人が処刑されたか(真占い師を信じない構図の指標)
+        "seer_executed": any(final_roles[pid] == "seer" for pid in ended["result"]["executed"]),
     }
 
 
@@ -104,18 +106,20 @@ def summarize_games(games: list[dict[str, Any]]) -> dict[str, Any]:
         "lie_rate": sum(g["lies"] for g in games) / claims if claims else 0.0,
         "confessions": sum(g["confessions"] for g in games),
         "repeat_rate": sum(g["repeats"] for g in games) / utterances if utterances else 0.0,
+        "seer_executed": sum(g["seer_executed"] for g in games),
     }
 
 
 def format_report(games: list[dict[str, Any]]) -> str:
     s = summarize_games(games)
     lines = [
-        "| seed | 勝者 | 処刑 | 秒 | 判断 | 呼び出し | 未提出 | FB | 嘘CO/CO | なぞり |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| seed | 勝者 | 処刑 | 占処刑 | 秒 | 判断 | 呼び出し | 未提出 | FB | 嘘CO/CO | なぞり |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for g in games:
         lines.append(
-            f"| {g['seed']} | {g['winner']} | {','.join(g['executed']) or '-'} | {g['seconds']:.0f} | {g['decisions']} "
+            f"| {g['seed']} | {g['winner']} | {','.join(g['executed']) or '-'} | {'o' if g['seer_executed'] else '-'} "
+            f"| {g['seconds']:.0f} | {g['decisions']} "
             f"| {g['model_calls']} | {g['no_submission']} | {g['fallbacks']} | {g['lies']}/{g['claims']} | {g['repeats']}/{g['utterances']} |"
         )
     lines += [
@@ -124,6 +128,7 @@ def format_report(games: list[dict[str, Any]]) -> str:
         f"総時間 平均 {s['seconds_mean']:.0f} 秒、1 判断の呼び出し {s['calls_per_decision']:.2f}、"
         f"レイテンシ p50 {s['latency_p50']:.1f} / p95 {s['latency_p95']:.1f} 秒、最大コンテキスト {s['max_ctx']}",
         f"未提出率 {s['no_submission_rate']:.1%}、フォールバック率 {s['fallback_rate']:.1%}、"
-        f"嘘 CO 率 {s['lie_rate']:.1%}、人狼の自白 {s['confessions']}、なぞり率 {s['repeat_rate']:.1%}",
+        f"嘘 CO 率 {s['lie_rate']:.1%}、人狼の自白 {s['confessions']}、なぞり率 {s['repeat_rate']:.1%}、"
+        f"占い師の処刑 {s['seer_executed']} ゲーム",
     ]
     return "\n".join(lines)
