@@ -1,7 +1,7 @@
 """タスク一覧を LangSmith データセットに同期し、モデル設定ごとに evaluate() で実験を回す。
 
 使い方:
-  uv run --env-file ../.env python run_eval.py gemma4:26b [--reasoning true|false|default] [--category tool_use,filesystem] [--repeat 1]
+  uv run --env-file ../.env python run_eval.py gemma4:26b [--reasoning true|false|default] [--category tool_use,filesystem] [--repeat 1] [--num-predict 2048]
 
 結果は LangSmith の実験(experiment)と results/<experiment>.jsonl の両方に残す。
 """
@@ -177,8 +177,14 @@ def main() -> None:
     ap.add_argument("--task", default=None, help="task_id をカンマ区切りで絞り込む")
     ap.add_argument("--repeat", type=int, default=1)
     ap.add_argument("--coerce", action="store_true", help="ツール引数の寛容な変換ミドルウェアを有効にする")
+    ap.add_argument("--num-predict", type=int, default=2048, help="1 呼び出しの生成上限(暴走の判定にも使う)")
     args = ap.parse_args()
-    cfg = ModelConfig(model=args.model, reasoning={"true": True, "false": False, "default": None}[args.reasoning], coerce=args.coerce)
+    cfg = ModelConfig(
+        model=args.model,
+        reasoning={"true": True, "false": False, "default": None}[args.reasoning],
+        coerce=args.coerce,
+        num_predict=args.num_predict,
+    )
 
     client = Client()
     ds_name = sync_dataset(client)

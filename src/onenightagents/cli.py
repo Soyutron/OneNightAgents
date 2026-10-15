@@ -72,6 +72,7 @@ def make_players(config: GameConfig, recorder: Recorder, args: argparse.Namespac
         num_predict=args.num_predict,
         reasoning=args.reasoning,
         temperature=args.temperature,
+        top_p=args.top_p,
         seed=config.seed,
     )
 
@@ -240,6 +241,7 @@ def add_game_options(p: argparse.ArgumentParser) -> None:
     p.add_argument("--num-ctx", type=int, default=16384)
     p.add_argument("--num-predict", type=int, default=4096)
     p.add_argument("--temperature", type=float, default=0.7)
+    p.add_argument("--top-p", type=float, default=None, help="未指定ならモデルの既定(Nemotron のツール呼び出し推奨は 0.95)")
     p.add_argument("--timeout", type=float, default=60.0, help="1 判断の制限時間(秒)")
     p.add_argument("--personas", default=None, help="ペルソナ YAML のディレクトリ(例: configs/personas)")
 

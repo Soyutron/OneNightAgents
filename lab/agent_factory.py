@@ -30,7 +30,7 @@ class ModelConfig:
     @property
     def label(self) -> str:
         r = {True: "think", False: "nothink", None: "default"}[self.reasoning]
-        return f"{self.model}-{r}" + ("-coerce" if self.coerce else "")
+        return f"{self.model}-{r}" + ("-coerce" if self.coerce else "") + (f"-np{self.num_predict}" if self.num_predict != 2048 else "")
 
 
 def make_llm(cfg: ModelConfig) -> ChatOllama:

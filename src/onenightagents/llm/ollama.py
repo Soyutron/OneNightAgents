@@ -12,6 +12,7 @@ def make_llm(
     num_predict: int = 4096,
     reasoning: bool | None = True,
     temperature: float = 0.7,
+    top_p: float | None = None,
     seed: int | None = None,
 ) -> ChatOllama:
     return ChatOllama(
@@ -20,6 +21,7 @@ def make_llm(
         num_predict=num_predict,  # 暴走の上限
         reasoning=reasoning,
         temperature=temperature,
+        top_p=top_p,
         seed=seed,
         keep_alive="30m",
         validate_model_on_init=True,
