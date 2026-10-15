@@ -11,6 +11,7 @@
 3. **`nemotron-3-nano:30b` は langchain-ollama 経由でツール呼び出し・構造化出力(`format=json_schema`)とも動く**(本リポジトリで確認)。Ollama は Go 実装のレンダラー/パーサー(`nemotron3nano`)を持ち、過去ターンの思考を自動で切り落とすので、006 の `drop_past_reasoning` は Nemotron では no-op になる(gemma4 と同じ)。
 4. **既知の問題は「推論モデルの出力が content に入らない」「思考が途中で切れるとツール呼び出しが壊れる」「存在しないツール名を呼ぶ」の 3 系統。** 前者と後者は langchain-ollama + Deep Agents の構成では出ない。**残るのは「思考が `num_predict` で切れる」で、これが本リポジトリでの実質的な制約**: 人狼 bench では呼び出しの 12〜16% が 4096 トークンの思考で切れ、未提出率 28〜32%(gemma4 6%、qwen3.8 0.6%)。lab の短いタスクは `num_predict` を 4096 にすれば 26/29 相当。
 5. NVIDIA の公式推奨サンプリング(ツール呼び出し用途で temperature 0.6 / top_p 0.95)を試したが、人狼では思考の長さも未提出率も改善しなかった(007)。**ハーネス側に Nemotron 固有の修正を入れる必要はなく、人狼の既定モデルにもしない。**
+6. **2026-08 公開の `nemotron-3.5-lightning:30b` では思考の暴走が消えた**(008)。用途別 29 タスクで 28/29・p95 5.8 秒(全設定で最速)、人狼でも未提出 2.1%・1 ゲーム 143 秒と gemma4 並み。ローカルで Nemotron を使うならこちら。ただし人狼の推理(村 0 勝、役職の誤認、なぞり 12.8%)は gemma4 以下で、既定モデルは据え置き。
 
 ## 2. 公式情報
 
@@ -89,10 +90,23 @@ Ollama 0.33.3 の `nemotron-3-nano:30b` は Modelfile の TEMPLATE が `{{ .Prom
 | モデル | サイズ | 能力 | 備考 |
 | --- | --- | --- | --- |
 | `nemotron-3-nano:30b` | 24GB(Q4_K_M)、1M ctx | tools, thinking | 本リポジトリで取得済み。2025-12 公開 |
-| `nemotron-3.5-lightning:30b` | 25GB、1M ctx | tools, thinking | 30B-A3B。「常駐エージェントの実行層向け」。2 か月前公開。Ollama のレンダラーは `v35` 分岐で対応、`think="medium"` で `{reasoning effort: efficient}` を付ける。langchain-nvidia にも登録済み(PR #359) |
+| `nemotron-3.5-lightning:30b` | 25GB、1M ctx | tools, thinking | 30B-A3B。2026-08-11 公開、「常駐エージェントの実行層向け」。Ollama のレンダラーは `v35` 分岐で対応、`think="medium"` で `{reasoning effort: efficient}` を付ける。langchain-nvidia にも登録済み(PR #359)。詳細は §2.7 |
 | `nemotron3:33b` | 28GB、128K ctx | vision, tools, thinking | Nano Omni(動画・音声・画像)。32GB には 16K ctx 込みで厳しい |
 | `nemotron-3-super:120b` | 87GB | tools, thinking | 120B-A12B。**ローカルには載らない**(`:cloud` あり) |
 | `nemotron-3-ultra` | cloud のみ | tools, thinking | Deep Agents の正式対応モデル |
+
+### 2.7 Nemotron 3.5 Lightning 30B-A3B(2026-08-11 公開)
+
+| 項目 | 内容 | 出典 |
+| --- | --- | --- |
+| 構成 | Nano 3 と同じ Mamba-2 + MoE + Attention のハイブリッド、30B(3B アクティブ)。MTP(Multi-Token Prediction)層を同梱し、Ollama の Modelfile にも `draft_num_predict 2` が入っている(投機的デコード) | [HF model card](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16)、`ollama show --modelfile` |
+| コンテキスト・言語 | 最大 1M(H100 1 枚では 256K)。英語・スペイン語・フランス語・ドイツ語・イタリア語・日本語 | HF model card |
+| 推奨サンプリング | **temperature 1.0 / top_p 0.95**(Ollama の Modelfile 既定も同じ)。Unsloth は思考モード 0.6 / 0.95 と書くが、NVIDIA の card には 0.6 の記載がない | HF model card、[Unsloth guide](https://unsloth.ai/docs/models/nemotron-3.5) |
+| 思考の切り替え | `enable_thinking`(既定 True)。effort の段階や予算は card に記載なし。Ollama のレンダラーは `think="medium"` のときだけ最後の user に `{reasoning effort: efficient}` を付け、`low` / `high` は `True` と同じ扱い | HF model card、Ollama レンダラー(`v35`) |
+| ツール呼び出し | Nano 3 と同じ XML 形式。vLLM は `--tool-call-parser qwen3_coder --reasoning-parser nemotron_v3`。coding agent 向けに `chat_template_kwargs` の `force_nonempty_content` の記載あり | HF model card |
+| 位置づけ | card は「カスタマイズと post-training の起点」とし、Ollama の説明は「常駐エージェントの実行層向け(OpenClaw、Hermes Agent)」 | HF model card、Ollama library |
+
+本リポジトリでのプローブ(§4.1 と同じ手順、seed=1): ツール呼び出しは `reasoning=True/False` とも構造化された `tool_calls` で返り、同じ発言プロンプトの思考は 361 文字(Nano 3 は 1,670)。過去ターンの思考を送る / 外すで `prompt_eval_count` は 589 / 589 で一致(レンダラーが捨てる)。`json_schema` の構造化出力も両方通った。`reasoning="medium"` は出力が変わる(eval 435 → 505)が短くはならず、`"low"` / `"high"` は `True` と同一の出力だった。
 
 ## 3. 推測・解釈(公式情報ではないもの)
 
@@ -158,6 +172,19 @@ HF discussion #3 の NVIDIA の回答(token 予算が足りないとツール解
 
 思考に 2048〜4096 トークンを使えば planning は解ける。残り 3 件は思考の長さと無関係な判断の癖(JSON をコードブロックで答える、ツールを呼ばずに説明する、一意でない置換)。29 タスク換算では 26/29 相当。
 
+### 4.5 nemotron-3.5-lightning:30b(lab + 人狼 5 seed、[008](../experiments/008-nemotron-lightning.md))
+
+| 指標 | nemotron-3-nano:30b | nemotron-3.5-lightning:30b | gemma4:26b(参考) |
+| --- | --- | --- | --- |
+| lab 29 タスク | 23/29(暴走 5) | **28/29**(暴走 0、p95 5.8 秒で最速) | 29/29 |
+| 人狼: 未提出率 / フォールバック率 | 27.9% / 9.5% | **2.1% / 0.7%** | 6.1% / 0% |
+| 人狼: 思考が 4096 に達した呼び出し | 53 / 423 | **3 / 420** | 6 / 370 |
+| 人狼: 総時間 平均 | 364 秒 | **143 秒** | 129 秒 |
+| 人狼: 村の勝ち / 占い師の処刑 | 2 / 1 | 0 / 0 | 1 / 1 |
+| 人狼: なぞり率 | 10.3% | 12.8% | 8.3% |
+
+Nano 3 の問題(思考の暴走)は Lightning で解消した。人狼の推理の質は gemma4 以下(怪盗が自分を「originally werewolf」と誤って説明し村側が処刑される、直前の発言をなぞる)。
+
 ## 5. 現在の実装への適用
 
 | 項目 | 判断 | 理由 |
@@ -167,8 +194,9 @@ HF discussion #3 の NVIDIA の回答(token 予算が足りないとツール解
 | `top_p` の指定(`make_llm(top_p=…)`、`--top-p`) | **追加した** | NVIDIA 推奨 0.6 / 0.95 の比較(007 B)に必要。既定は未指定のまま(モデルの既定) |
 | lab `run_eval.py --num-predict` | **追加した** | 思考が 2048 で切れる planning タスクの再評価に必要(§4.4) |
 | `num_predict` の引き上げ(8192) | **見送り** | 暴走 1 回が 12 → 24 秒になり、総時間が qwen の 2 倍を超える。投票の思考が 4096 で収まらない比率(7%)に対して高すぎる |
-| 既定モデルの変更 | **しない** | 007 の結論。gemma4:26b(速さ)/ qwen3.8:27b(推理)のまま |
-| 投票だけ `reasoning=False` にする、`nemotron-3.5-lightning:30b` を試す | 次の仮説(007) | — |
+| 既定モデルの変更 | **しない** | 007 / 008 の結論。gemma4:26b(速さ)/ qwen3.8:27b(推理)のまま。Nemotron を使う場合の推奨は `nemotron-3.5-lightning:30b`(取得済み、25GB) |
+| 投票だけ `reasoning=False` にする | 見送り | Lightning では暴走が消えたので不要 |
+| Lightning を temperature 1.0(公式推奨)で回す、`reasoning="medium"` を CLI から指定できるようにする | 次の仮説(008) | — |
 
 ## 参考リンク
 
