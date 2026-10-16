@@ -62,11 +62,18 @@ def summarize_game(run_dir: Path) -> dict[str, Any]:
             repeats += 1
         seen.append(u["content"])
 
+    # 村側(終了時に人狼でない)の票がどこへ行ったか。5 ゲームの勝敗より標本が多い直接指標(013 / 018)
+    village_votes = [v for v in ended["votes"] if final_roles[v["voter"]] != "werewolf"]
+
     return {
         "run_dir": str(run_dir),
         "seed": events[0]["data"]["config"]["seed"],
         "winner": ended["result"]["winner"],
         "executed": ended["result"]["executed"],
+        "seer_target": ended["night"]["seer_target"],
+        "village_votes": len(village_votes),
+        "wolf_votes": sum(final_roles[v["target"]] == "werewolf" for v in village_votes),
+        "seer_votes": sum(final_roles[v["target"]] == "seer" for v in village_votes),
         "seconds": (t1 - t0).total_seconds(),
         "utterances": len([u for u in utterances if not u["is_pass"]]),
         "passes": len([u for u in utterances if u["is_pass"]]),
@@ -107,18 +114,22 @@ def summarize_games(games: list[dict[str, Any]]) -> dict[str, Any]:
         "confessions": sum(g["confessions"] for g in games),
         "repeat_rate": sum(g["repeats"] for g in games) / utterances if utterances else 0.0,
         "seer_executed": sum(g["seer_executed"] for g in games),
+        "village_votes": sum(g["village_votes"] for g in games),
+        "wolf_votes": sum(g["wolf_votes"] for g in games),
+        "seer_votes": sum(g["seer_votes"] for g in games),
     }
 
 
 def format_report(games: list[dict[str, Any]]) -> str:
     s = summarize_games(games)
     lines = [
-        "| seed | 勝者 | 処刑 | 占処刑 | 秒 | 判断 | 呼び出し | 未提出 | FB | 嘘CO/CO | なぞり |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| seed | 勝者 | 処刑 | 占い | 人狼票/占票 | 占処刑 | 秒 | 判断 | 呼び出し | 未提出 | FB | 嘘CO/CO | なぞり |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for g in games:
         lines.append(
-            f"| {g['seed']} | {g['winner']} | {','.join(g['executed']) or '-'} | {'o' if g['seer_executed'] else '-'} "
+            f"| {g['seed']} | {g['winner']} | {','.join(g['executed']) or '-'} | {g['seer_target'] or '-'} "
+            f"| {g['wolf_votes']}/{g['seer_votes']}/{g['village_votes']} | {'o' if g['seer_executed'] else '-'} "
             f"| {g['seconds']:.0f} | {g['decisions']} "
             f"| {g['model_calls']} | {g['no_submission']} | {g['fallbacks']} | {g['lies']}/{g['claims']} | {g['repeats']}/{g['utterances']} |"
         )
@@ -130,5 +141,6 @@ def format_report(games: list[dict[str, Any]]) -> str:
         f"未提出率 {s['no_submission_rate']:.1%}、フォールバック率 {s['fallback_rate']:.1%}、"
         f"嘘 CO 率 {s['lie_rate']:.1%}、人狼の自白 {s['confessions']}、なぞり率 {s['repeat_rate']:.1%}、"
         f"占い師の処刑 {s['seer_executed']} ゲーム",
+        f"村側の票 {s['village_votes']}: 人狼 {s['wolf_votes']}、真占い師 {s['seer_votes']}",
     ]
     return "\n".join(lines)

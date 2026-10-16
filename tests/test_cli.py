@@ -39,8 +39,9 @@ async def test_bench_runs_games_and_summarizes(tmp_path: Path, capsys) -> None:
     assert all(g["decisions"] == 0 for g in games)
     s = summarize_games(games)
     assert s["games"] == 2 and s["village"] + s["werewolf"] + s["none"] == 2
+    assert all(g["wolf_votes"] + g["seer_votes"] <= g["village_votes"] <= 4 for g in games)
     report = format_report(games)
-    assert "| 1 |" in report and "ゲーム数 2" in report
+    assert "| 1 |" in report and "ゲーム数 2" in report and "村側の票" in report
     assert "seed=1 winner=" in capsys.readouterr().out
 
 
