@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 SUBMIT_TOOLS = {"speak", "pass_turn", "vote", "seer_look", "thief_swap"}
+INFO_KINDS = ("占い", "怪盗", "なし", "人狼なし")
 # 文字 bigram の Jaccard 類似度がこれ以上なら「他者の発言のなぞり」とみなす
 REPEAT_THRESHOLD = 0.4
 
@@ -39,11 +40,31 @@ def _is_repeat(content: str, earlier: list[str]) -> bool:
     return False
 
 
+def classify_info(initial_roles: dict[str, str], night: dict[str, Any], final_roles: dict[str, str]) -> str:
+    """村側が投票の根拠にできる夜の情報で配役を分ける(017 / 022)。
+
+    占い: 占い結果が人狼を指し、終了時もその人が人狼で、怪盗が占い師と交換していない(対抗 CO が両方正直にならない)。
+    怪盗: 占い結果が決め手にならず、怪盗が村側のカードと交換した(相手と自分を候補から外せる)。
+    なし: どちらもない(占い師が中央、白の占い結果だけ、怪盗が人狼カードを奪った、など)。
+    人狼なし: 人狼が 2 枚とも中央で、人狼票が定義できない(誰も処刑しないのが正解)。
+    """
+    if "werewolf" not in final_roles.values():
+        return "人狼なし"
+    seer = next((pid for pid, r in initial_roles.items() if r == "seer"), None)
+    target = night["seer_target"]
+    if target in final_roles and final_roles[target] == "werewolf" and night["thief_target"] != seer:
+        return "占い"
+    if night["thief_target"] is not None and night["thief_new_role"] != "werewolf":
+        return "怪盗"
+    return "なし"
+
+
 def summarize_game(run_dir: Path) -> dict[str, Any]:
     events = [json.loads(line) for line in (run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()]
     t0 = datetime.fromisoformat(events[0]["time"])
     t1 = datetime.fromisoformat(events[-1]["time"])
     ended = next(e["data"] for e in events if e["event"] == "game_ended")
+    initial_roles = next(e["data"]["initial_roles"] for e in events if e["event"] == "roles_assigned")
     final_roles = ended["result"]["final_roles"]
     utterances = [e["data"] for e in events if e["event"] == "utterance"]
     steps = [e["data"] for e in events if e["event"] == "agent_step"]
@@ -71,6 +92,7 @@ def summarize_game(run_dir: Path) -> dict[str, Any]:
         "winner": ended["result"]["winner"],
         "executed": ended["result"]["executed"],
         "seer_target": ended["night"]["seer_target"],
+        "info": classify_info(initial_roles, ended["night"], final_roles),
         "village_votes": len(village_votes),
         "wolf_votes": sum(final_roles[v["target"]] == "werewolf" for v in village_votes),
         "seer_votes": sum(final_roles[v["target"]] == "seer" for v in village_votes),
@@ -120,15 +142,30 @@ def summarize_games(games: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def summarize_by_info(games: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
+    """情報の種類ごとのゲーム数・村の勝ち・村側の票の行き先。"""
+    out: dict[str, dict[str, int]] = {}
+    for kind in INFO_KINDS:
+        gs = [g for g in games if g["info"] == kind]
+        out[kind] = {
+            "games": len(gs),
+            "village": sum(g["winner"] == "village" for g in gs),
+            "village_votes": sum(g["village_votes"] for g in gs),
+            "wolf_votes": sum(g["wolf_votes"] for g in gs),
+            "seer_votes": sum(g["seer_votes"] for g in gs),
+        }
+    return out
+
+
 def format_report(games: list[dict[str, Any]]) -> str:
     s = summarize_games(games)
     lines = [
-        "| seed | 勝者 | 処刑 | 占い | 人狼票/占票 | 占処刑 | 秒 | 判断 | 呼び出し | 未提出 | FB | 嘘CO/CO | なぞり |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| seed | 勝者 | 処刑 | 占い | 情報 | 人狼票/占票 | 占処刑 | 秒 | 判断 | 呼び出し | 未提出 | FB | 嘘CO/CO | なぞり |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for g in games:
         lines.append(
-            f"| {g['seed']} | {g['winner']} | {','.join(g['executed']) or '-'} | {g['seer_target'] or '-'} "
+            f"| {g['seed']} | {g['winner']} | {','.join(g['executed']) or '-'} | {g['seer_target'] or '-'} | {g['info']} "
             f"| {g['wolf_votes']}/{g['seer_votes']}/{g['village_votes']} | {'o' if g['seer_executed'] else '-'} "
             f"| {g['seconds']:.0f} | {g['decisions']} "
             f"| {g['model_calls']} | {g['no_submission']} | {g['fallbacks']} | {g['lies']}/{g['claims']} | {g['repeats']}/{g['utterances']} |"
@@ -142,5 +179,10 @@ def format_report(games: list[dict[str, Any]]) -> str:
         f"嘘 CO 率 {s['lie_rate']:.1%}、人狼の自白 {s['confessions']}、なぞり率 {s['repeat_rate']:.1%}、"
         f"占い師の処刑 {s['seer_executed']} ゲーム",
         f"村側の票 {s['village_votes']}: 人狼 {s['wolf_votes']}、真占い師 {s['seer_votes']}",
+        "",
+        "| 情報 | ゲーム | 村勝ち | 村側の票 | 人狼票 | 占票 |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
+    for kind, b in summarize_by_info(games).items():
+        lines.append(f"| {kind} | {b['games']} | {b['village']} | {b['village_votes']} | {b['wolf_votes']} | {b['seer_votes']} |")
     return "\n".join(lines)
