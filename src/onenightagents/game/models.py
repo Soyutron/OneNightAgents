@@ -48,6 +48,8 @@ class GameConfig(BaseModel):
     reply_chain_limit: int = 2
     llm_timeout_sec: float = 60.0
     model_call_limit: int = 4
+    # 023: この席に人狼カードを配り、嘘の占い師 CO を出す scripted プレイヤーが担当する
+    liar_seer: str | None = None
 
     @model_validator(mode="after")
     def _check_players(self) -> GameConfig:
@@ -59,6 +61,8 @@ class GameConfig(BaseModel):
             raise ValueError("player ids must be unique")
         if CENTER in ids:
             raise ValueError(f"player id {CENTER!r} is reserved")
+        if self.liar_seer is not None and self.liar_seer not in ids:
+            raise ValueError(f"liar_seer must be a player id, got {self.liar_seer!r}")
         return self
 
     @property

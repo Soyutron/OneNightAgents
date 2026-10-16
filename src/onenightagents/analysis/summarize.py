@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 SUBMIT_TOOLS = {"speak", "pass_turn", "vote", "seer_look", "thief_swap"}
-INFO_KINDS = ("占い", "怪盗", "なし", "人狼なし")
+INFO_KINDS = ("占い", "怪盗", "なし", "人狼なし", "嘘CO", "嘘CO対抗")
 # 文字 bigram の Jaccard 類似度がこれ以上なら「他者の発言のなぞり」とみなす
 REPEAT_THRESHOLD = 0.4
 
@@ -40,14 +40,23 @@ def _is_repeat(content: str, earlier: list[str]) -> bool:
     return False
 
 
-def classify_info(initial_roles: dict[str, str], night: dict[str, Any], final_roles: dict[str, str]) -> str:
+def classify_info(
+    initial_roles: dict[str, str],
+    night: dict[str, Any],
+    final_roles: dict[str, str],
+    liar_seer: str | None = None,
+    seer_claimants: set[str] | None = None,
+) -> str:
     """村側が投票の根拠にできる夜の情報で配役を分ける(017 / 022)。
 
     占い: 占い結果が人狼を指し、終了時もその人が人狼で、怪盗が占い師と交換していない(対抗 CO が両方正直にならない)。
     怪盗: 占い結果が決め手にならず、怪盗が村側のカードと交換した(相手と自分を候補から外せる)。
     なし: どちらもない(占い師が中央、白の占い結果だけ、怪盗が人狼カードを奪った、など)。
     人狼なし: 人狼が 2 枚とも中央で、人狼票が定義できない(誰も処刑しないのが正解)。
+    嘘CO / 嘘CO対抗: 嘘の占い師 CO を出す席がある(023)。他に占い師を名乗った人がいれば「対抗」。
     """
+    if liar_seer is not None:
+        return "嘘CO対抗" if (seer_claimants or set()) - {liar_seer} else "嘘CO"
     if "werewolf" not in final_roles.values():
         return "人狼なし"
     seer = next((pid for pid, r in initial_roles.items() if r == "seer"), None)
@@ -92,7 +101,13 @@ def summarize_game(run_dir: Path) -> dict[str, Any]:
         "winner": ended["result"]["winner"],
         "executed": ended["result"]["executed"],
         "seer_target": ended["night"]["seer_target"],
-        "info": classify_info(initial_roles, ended["night"], final_roles),
+        "info": classify_info(
+            initial_roles,
+            ended["night"],
+            final_roles,
+            events[0]["data"]["config"].get("liar_seer"),
+            {u["speaker"] for u in claims if u["claimed_role"] == "seer"},
+        ),
         "village_votes": len(village_votes),
         "wolf_votes": sum(final_roles[v["target"]] == "werewolf" for v in village_votes),
         "seer_votes": sum(final_roles[v["target"]] == "seer" for v in village_votes),
@@ -147,6 +162,8 @@ def summarize_by_info(games: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
     out: dict[str, dict[str, int]] = {}
     for kind in INFO_KINDS:
         gs = [g for g in games if g["info"] == kind]
+        if not gs:
+            continue
         out[kind] = {
             "games": len(gs),
             "village": sum(g["winner"] == "village" for g in gs),

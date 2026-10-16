@@ -16,7 +16,9 @@ from onenightagents.cli import bench, load_personas, make_config, replay
 from onenightagents.players.prompts import build_system_prompt
 
 
-def bench_args(run_dir: Path, games: int = 2, warmup_seed: int | None = None) -> argparse.Namespace:
+def bench_args(
+    run_dir: Path, games: int = 2, warmup_seed: int | None = None, liar_seer: str | None = None
+) -> argparse.Namespace:
     return argparse.Namespace(
         players=4,
         seed=1,
@@ -30,6 +32,7 @@ def bench_args(run_dir: Path, games: int = 2, warmup_seed: int | None = None) ->
         temperature=0.7,
         timeout=60.0,
         personas=None,
+        liar_seer=liar_seer,
         games=games,
         name="b",
         warmup_seed=warmup_seed,
@@ -104,3 +107,22 @@ def test_classify_info() -> None:
     assert classify_info(no_seer, none_night, no_seer) == "なし"
     traded = {**no_seer, "p2": "thief", "p4": "villager"}
     assert classify_info(no_seer, {**none_night, "thief_target": "p2", "thief_new_role": "villager"}, traded) == "怪盗"
+
+
+async def test_bench_with_liar_seer_classifies_lie_co(tmp_path: Path, capsys) -> None:
+    await bench(bench_args(tmp_path, games=3, liar_seer="p2"))
+    games = [summarize_game(d) for d in find_game_dirs([tmp_path / "b"])]
+    assert all(g["info"] in ("嘘CO", "嘘CO対抗") for g in games)
+    # 嘘 CO 席は毎ゲーム人狼で、村側の票の対象になりうる
+    assert all(g["village_votes"] <= 3 for g in games)
+    report = format_report(games)
+    assert "\n| 嘘CO" in report and "\n| 占い |" not in report  # ゲームのない種類は表に出ない
+    assert "seed=1 winner=" in capsys.readouterr().out
+
+
+def test_classify_info_liar_seer() -> None:
+    roles = {"p1": "werewolf", "p2": "villager", "p3": "seer", "p4": "thief", "p5": "werewolf"}
+    night = {"seer_target": "p2", "thief_target": None, "thief_new_role": None}
+    assert classify_info(roles, night, roles, "p1", {"p1"}) == "嘘CO"
+    assert classify_info(roles, night, roles, "p1", {"p1", "p3"}) == "嘘CO対抗"
+    assert classify_info(roles, night, roles, "p1", set()) == "嘘CO"

@@ -13,15 +13,15 @@ from onenightagents.engine.recorder import Recorder
 from onenightagents.game import rules
 from onenightagents.game.models import NightRequest, SpeakRequest, VoteRequest
 from onenightagents.players.base import NightAction, SpeechAction, VoteAction
-from onenightagents.players.scripted import RandomPlayer
+from onenightagents.players.scripted import LiarSeerPlayer, RandomPlayer
 
 
 def read_events(run_dir: Path) -> list[dict]:
     return [json.loads(line) for line in (run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()]
 
 
-async def run_game(run_dir: Path, seed: int, players=None, num_players: int = 5) -> dict:
-    config = make_config(f"g{seed}", seed, num_players, 2)
+async def run_game(run_dir: Path, seed: int, players=None, num_players: int = 5, liar_seer: str | None = None) -> dict:
+    config = make_config(f"g{seed}", seed, num_players, 2, liar_seer=liar_seer)
     if players is None:
         players = {p.id: RandomPlayer(p.id, random.Random(seed * 100 + i)) for i, p in enumerate(config.players)}
     ctx = GameContext(players=players, recorder=Recorder(run_dir), rng=random.Random(seed))
@@ -111,3 +111,20 @@ async def test_timeout_falls_back(tmp_path: Path) -> None:
     assert len(final["votes"]) == 3
     skipped = [e for e in read_events(tmp_path) if e["event"] == "turn_skipped"]
     assert len(skipped) == 3 and all("制限時間" in e["data"]["reason"] for e in skipped)
+
+
+@pytest.mark.asyncio
+async def test_liar_seer_claims_seer_and_votes_target(tmp_path: Path) -> None:
+    for seed in range(1, 11):
+        liar = LiarSeerPlayer("p3", random.Random(seed))
+        players = {f"p{i}": RandomPlayer(f"p{i}", random.Random(seed * 100 + i)) for i in range(1, 6)}
+        players["p3"] = liar
+        final = await run_game(tmp_path / f"s{seed}", seed, players, liar_seer="p3")
+        assert final["initial_roles"]["p3"] is rules.Role.WEREWOLF
+        partners = [w for w in final["night"].werewolves if w != "p3"]
+        assert liar.partner == (partners[0] if partners else None)
+        assert liar.target is not None and liar.target != liar.partner and liar.target != "p3"
+        mine = [u for u in final["utterances"] if u.speaker == "p3"]
+        assert mine[0].round == 0 and mine[0].claimed_role is rules.Role.SEER and liar.target in mine[0].content
+        assert all(u.claimed_role is rules.Role.SEER and not u.is_pass for u in mine)
+        assert next(v for v in final["votes"] if v.voter == "p3").target == liar.target

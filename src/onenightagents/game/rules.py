@@ -23,10 +23,20 @@ def role_deck(num_players: int) -> list[Role]:
     return FIXED_ROLES + [Role.VILLAGER] * villagers
 
 
-def assign_roles(player_ids: list[str], rng: random.Random) -> tuple[dict[str, Role], list[Role]]:
-    """カードをシャッフルして配り、(初期役職, 中央 2 枚) を返す。"""
+def assign_roles(
+    player_ids: list[str], rng: random.Random, werewolf: str | None = None
+) -> tuple[dict[str, Role], list[Role]]:
+    """カードをシャッフルして配り、(初期役職, 中央 2 枚) を返す。
+
+    werewolf を指定すると、その席が人狼でなければ最初の人狼カードと入れ替える(023 の嘘 CO 実験用)。
+    """
     deck = role_deck(len(player_ids))
     rng.shuffle(deck)
+    if werewolf is not None:
+        seat = player_ids.index(werewolf)
+        if deck[seat] is not Role.WEREWOLF:
+            wolf = deck.index(Role.WEREWOLF)
+            deck[seat], deck[wolf] = deck[wolf], deck[seat]
     roles = dict(zip(player_ids, deck))
     return roles, deck[len(player_ids):]
 

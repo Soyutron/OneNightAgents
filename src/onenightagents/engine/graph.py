@@ -87,7 +87,7 @@ async def setup(state: GameState, runtime: Runtime[GameContext]) -> dict:
     ctx = runtime.context
     ctx.recorder.write_config(config)
     ctx.recorder.emit("game_started", "public", config=config.model_dump())
-    roles, center = rules.assign_roles(config.player_ids, ctx.rng)
+    roles, center = rules.assign_roles(config.player_ids, ctx.rng, werewolf=config.liar_seer)
     ctx.recorder.emit("roles_assigned", "secret", initial_roles=roles, center=center)
     return {
         "phase": "night",

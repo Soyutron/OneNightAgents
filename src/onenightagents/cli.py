@@ -23,7 +23,7 @@ from onenightagents.llm.ollama import make_llm
 from onenightagents.players.base import Player
 from onenightagents.players.deep import DeepAgentPlayer
 from onenightagents.players.prompts import render_persona
-from onenightagents.players.scripted import RandomPlayer
+from onenightagents.players.scripted import LiarSeerPlayer, RandomPlayer
 
 DISPLAY_NAMES = ["太郎", "花子", "次郎", "美咲", "健太", "さくら", "大輔"]
 
@@ -38,6 +38,7 @@ def make_config(
     max_free_rounds: int,
     kind: str = "scripted",
     personas: list[str] | None = None,
+    liar_seer: str | None = None,
     **overrides,
 ) -> GameConfig:
     # 席とペルソナの対応を固定すると同じ席が毎回標的になる(002)ので、seed で並べ替える
@@ -47,12 +48,14 @@ def make_config(
         PlayerConfig(
             id=f"p{i + 1}",
             display_name=DISPLAY_NAMES[i],
-            kind=kind,
+            kind="scripted" if f"p{i + 1}" == liar_seer else kind,
             persona=order[i % len(order)] if personas else None,
         )
         for i in range(num_players)
     ]
-    return GameConfig(game_id=game_id, seed=seed, players=players, max_free_rounds=max_free_rounds, **overrides)
+    return GameConfig(
+        game_id=game_id, seed=seed, players=players, max_free_rounds=max_free_rounds, liar_seer=liar_seer, **overrides
+    )
 
 
 def load_personas(directory: str | None) -> list[str] | None:
@@ -64,8 +67,16 @@ def load_personas(directory: str | None) -> list[str] | None:
 
 
 def make_players(config: GameConfig, recorder: Recorder, args: argparse.Namespace) -> dict[str, Player]:
+    players: dict[str, Player] = {}
+    if config.liar_seer is not None:
+        players[config.liar_seer] = LiarSeerPlayer(config.liar_seer, random.Random(config.seed))
     if args.kind == "random":
-        return {p.id: RandomPlayer(p.id, random.Random(config.seed * 100 + i)) for i, p in enumerate(config.players)}
+        players.update(
+            (p.id, RandomPlayer(p.id, random.Random(config.seed * 100 + i)))
+            for i, p in enumerate(config.players)
+            if p.id not in players
+        )
+        return players
     llm = make_llm(
         args.model,
         num_ctx=args.num_ctx,
@@ -82,18 +93,23 @@ def make_players(config: GameConfig, recorder: Recorder, args: argparse.Namespac
         if notes is not None:
             recorder.emit("notes_updated", "secret", player=step["player"], notes=notes)
 
-    return {
-        p.id: DeepAgentPlayer(
-            id=p.id,
-            display_name=p.display_name,
-            game_id=config.game_id,
-            llm=llm,
-            persona=p.persona,
-            model_call_limit=config.model_call_limit,
-            on_step=on_step,
+    players.update(
+        (
+            p.id,
+            DeepAgentPlayer(
+                id=p.id,
+                display_name=p.display_name,
+                game_id=config.game_id,
+                llm=llm,
+                persona=p.persona,
+                model_call_limit=config.model_call_limit,
+                on_step=on_step,
+            ),
         )
         for p in config.players
-    }
+        if p.id not in players
+    )
+    return players
 
 
 def _role_names(value: object) -> object:
@@ -153,7 +169,14 @@ async def run_game(
 ) -> dict:
     kind = "scripted" if args.kind == "random" else "deep"
     config = make_config(
-        game_id, seed, args.players, args.max_rounds, kind, load_personas(args.personas), llm_timeout_sec=args.timeout
+        game_id,
+        seed,
+        args.players,
+        args.max_rounds,
+        kind,
+        load_personas(args.personas),
+        liar_seer=args.liar_seer,
+        llm_timeout_sec=args.timeout,
     )
     recorder = Recorder(run_dir, on_event)
     ctx = GameContext(players=make_players(config, recorder, args), recorder=recorder, rng=random.Random(seed))
@@ -248,6 +271,7 @@ def add_game_options(p: argparse.ArgumentParser) -> None:
     p.add_argument("--top-p", type=float, default=None, help="未指定ならモデルの既定(Nemotron のツール呼び出し推奨は 0.95)")
     p.add_argument("--timeout", type=float, default=60.0, help="1 判断の制限時間(秒)")
     p.add_argument("--personas", default=None, help="ペルソナ YAML のディレクトリ(例: configs/personas)")
+    p.add_argument("--liar-seer", default=None, help="この席を人狼にし、嘘の占い師 CO を出す scripted プレイヤーにする(023)")
 
 
 def main() -> None:

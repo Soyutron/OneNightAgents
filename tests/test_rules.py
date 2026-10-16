@@ -197,3 +197,16 @@ def test_fallbacks_are_deterministic() -> None:
     b = rules.fallback_vote("p1", P5, random.Random(3))
     assert a == b
     assert a in P5 and a != "p1"
+
+
+def test_assign_roles_forces_werewolf_seat() -> None:
+    ids = ["p1", "p2", "p3", "p4", "p5"]
+    for seed in range(30):
+        roles, center = rules.assign_roles(ids, random.Random(seed), werewolf="p2")
+        assert roles["p2"] is Role.WEREWOLF
+        assert sorted([*roles.values(), *center]) == sorted(rules.role_deck(5))
+    # 人狼が 2 枚とも中央の seed でも、中央から引き上げる
+    plain = [s for s in range(200) if Role.WEREWOLF not in rules.assign_roles(ids, random.Random(s))[0].values()]
+    assert plain
+    roles, center = rules.assign_roles(ids, random.Random(plain[0]), werewolf="p2")
+    assert roles["p2"] is Role.WEREWOLF and center.count(Role.WEREWOLF) == 1
