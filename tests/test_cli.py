@@ -8,7 +8,7 @@ from onenightagents.cli import bench, load_personas, make_config, replay
 from onenightagents.players.prompts import build_system_prompt
 
 
-def bench_args(run_dir: Path, games: int = 2) -> argparse.Namespace:
+def bench_args(run_dir: Path, games: int = 2, warmup_seed: int | None = None) -> argparse.Namespace:
     return argparse.Namespace(
         players=4,
         seed=1,
@@ -24,6 +24,7 @@ def bench_args(run_dir: Path, games: int = 2) -> argparse.Namespace:
         personas=None,
         games=games,
         name="b",
+        warmup_seed=warmup_seed,
     )
 
 
@@ -41,6 +42,13 @@ async def test_bench_runs_games_and_summarizes(tmp_path: Path, capsys) -> None:
     report = format_report(games)
     assert "| 1 |" in report and "ゲーム数 2" in report
     assert "seed=1 winner=" in capsys.readouterr().out
+
+
+async def test_bench_warmup_game_is_excluded_from_summary(tmp_path: Path, capsys) -> None:
+    await bench(bench_args(tmp_path, games=1, warmup_seed=7))
+    assert [d.name for d in find_game_dirs([tmp_path / "b"])] == ["seed1"]
+    assert (tmp_path / "b-warmup" / "seed7" / "events.jsonl").exists()
+    assert "ゲーム数 1" in capsys.readouterr().out
 
 
 def test_load_personas_renders_in_file_order() -> None:

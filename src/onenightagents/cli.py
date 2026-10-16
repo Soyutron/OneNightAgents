@@ -178,6 +178,10 @@ async def bench(args: argparse.Namespace) -> None:
     """seed を変えて連続実行し、最後に集計を出す。"""
     bench_id = args.name or f"{datetime.now():%Y%m%d-%H%M%S}-bench"
     bench_dir = Path(args.run_dir) / bench_id
+    if args.warmup_seed is not None:
+        # 出力はモデル読み込み後の履歴に依存する(013)ので、履歴違いの複製を作るための前置き。集計には含めない
+        w = args.warmup_seed
+        await run_game(f"{bench_id}-warmup/seed{w}", w, bench_dir.with_name(f"{bench_id}-warmup") / f"seed{w}", args, None)
     for seed in range(args.seed, args.seed + args.games):
         game_id = f"{bench_id}/seed{seed}"
         t0 = time.perf_counter()
@@ -256,6 +260,7 @@ def main() -> None:
     add_game_options(b)
     b.add_argument("--games", type=int, default=5)
     b.add_argument("--name", default=None, help="runs/ 配下のディレクトリ名")
+    b.add_argument("--warmup-seed", type=int, default=None, help="集計に含めない前置きゲームの seed(履歴違いの複製用)")
     z = sub.add_parser("summarize", help="runs/ のログを集計する")
     z.add_argument("paths", nargs="+")
     r = sub.add_parser("replay", help="終了したゲームを役職付きで表示する")
