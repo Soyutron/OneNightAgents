@@ -122,6 +122,8 @@ def _request_text(state: GameState, pid: str, request: Request) -> str:
     if isinstance(request, VoteRequest):
         return (
             "議論は終了しました。/notes.md を更新したうえで、処刑したい相手を vote で 1 人選んでください。"
+            "対抗のない占い師 CO は、占い結果に矛盾がない限り最も信頼できる情報です。"
+            "占われた本人の否定や言い方の強さは、占い師を疑う根拠になりません。"
             f"候補: {', '.join(request.candidates)}"
         )
     raise TypeError(f"unknown request: {type(request)}")
