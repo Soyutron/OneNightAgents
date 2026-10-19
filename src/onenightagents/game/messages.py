@@ -67,6 +67,10 @@ def _dawn(state: GameState, pid: str) -> str:
             lines.append(f"仲間の人狼: {', '.join(partners)}。")
         else:
             lines.append("あなたは一匹狼です(もう 1 枚の人狼カードは中央にあります)。")
+        # 027: 嘘の占い結果を議論中に即興で作ると、自分を占う・結果を言わない・結果が 2 つになる。先に決めさせる
+        lines.append(
+            "占い師を騙る場合に備えて、誰を占って結果が何だったと言うか(占い結果は 1 人分だけ)を今決めて、メモに残しておいてください。"
+        )
     elif role is Role.THIEF:
         if night.thief_target is None:
             lines.append("交換しませんでした。あなたの役職は怪盗のままです。")
