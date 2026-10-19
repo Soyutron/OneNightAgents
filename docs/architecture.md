@@ -327,7 +327,7 @@ sequenceDiagram
 - エンジンは `asyncio`。LangGraph のノードは `async def`、プレイヤー呼び出しは `await`。
 - **初期版は逐次実行。** Ollama の既定は `OLLAMA_NUM_PARALLEL=1`（[FAQ](https://docs.ollama.com/faq)）。並列に投げても待ち行列に入るだけで、トレースとログの順序が読みにくくなる。
 - 独立した判断（夜・投票・メモ更新）は、`OLLAMA_NUM_PARALLEL` を上げて `asyncio.gather` で並列化する実験を第 2 段階で行う。並列度は LLM 層の `asyncio.Semaphore` で制御する。
-- 人間プレイヤーは LangGraph の `interrupt()`（第 3 段階）。
+- 人間プレイヤーは `Player` を実装した `HumanPlayer`（端末入力。[implementation-plan.md](implementation-plan.md) Step 8）。GM が逐次 `await` するので入力待ちは Player の中で足りる。LangGraph の `interrupt()` は、Web UI で中断・再開が必要になったときの選択肢。
 
 ---
 
