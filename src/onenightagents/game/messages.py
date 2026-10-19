@@ -117,7 +117,11 @@ def _request_text(state: GameState, pid: str, request: Request) -> str:
         lines = [f"【{label}】"]
         if turn.reply_to_turn is not None:
             asker = state["utterances"][turn.reply_to_turn].speaker
-            lines.append(f"あなたは {asker} からの発言 #{turn.reply_to_turn} で問われています。")
+            lines.append(
+                f"あなたは {asker} からの発言 #{turn.reply_to_turn} で問われています。"
+                "問いに対するあなたの判断(誰を疑うか、どの主張を信じるか)を 1 つ含めて答えてください。"
+                "「判断が難しい」「様子を見たい」だけの返答や、相手の発言の言い換えは避けてください。"
+            )
         if turn.pass_allowed:
             lines.append("あなたの発言ターンです。speak で発言するか、pass_turn でパスしてください。")
         else:
