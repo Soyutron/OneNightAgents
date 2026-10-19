@@ -355,8 +355,9 @@ sequenceDiagram
 - 有効化: `LANGSMITH_TRACING=true`、`LANGSMITH_API_KEY`、`LANGSMITH_PROJECT=onenightagents`（[Observability](https://docs.langchain.com/oss/python/langchain/observability)）。`.env` に置き、`bench` で無効化できるようにする。
 - **トレースの単位**: ゲーム 1 回 = GM グラフの 1 実行 = 1 トレース。その下に `discussion_turn` などのノード、さらに各プレイヤーのエージェント実行（`create_deep_agent` のグラフ）、モデル呼び出し、ツール呼び出し、要約が階層で並ぶ。
 - **メタデータとタグ**（[Trace LangChain applications](https://docs.langchain.com/langsmith/trace-with-langchain)）: `RunnableConfig` の `metadata` / `tags` は子 run に継承される。
-  - ゲーム実行時: `metadata={"game_id", "seed", "config_name"}`, `tags=["onenightagents", config_name]`
-  - プレイヤーの `ainvoke` 時: `metadata={"player_id", "display_name", "initial_role", "phase", "round", "turn", "purpose"}`, `run_name=f"{player_id}:{purpose}"`
+  - ゲーム実行時（root run）: `metadata={"game_id", "seed", "bench", "model", "kind", "personas", "liar_seer", "reasoning", "num_predict", "temperature"}`, `tags=["onenightagents"]`。`bench` は bench 名で、実験の条件名を兼ねる（`play` では `None`）。
+  - プレイヤーの `ainvoke` 時: プレイヤー自身が `metadata={"player_id", "display_name", "purpose"}`, `run_name=f"{player_id}:{purpose}"` を付け、GM が `langsmith.tracing_context(metadata=...)` で `initial_role` と、発言なら `round` / `turn` を重ねる（`engine/graph.py`）。プレイヤーは自分の役職を知らなくてよい。
+  - ゲーム終了後: root run に feedback `village_won`（bool）、`wolf_votes`（村側の票のうち人狼に向いた数）、`true_seer_executed`（bool）を付ける（`cli.run_game`）。`summarize` の指標と同じ定義で、弱点のゲームだけをトレースで開く入口にする。root run の id は `RunnableConfig` の `run_id` で先に決める。
   - Deep Agents はエージェント名を `lc_agent_name` メタデータに付ける（[Subagents: LangSmith tracing](https://docs.langchain.com/oss/python/deepagents/subagents#langsmith-tracing)）。`create_deep_agent(name=...)` にプレイヤー名を入れて絞り込みに使う。
 - **モデル名**: `ChatOllama(metadata={"ls_provider": "ollama", "ls_model_name": "<model>"})` で、トレース上のモデル名を明示する（[Metadata parameters](https://docs.langchain.com/langsmith/ls-metadata-parameters)）。
 - **見るもの**: モデル呼び出しの入力（system + 履歴 + 差分）と出力、ツール呼び出しの引数と返り値、1 判断のステップ数、各 run の latency と token usage、要約が走ったときの前後の履歴、再試行。

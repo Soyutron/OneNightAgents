@@ -68,6 +68,16 @@ def classify_info(
     return "なし"
 
 
+def village_vote_counts(votes: list[dict[str, Any]], final_roles: dict[str, str]) -> dict[str, int]:
+    """村側(終了時に人狼でない)の票の数と行き先(人狼 / 真占い師)。勝敗より標本が多い直接指標(013 / 018)。"""
+    village = [v for v in votes if final_roles[v["voter"]] != "werewolf"]
+    return {
+        "village_votes": len(village),
+        "wolf_votes": sum(final_roles[v["target"]] == "werewolf" for v in village),
+        "seer_votes": sum(final_roles[v["target"]] == "seer" for v in village),
+    }
+
+
 def summarize_game(run_dir: Path) -> dict[str, Any]:
     events = [json.loads(line) for line in (run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()]
     t0 = datetime.fromisoformat(events[0]["time"])
@@ -92,9 +102,6 @@ def summarize_game(run_dir: Path) -> dict[str, Any]:
             repeats += 1
         seen.append(u["content"])
 
-    # 村側(終了時に人狼でない)の票がどこへ行ったか。5 ゲームの勝敗より標本が多い直接指標(013 / 018)
-    village_votes = [v for v in ended["votes"] if final_roles[v["voter"]] != "werewolf"]
-
     return {
         "run_dir": str(run_dir),
         "seed": events[0]["data"]["config"]["seed"],
@@ -108,9 +115,7 @@ def summarize_game(run_dir: Path) -> dict[str, Any]:
             events[0]["data"]["config"].get("liar_seer"),
             {u["speaker"] for u in claims if u["claimed_role"] == "seer"},
         ),
-        "village_votes": len(village_votes),
-        "wolf_votes": sum(final_roles[v["target"]] == "werewolf" for v in village_votes),
-        "seer_votes": sum(final_roles[v["target"]] == "seer" for v in village_votes),
+        **village_vote_counts(ended["votes"], final_roles),
         "seconds": (t1 - t0).total_seconds(),
         "utterances": len([u for u in utterances if not u["is_pass"]]),
         "passes": len([u for u in utterances if u["is_pass"]]),

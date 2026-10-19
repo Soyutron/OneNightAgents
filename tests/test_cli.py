@@ -12,7 +12,8 @@ from onenightagents.analysis.summarize import (
     summarize_game,
     summarize_games,
 )
-from onenightagents.cli import bench, load_personas, make_config, replay
+from onenightagents.cli import bench, game_feedback, load_personas, make_config, replay
+from onenightagents.game.models import GameResult, Role, Vote
 from onenightagents.players.prompts import build_system_prompt
 
 
@@ -126,3 +127,14 @@ def test_classify_info_liar_seer() -> None:
     assert classify_info(roles, night, roles, "p1", {"p1"}) == "嘘CO"
     assert classify_info(roles, night, roles, "p1", {"p1", "p3"}) == "嘘CO対抗"
     assert classify_info(roles, night, roles, "p1", set()) == "嘘CO"
+
+
+def test_game_feedback() -> None:
+    final_roles = {"p1": Role.WEREWOLF, "p2": Role.SEER, "p3": Role.VILLAGER, "p4": Role.THIEF}
+    votes = [Vote(voter="p1", target="p2"), Vote(voter="p2", target="p1"), Vote(voter="p3", target="p2"), Vote(voter="p4", target="p1")]
+    result = GameResult(executed=["p1", "p2"], winner="village", final_roles=final_roles, center=[Role.VILLAGER, Role.WEREWOLF])
+    assert game_feedback({"result": result, "votes": votes}) == {
+        "village_won": True,
+        "wolf_votes": 2,  # 人狼 p1 の票は数えない
+        "true_seer_executed": True,
+    }

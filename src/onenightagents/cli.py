@@ -10,15 +10,18 @@ import time
 from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
+from uuid import uuid4
 
 import yaml
+from langsmith import Client
+from langsmith.utils import get_tracer_project, tracing_is_enabled
 
-from onenightagents.analysis.summarize import find_game_dirs, format_report, summarize_game
+from onenightagents.analysis.summarize import find_game_dirs, format_report, summarize_game, village_vote_counts
 from onenightagents.engine.context import GameContext
 from onenightagents.engine.graph import build_graph
 from onenightagents.engine.recorder import Event, Recorder
 from onenightagents.game.messages import ROLE_NAMES
-from onenightagents.game.models import GameConfig, PlayerConfig
+from onenightagents.game.models import GameConfig, PlayerConfig, Role
 from onenightagents.llm.ollama import make_llm
 from onenightagents.players.base import Player
 from onenightagents.players.deep import DeepAgentPlayer
@@ -165,7 +168,12 @@ def print_event(ev: Event, reveal: bool) -> None:
 
 
 async def run_game(
-    game_id: str, seed: int, run_dir: Path, args: argparse.Namespace, on_event: Callable[[Event], None] | None
+    game_id: str,
+    seed: int,
+    run_dir: Path,
+    args: argparse.Namespace,
+    on_event: Callable[[Event], None] | None,
+    bench: str | None = None,
 ) -> dict:
     kind = "scripted" if args.kind == "random" else "deep"
     config = make_config(
@@ -180,14 +188,45 @@ async def run_game(
     )
     recorder = Recorder(run_dir, on_event)
     ctx = GameContext(players=make_players(config, recorder, args), recorder=recorder, rng=random.Random(seed))
-    # LangSmith でゲーム単位に絞り込むためのメタデータ(docs/architecture.md 10.1)
+    # LangSmith でゲーム単位・条件別に絞り込むためのメタデータ。bench 名が実験の条件名を兼ねる(docs/architecture.md 10.1)
+    run_id = uuid4()
     run_config = {
         "recursion_limit": RECURSION_LIMIT,
+        "run_id": run_id,
         "run_name": game_id,
-        "metadata": {"game_id": game_id, "seed": seed, "model": args.model, "kind": kind},
+        "metadata": {
+            "game_id": game_id,
+            "seed": seed,
+            "bench": bench,
+            "model": args.model,
+            "kind": kind,
+            "personas": args.personas,
+            "liar_seer": args.liar_seer,
+            "reasoning": args.reasoning,
+            "num_predict": args.num_predict,
+            "temperature": args.temperature,
+        },
         "tags": ["onenightagents"],
     }
-    return await build_graph().ainvoke({"config": config}, config=run_config, context=ctx)
+    final = await build_graph().ainvoke({"config": config}, config=run_config, context=ctx)
+    if tracing_is_enabled():
+        client = Client()
+        # run 単位の feedback はプロジェクト ID が必須(省略は非推奨)
+        project_id = client.read_project(project_name=get_tracer_project()).id
+        for key, score in game_feedback(final).items():
+            client.create_feedback(run_id, key, score=score, session_id=project_id)
+    return final
+
+
+def game_feedback(final: dict) -> dict[str, bool | int]:
+    """root run に付ける結果の feedback。summarize で見つけた弱点のゲームをトレースから開く入口にする。"""
+    result = final["result"]
+    counts = village_vote_counts([v.model_dump() for v in final["votes"]], result.final_roles)
+    return {
+        "village_won": result.winner == "village",
+        "wolf_votes": counts["wolf_votes"],
+        "true_seer_executed": any(result.final_roles[p] == Role.SEER for p in result.executed),
+    }
 
 
 async def play(args: argparse.Namespace) -> None:
@@ -204,11 +243,12 @@ async def bench(args: argparse.Namespace) -> None:
     if args.warmup_seed is not None:
         # 出力はモデル読み込み後の履歴に依存する(013)ので、履歴違いの複製を作るための前置き。集計には含めない
         w = args.warmup_seed
-        await run_game(f"{bench_id}-warmup/seed{w}", w, bench_dir.with_name(f"{bench_id}-warmup") / f"seed{w}", args, None)
+        warmup_id = f"{bench_id}-warmup"
+        await run_game(f"{warmup_id}/seed{w}", w, bench_dir.with_name(warmup_id) / f"seed{w}", args, None, warmup_id)
     for seed in range(args.seed, args.seed + args.games):
         game_id = f"{bench_id}/seed{seed}"
         t0 = time.perf_counter()
-        final = await run_game(game_id, seed, bench_dir / f"seed{seed}", args, None)
+        final = await run_game(game_id, seed, bench_dir / f"seed{seed}", args, None, bench_id)
         r = final["result"]
         print(f"seed={seed} winner={r.winner} executed={r.executed} {time.perf_counter() - t0:.0f}s", flush=True)
     print()

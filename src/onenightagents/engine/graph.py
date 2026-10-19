@@ -13,6 +13,7 @@ from typing import Literal, TypeVar
 from langchain_core.messages import HumanMessage
 from langgraph.graph import END, START, StateGraph
 from langgraph.runtime import Runtime
+from langsmith import tracing_context
 
 from onenightagents.engine.context import GameContext
 from onenightagents.game import rules, scheduler
@@ -47,6 +48,14 @@ def _delivered(state: GameState, pid: str, upto: int) -> dict[str, int]:
     return {**state.get("delivered_upto", {}), pid: upto}
 
 
+def _trace_metadata(state: GameState, pid: str, request: Request | None = None) -> dict:
+    """プレイヤーの run に継承させるメタデータ。LangSmith で「占い師の投票だけ」のように絞る(docs/architecture.md 10.1)。"""
+    meta: dict = {"initial_role": state["initial_roles"][pid].value}
+    if isinstance(request, SpeakRequest):
+        meta |= {"round": request.turn.round, "turn": len(state["utterances"])}
+    return meta
+
+
 async def _request_action(
     state: GameState,
     runtime: Runtime[GameContext],
@@ -61,20 +70,21 @@ async def _request_action(
     timeout = state["config"].llm_timeout_sec
     text = build_message(state, pid, request)
     error: str | None = None
-    for attempt in range(2):
-        if attempt == 1:
-            text = f"前回の行動は無効でした: {error}。もう一度、正しい行動を提出してください。"
-        try:
-            action = await asyncio.wait_for(call([HumanMessage(text)]), timeout)
-        except TimeoutError:
-            error = "制限時間内に行動が提出されませんでした"
-            continue
-        except ActionNotSubmitted:
-            error = "ツールで行動が提出されませんでした。必ず対応するツールを呼んで提出してください"
-            continue
-        error = validate(action)
-        if error is None:
-            return action, False
+    with tracing_context(metadata=_trace_metadata(state, pid, request)):
+        for attempt in range(2):
+            if attempt == 1:
+                text = f"前回の行動は無効でした: {error}。もう一度、正しい行動を提出してください。"
+            try:
+                action = await asyncio.wait_for(call([HumanMessage(text)]), timeout)
+            except TimeoutError:
+                error = "制限時間内に行動が提出されませんでした"
+                continue
+            except ActionNotSubmitted:
+                error = "ツールで行動が提出されませんでした。必ず対応するツールを呼んで提出してください"
+                continue
+            error = validate(action)
+            if error is None:
+                return action, False
     ctx.recorder.emit("turn_skipped", "public", player=pid, reason=error)
     return fallback(), True
 
@@ -162,10 +172,11 @@ async def dawn(state: GameState, runtime: Runtime[GameContext]) -> dict:
     delivered = dict(state["delivered_upto"])
     for pid in state["config"].player_ids:
         text = build_message(state, pid, NotesRequest())
-        try:
-            notes = await asyncio.wait_for(ctx.players[pid].update_notes([HumanMessage(text)]), timeout)
-        except TimeoutError:
-            notes = None
+        with tracing_context(metadata=_trace_metadata(state, pid)):
+            try:
+                notes = await asyncio.wait_for(ctx.players[pid].update_notes([HumanMessage(text)]), timeout)
+            except TimeoutError:
+                notes = None
         if notes is not None:
             ctx.recorder.emit("notes_updated", "secret", player=pid, notes=notes)
         delivered[pid] = 0

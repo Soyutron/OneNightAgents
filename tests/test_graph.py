@@ -5,6 +5,7 @@ import random
 from pathlib import Path
 
 import pytest
+from langsmith import get_tracing_context
 
 from onenightagents.cli import RECURSION_LIMIT, make_config
 from onenightagents.engine.context import GameContext
@@ -128,3 +129,45 @@ async def test_liar_seer_claims_seer_and_votes_target(tmp_path: Path) -> None:
         assert mine[0].round == 0 and mine[0].claimed_role is rules.Role.SEER and liar.target in mine[0].content
         assert all(u.claimed_role is rules.Role.SEER and not u.is_pass for u in mine)
         assert next(v for v in final["votes"] if v.voter == "p3").target == liar.target
+
+
+class RecordingPlayer(RandomPlayer):
+    """呼び出し中の tracing context のメタデータを目的別に記録する。"""
+
+    seen: dict[str, list[dict]] = {}
+
+    def _record(self, purpose: str) -> None:
+        self.seen.setdefault(purpose, []).append(get_tracing_context()["metadata"] or {})
+
+    async def act_at_night(self, messages, request: NightRequest) -> NightAction:
+        self._record("night")
+        return await super().act_at_night(messages, request)
+
+    async def speak(self, messages, request: SpeakRequest) -> SpeechAction:
+        self._record("speak")
+        return await super().speak(messages, request)
+
+    async def vote(self, messages, request: VoteRequest) -> VoteAction:
+        self._record("vote")
+        return await super().vote(messages, request)
+
+    async def update_notes(self, messages) -> str | None:
+        self._record("notes")
+        return None
+
+
+@pytest.mark.asyncio
+async def test_player_calls_carry_trace_metadata(tmp_path: Path) -> None:
+    """GM がプレイヤーの判断に付けるメタデータ(docs/architecture.md 10.1)が、呼び出し中の tracing context に入る。"""
+    RecordingPlayer.seen = {}
+    players = {f"p{i}": RecordingPlayer(f"p{i}", random.Random(i)) for i in range(1, 6)}
+    final = await run_game(tmp_path / "a", seed=1, players=players)
+    seen = RecordingPlayer.seen
+    roles = {pid: r.value for pid, r in final["initial_roles"].items()}
+    assert set(seen) == {"night", "notes", "speak", "vote"}
+    assert {m["initial_role"] for ms in seen.values() for m in ms} <= set(roles.values())
+    assert len(seen["notes"]) == 5 and len(seen["vote"]) == 5
+    assert [m["turn"] for m in seen["speak"]] == list(range(len(final["utterances"])))
+    assert [m["round"] for m in seen["speak"]] == [u.round for u in final["utterances"]]
+    assert all("turn" not in m and "round" not in m for m in seen["vote"] + seen["notes"] + seen["night"])
+    assert {m["initial_role"] for m in seen["night"]} == {"seer", "thief"} & set(roles.values())
