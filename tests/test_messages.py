@@ -59,8 +59,8 @@ def make_state(seer_target: str = "p3") -> GameState:
 def all_requests(pid: str):
     others = [i for i in IDS if i != pid]
     return [
-        NightRequest(role=Role.SEER, candidates=[*others, CENTER]),
-        NightRequest(role=Role.THIEF, candidates=others),
+        NightRequest(role=Role.SEER, candidates=[*others, CENTER], hint=CENTER),
+        NightRequest(role=Role.THIEF, candidates=others, hint=others[0]),
         NotesRequest(),
         SpeakRequest(turn=Turn(speaker=pid, round=1, pass_allowed=True), others=others),
         SpeakRequest(turn=Turn(speaker=pid, round=0, pass_allowed=False, reply_to_turn=1, chain=1), others=others),
@@ -114,7 +114,7 @@ def test_werewolf_and_thief_dawn_messages() -> None:
 
 def test_intro_only_in_first_message() -> None:
     state = make_state()
-    assert "ワンナイト人狼を始めます" in build_message(state, "p1", NightRequest(role=Role.SEER, candidates=[CENTER]))
+    assert "ワンナイト人狼を始めます" in build_message(state, "p1", NightRequest(role=Role.SEER, candidates=[CENTER], hint=CENTER))
     assert "ワンナイト人狼を始めます" not in build_message(state, "p1", NotesRequest())
     assert "ワンナイト人狼を始めます" in build_message(state, "p4", NotesRequest())
     assert "ワンナイト人狼を始めます" not in build_message(state, "p4", VoteRequest(candidates=["p1"]))

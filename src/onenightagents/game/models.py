@@ -132,6 +132,7 @@ class TurnCursor(BaseModel):
 class NightRequest(BaseModel):
     role: Role
     candidates: list[str]
+    hint: str  # GM が乱数で選んだ候補。夜は情報がなくモデルは最小の ID を選ぶ(025)ので、迷う場合の既定として示す
 
 
 class SpeakRequest(BaseModel):

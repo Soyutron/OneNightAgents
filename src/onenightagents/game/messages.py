@@ -99,10 +99,15 @@ def _request_text(state: GameState, pid: str, request: Request) -> str:
     if isinstance(request, NightRequest):
         if request.role is Role.SEER:
             candidates = ", ".join(f"{CENTER}(中央の 2 枚)" if c == CENTER else c for c in request.candidates)
-            return f"夜になりました。占う対象を seer_look で 1 つ選んでください。候補: {candidates}"
+            hint = f"{CENTER}(中央の 2 枚)" if request.hint == CENTER else request.hint
+            return (
+                f"夜になりました。占う対象を seer_look で 1 つ選んでください。候補: {candidates}。"
+                f"候補に優劣はありません。迷う場合は {hint} を選んでください"
+            )
         return (
             "夜になりました。カードを交換する相手を thief_swap で選んでください。"
-            f"交換しない場合は target を null にしてください。候補: {', '.join(request.candidates)}"
+            f"交換しない場合は target を null にしてください。候補: {', '.join(request.candidates)}。"
+            f"候補に優劣はありません。迷う場合は {request.hint} を選んでください"
         )
     if isinstance(request, NotesRequest):
         return "これから議論です。/notes.md に推理メモを書いてください。"

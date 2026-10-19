@@ -171,3 +171,32 @@ async def test_player_calls_carry_trace_metadata(tmp_path: Path) -> None:
     assert [m["round"] for m in seen["speak"]] == [u.round for u in final["utterances"]]
     assert all("turn" not in m and "round" not in m for m in seen["vote"] + seen["notes"] + seen["night"])
     assert {m["initial_role"] for m in seen["night"]} == {"seer", "thief"} & set(roles.values())
+
+
+class CandidateRecorder(RandomPlayer):
+    """夜の要求(候補と GM の提示)を記録する。"""
+
+    seen: dict[str, NightRequest] = {}
+
+    async def act_at_night(self, messages, request: NightRequest) -> NightAction:
+        self.seen[request.role.value] = request
+        return await super().act_at_night(messages, request)
+
+
+@pytest.mark.asyncio
+async def test_night_request_hint_is_a_candidate_chosen_by_seed(tmp_path: Path) -> None:
+    """夜の要求の hint は候補の 1 つで、seed で決まる(025)。"""
+    hints: list[dict[str, str]] = []
+    for seed in (1, 2, 3, 1):
+        CandidateRecorder.seen = {}
+        players = {f"p{i}": CandidateRecorder(f"p{i}", random.Random(i)) for i in range(1, 6)}
+        final = await run_game(tmp_path / f"s{seed}-{len(hints)}", seed=seed, players=players)
+        for role, req in CandidateRecorder.seen.items():
+            pid = next(p for p, r in final["initial_roles"].items() if r.value == role)
+            assert req.candidates == [p for p in final["config"].player_ids if p != pid] + (["center"] if role == "seer" else [])
+            assert req.hint in req.candidates
+        hints.append({role: req.hint for role, req in CandidateRecorder.seen.items()})
+    assert hints[0] == hints[3]
+    events = read_events(tmp_path / "s1-0")
+    night = [e["data"] for e in events if e["event"] == "night_action" and e["data"]["action"] != "werewolf_check"]
+    assert night and all(x["hint"] in x["candidates"] for x in night)

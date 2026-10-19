@@ -117,7 +117,8 @@ async def night_seer(state: GameState, runtime: Runtime[GameContext]) -> dict:
     if pid is None:
         return {}
     ids = state["config"].player_ids
-    request = NightRequest(role=Role.SEER, candidates=[*_others(state, pid), CENTER])
+    candidates = [*_others(state, pid), CENTER]
+    request = NightRequest(role=Role.SEER, candidates=candidates, hint=runtime.context.rng.choice(candidates))
     action, fallback = await _request_action(
         state,
         runtime,
@@ -129,7 +130,15 @@ async def night_seer(state: GameState, runtime: Runtime[GameContext]) -> dict:
     )
     result = rules.resolve_seer(action.target, state["current_roles"], state["center"])
     runtime.context.recorder.emit(
-        "night_action", "secret", actor=pid, action="seer_look", target=action.target, result=result, fallback=fallback
+        "night_action",
+        "secret",
+        actor=pid,
+        action="seer_look",
+        candidates=request.candidates,
+        hint=request.hint,
+        target=action.target,
+        result=result,
+        fallback=fallback,
     )
     night = state["night"].model_copy(update={"seer_target": action.target, "seer_result": result})
     return {"night": night, "delivered_upto": _delivered(state, pid, 0)}
@@ -148,7 +157,8 @@ async def night_thief(state: GameState, runtime: Runtime[GameContext]) -> dict:
     if pid is None:
         return {}
     ids = state["config"].player_ids
-    request = NightRequest(role=Role.THIEF, candidates=_others(state, pid))
+    candidates = _others(state, pid)
+    request = NightRequest(role=Role.THIEF, candidates=candidates, hint=runtime.context.rng.choice(candidates))
     action, fallback = await _request_action(
         state,
         runtime,
@@ -160,7 +170,15 @@ async def night_thief(state: GameState, runtime: Runtime[GameContext]) -> dict:
     )
     roles, new_role = rules.resolve_thief(pid, action.target, state["current_roles"])
     runtime.context.recorder.emit(
-        "night_action", "secret", actor=pid, action="thief_swap", target=action.target, result=new_role, fallback=fallback
+        "night_action",
+        "secret",
+        actor=pid,
+        action="thief_swap",
+        candidates=request.candidates,
+        hint=request.hint,
+        target=action.target,
+        result=new_role,
+        fallback=fallback,
     )
     night = state["night"].model_copy(update={"thief_target": action.target, "thief_new_role": new_role})
     return {"night": night, "current_roles": roles, "delivered_upto": _delivered(state, pid, 0)}
