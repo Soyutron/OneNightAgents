@@ -116,6 +116,28 @@ Step 3 のトレースを読み、以下を順に観察・改善する。各項�
 
 最初の実験は 1 とし、023 として「嘘の占い師 CO を出す scripted な人狼」を混ぜる。人間席の入力制御（タイムアウト、催促、投票への早送り）と終了後の種明かし表示は、第 3 段階の人間プレイヤーの実装項目に含める。
 
+### Step 7: LangSmith トレースの活用を決める（Step 6 と並行、1 件の実験ノート）
+
+トレースは Step 3 の設計どおり取れている（ゲーム 1 回 = 1 トレース、`game_id` / `seed` / `model` と判断ごとの `player_id` / `purpose`）が、観察サイクルで使ったのは 001・002・006 の 3 回だけで、007 以降の比較はすべて `runs/` の JSONL と `replay` / `summarize` で行っている。一方で `bench` は無条件に全量を送っている。「使われないのに送り続ける」状態を解消するため、トレースが観察サイクルに入るかを一度検証し、残すか外すかを決める。
+
+検証の前提として、トレースを比較に使えるだけのメタデータを付ける（設計は [architecture.md](architecture.md) 10.1）。
+
+| # | 追加 | 目的 |
+| --- | --- | --- |
+| 1 | ゲームの root run の `metadata` に `bench`（bench 名。実験の条件名を兼ねる）、`personas`、`liar_seer`、`reasoning` / `num_predict` / `temperature` | 実験ノートの A/B を LangSmith 側でも条件別に絞れるようにする |
+| 2 | プレイヤーの判断 run の `metadata` に `initial_role`、発言なら `round` / `turn`（`purpose` は既にある） | 「占い師の投票だけ」「最終ラウンドの発言だけ」の絞り込み |
+| 3 | ゲーム終了後に root run へ feedback（`village_won`、`wolf_votes`、`true_seer_executed`） | `summarize` で見つけた弱点のゲームだけをトレースで開く入口 |
+
+
+検証は Step 6 の 2（応答の質）と 4（人狼の嘘の筋）で行う。どちらも発言の表面ではなく思考の筋を読む項目で、JSONL には思考が残らない。その実験ノートで、原因の特定に「トレースを開いて分かったこと」が JSONL だけでは得られなかったかを記録する。
+
+| 判断 | 条件 | 対応 |
+| --- | --- | --- |
+| 残す | 2 本のノートのいずれかで、トレースでしか分からない原因が結論に入った | `bench` でも送り続ける。プロジェクト名は `play` と分ける |
+| 外す | 2 本とも JSONL と `replay` で足りた | `bench` では `LANGSMITH_TRACING` を切り、`play` の単発観察だけ送る。追加したメタデータと feedback は残す（単発観察には効く） |
+
+いずれの場合も、ローカル JSONL が集計の正本であることは変えない。トレースは原因調査の道具であり、集計には使わない（[local-deepagents.md](research/local-deepagents.md) 4.11 の分担）。
+
 ### 第 2 段階（MVP 後）
 
 - `SimpleLLMPlayer` を追加し、同一モデルで `DeepAgentPlayer` と比較（テンポ・勝率・騙り率）。ハーネスの効果を切り分ける。
