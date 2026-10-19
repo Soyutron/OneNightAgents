@@ -47,6 +47,7 @@ class GameConfig(BaseModel):
     max_free_rounds: int = 2
     reply_chain_limit: int = 2
     llm_timeout_sec: float = 60.0
+    human_timeout_sec: float = 300.0  # 人間の席の 1 判断の制限時間(Step 8)
     model_call_limit: int = 4
     # 023: この席に人狼カードを配り、嘘の占い師 CO を出す scripted プレイヤーが担当する
     liar_seer: str | None = None

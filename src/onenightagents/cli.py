@@ -25,6 +25,7 @@ from onenightagents.game.models import GameConfig, PlayerConfig, Role
 from onenightagents.llm.ollama import make_llm
 from onenightagents.players.base import Player
 from onenightagents.players.deep import DeepAgentPlayer
+from onenightagents.players.human import HumanPlayer
 from onenightagents.players.prompts import render_persona
 from onenightagents.players.scripted import LiarSeerPlayer, RandomPlayer
 
@@ -42,6 +43,7 @@ def make_config(
     kind: str = "scripted",
     personas: list[str] | None = None,
     liar_seer: str | None = None,
+    human: str | None = None,
     **overrides,
 ) -> GameConfig:
     # 席とペルソナの対応を固定すると同じ席が毎回標的になる(002)ので、seed で並べ替える
@@ -51,7 +53,7 @@ def make_config(
         PlayerConfig(
             id=f"p{i + 1}",
             display_name=DISPLAY_NAMES[i],
-            kind="scripted" if f"p{i + 1}" == liar_seer else kind,
+            kind="scripted" if f"p{i + 1}" == liar_seer else "human" if f"p{i + 1}" == human else kind,
             persona=order[i % len(order)] if personas else None,
         )
         for i in range(num_players)
@@ -73,6 +75,9 @@ def make_players(config: GameConfig, recorder: Recorder, args: argparse.Namespac
     players: dict[str, Player] = {}
     if config.liar_seer is not None:
         players[config.liar_seer] = LiarSeerPlayer(config.liar_seer, random.Random(config.seed))
+    for p in config.players:
+        if p.kind == "human":
+            players[p.id] = HumanPlayer(p.id, timeout_sec=config.human_timeout_sec)
     if args.kind == "random":
         players.update(
             (p.id, RandomPlayer(p.id, random.Random(config.seed * 100 + i)))
@@ -184,6 +189,7 @@ async def run_game(
         kind,
         load_personas(args.personas),
         liar_seer=args.liar_seer,
+        human=args.human,
         llm_timeout_sec=args.timeout,
     )
     recorder = Recorder(run_dir, on_event)
@@ -233,7 +239,19 @@ async def play(args: argparse.Namespace) -> None:
     game_id = f"{datetime.now():%Y%m%d-%H%M%S}-seed{args.seed}"
     run_dir = Path(args.run_dir) / game_id
     await run_game(game_id, args.seed, run_dir, args, lambda ev: print_event(ev, args.reveal))
+    if args.human:
+        reveal_game(run_dir)
     print(f"ログ: {run_dir}")
+
+
+def reveal_game(run_dir: Path) -> None:
+    """種明かし: 真の役職付きの発言と投票理由(replay)に、各 AI の最後の推理メモを添える。"""
+    print("\n===== 種明かし =====")
+    replay(argparse.Namespace(paths=[str(run_dir)]))
+    events = [json.loads(line) for line in (run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()]
+    notes = {e["data"]["player"]: e["data"]["notes"] for e in events if e["event"] == "notes_updated"}
+    for pid, text in notes.items():
+        print(f"\n--- {pid} の最後の推理メモ ---\n{text}")
 
 
 async def bench(args: argparse.Namespace) -> None:
@@ -320,11 +338,13 @@ def main() -> None:
     p = sub.add_parser("play", help="1 ゲームを実行して観戦する")
     add_game_options(p)
     p.add_argument("--reveal", action="store_true", help="秘密情報(配役・夜・投票・メモ)も表示する")
+    p.add_argument("--human", default=None, help="この席を人間が端末で担当する(例: p3)。終了後に種明かしを表示")
     b = sub.add_parser("bench", help="seed を変えて複数ゲームを実行し集計する")
     add_game_options(b)
     b.add_argument("--games", type=int, default=5)
     b.add_argument("--name", default=None, help="runs/ 配下のディレクトリ名")
     b.add_argument("--warmup-seed", type=int, default=None, help="集計に含めない前置きゲームの seed(履歴違いの複製用)")
+    b.set_defaults(human=None)
     z = sub.add_parser("summarize", help="runs/ のログを集計する")
     z.add_argument("paths", nargs="+")
     r = sub.add_parser("replay", help="終了したゲームを役職付きで表示する")

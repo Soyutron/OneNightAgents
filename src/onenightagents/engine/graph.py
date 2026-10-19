@@ -48,6 +48,10 @@ def _delivered(state: GameState, pid: str, upto: int) -> dict[str, int]:
     return {**state.get("delivered_upto", {}), pid: upto}
 
 
+def _is_human(state: GameState, pid: str) -> bool:
+    return next(p.kind for p in state["config"].players if p.id == pid) == "human"
+
+
 def _trace_metadata(state: GameState, pid: str, request: Request | None = None) -> dict:
     """プレイヤーの run に継承させるメタデータ。LangSmith で「占い師の投票だけ」のように絞る(docs/architecture.md 10.1)。"""
     meta: dict = {"initial_role": state["initial_roles"][pid].value}
@@ -67,8 +71,9 @@ async def _request_action(
 ) -> tuple[A, bool]:
     """プレイヤーに行動を求める。戻り値は (行動, フォールバックしたか)。"""
     ctx = runtime.context
-    timeout = state["config"].llm_timeout_sec
-    text = build_message(state, pid, request)
+    human = _is_human(state, pid)
+    timeout = state["config"].human_timeout_sec if human else state["config"].llm_timeout_sec
+    text = build_message(state, pid, request, human=human)
     error: str | None = None
     with tracing_context(metadata=_trace_metadata(state, pid, request)):
         for attempt in range(2):
@@ -189,7 +194,7 @@ async def dawn(state: GameState, runtime: Runtime[GameContext]) -> dict:
     timeout = state["config"].llm_timeout_sec
     delivered = dict(state["delivered_upto"])
     for pid in state["config"].player_ids:
-        text = build_message(state, pid, NotesRequest())
+        text = build_message(state, pid, NotesRequest(), human=_is_human(state, pid))
         with tracing_context(metadata=_trace_metadata(state, pid)):
             try:
                 notes = await asyncio.wait_for(ctx.players[pid].update_notes([HumanMessage(text)]), timeout)

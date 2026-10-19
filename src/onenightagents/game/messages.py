@@ -22,7 +22,8 @@ ROLE_NAMES = {Role.VILLAGER: "村人", Role.WEREWOLF: "人狼", Role.SEER: "占�
 Request = NightRequest | NotesRequest | SpeakRequest | VoteRequest
 
 
-def build_message(state: GameState, pid: str, request: Request) -> str:
+def build_message(state: GameState, pid: str, request: Request, human: bool = False) -> str:
+    """GM からの 1 通。human なら要求文をツール名なしの入力案内にする(見える情報は AI と同じ)。"""
     parts: list[str] = []
     if _is_first_message(state, pid, request):
         parts.append(_intro(state, pid))
@@ -31,7 +32,7 @@ def build_message(state: GameState, pid: str, request: Request) -> str:
     diff = _public_diff(state, pid)
     if diff:
         parts.append(diff)
-    parts.append(_request_text(state, pid, request))
+    parts.append((_request_text_human if human else _request_text)(state, pid, request))
     return "\n".join(parts)
 
 
@@ -137,6 +138,36 @@ def _request_text(state: GameState, pid: str, request: Request) -> str:
             "議論は終了しました。/notes.md を更新したうえで、処刑したい相手を vote で 1 人選んでください。"
             "対抗のない占い師 CO は、占い結果に矛盾がない限り最も信頼できる情報です。"
             "占われた本人の否定や言い方の強さは、占い師を疑う根拠になりません。"
+            f"候補: {', '.join(request.candidates)}"
+        )
+    raise TypeError(f"unknown request: {type(request)}")
+
+
+def _request_text_human(state: GameState, pid: str, request: Request) -> str:
+    if isinstance(request, NightRequest):
+        candidates = ", ".join(request.candidates)
+        if request.role is Role.SEER:
+            return f"夜になりました。占う相手を 1 つ入力してください(候補: {candidates}。{CENTER} は中央の 2 枚)。"
+        return f"夜になりました。カードを交換する相手を入力してください(候補: {candidates}。交換しないなら none)。"
+    if isinstance(request, NotesRequest):
+        return "これから議論です。"
+    if isinstance(request, SpeakRequest):
+        turn = request.turn
+        label = "オープニング" if turn.round == 0 else f"自由ラウンド {turn.round}"
+        lines = [f"【{label}】"]
+        if turn.reply_to_turn is not None:
+            asker = state["utterances"][turn.reply_to_turn].speaker
+            lines.append(f"あなたは {asker} からの発言 #{turn.reply_to_turn} で問われています。")
+        lines.append(
+            "あなたの発言ターンです。1 行で入力してください。"
+            + ("pass でパス。" if turn.pass_allowed else "(このターンはパスできません)")
+            + "先頭に @p2 で宛先、CO:占い師 で役職の主張。vote と入力すると以後の自由ラウンドを自動でパスします。"
+        )
+        lines.append(f"宛先に選べる相手: {', '.join(request.others)}")
+        return "\n".join(lines)
+    if isinstance(request, VoteRequest):
+        return (
+            "議論は終了しました。処刑したい相手の ID と、あれば理由を入力してください(例: p2 占い師 CO が矛盾している)。"
             f"候補: {', '.join(request.candidates)}"
         )
     raise TypeError(f"unknown request: {type(request)}")

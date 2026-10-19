@@ -34,6 +34,7 @@ def bench_args(
         timeout=60.0,
         personas=None,
         liar_seer=liar_seer,
+        human=None,
         games=games,
         name="b",
         warmup_seed=warmup_seed,
