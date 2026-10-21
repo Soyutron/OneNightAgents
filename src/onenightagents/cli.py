@@ -1,4 +1,4 @@
-"""CLI: play(1 ゲームを観戦)/ bench(複数 seed を連続実行)/ summarize(runs/ の集計)/ replay(役職付きの発言ログ)。"""
+"""CLI: play(1 ゲームを観戦)/ web(ブラウザで 1 席を遊ぶ)/ bench(複数 seed を連続実行)/ summarize(runs/ の集計)/ replay(役職付きの発言ログ)。"""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
+import uvicorn
 import yaml
 from langsmith import Client
 from langsmith.utils import get_tracer_project, tracing_is_enabled
@@ -28,6 +29,7 @@ from onenightagents.players.deep import DeepAgentPlayer
 from onenightagents.players.human import HumanPlayer
 from onenightagents.players.prompts import render_persona
 from onenightagents.players.scripted import LiarSeerPlayer, RandomPlayer
+from onenightagents.web import WebHumanPlayer, WebUI
 
 DISPLAY_NAMES = ["太郎", "花子", "次郎", "美咲", "健太", "さくら", "大輔"]
 
@@ -71,13 +73,15 @@ def load_personas(directory: str | None) -> list[str] | None:
     return [render_persona(yaml.safe_load(f.read_text(encoding="utf-8"))) for f in files] or None
 
 
-def make_players(config: GameConfig, recorder: Recorder, args: argparse.Namespace) -> dict[str, Player]:
+def make_players(
+    config: GameConfig, recorder: Recorder, args: argparse.Namespace, human_player: Player | None = None
+) -> dict[str, Player]:
     players: dict[str, Player] = {}
     if config.liar_seer is not None:
         players[config.liar_seer] = LiarSeerPlayer(config.liar_seer, random.Random(config.seed))
     for p in config.players:
         if p.kind == "human":
-            players[p.id] = HumanPlayer(p.id, timeout_sec=config.human_timeout_sec)
+            players[p.id] = human_player or HumanPlayer(p.id, timeout_sec=config.human_timeout_sec)
     if args.kind == "random":
         players.update(
             (p.id, RandomPlayer(p.id, random.Random(config.seed * 100 + i)))
@@ -179,6 +183,7 @@ async def run_game(
     args: argparse.Namespace,
     on_event: Callable[[Event], None] | None,
     bench: str | None = None,
+    human_player: Player | None = None,
 ) -> dict:
     kind = "scripted" if args.kind == "random" else "deep"
     config = make_config(
@@ -193,7 +198,7 @@ async def run_game(
         llm_timeout_sec=args.timeout,
     )
     recorder = Recorder(run_dir, on_event)
-    ctx = GameContext(players=make_players(config, recorder, args), recorder=recorder, rng=random.Random(seed))
+    ctx = GameContext(players=make_players(config, recorder, args, human_player), recorder=recorder, rng=random.Random(seed))
     # LangSmith でゲーム単位・条件別に絞り込むためのメタデータ。bench 名が実験の条件名を兼ねる(docs/architecture.md 10.1)
     run_id = uuid4()
     run_config = {
@@ -242,6 +247,27 @@ async def play(args: argparse.Namespace) -> None:
     if args.human:
         reveal_game(run_dir)
     print(f"ログ: {run_dir}")
+
+
+async def web(args: argparse.Namespace) -> None:
+    """ローカルの Web サーバを立て、ブラウザがつながったらゲームを始める。終了後も Ctrl-C まで種明かしを表示し続ける。"""
+    ui = WebUI(args.human)
+    server = uvicorn.Server(uvicorn.Config(ui.app, host="127.0.0.1", port=args.port, log_level="warning"))
+    serving = asyncio.create_task(server.serve())
+    print(f"ブラウザで http://127.0.0.1:{args.port} を開いてください(終了は Ctrl-C)")
+    await ui.connected.wait()
+    game_id = f"{datetime.now():%Y%m%d-%H%M%S}-seed{args.seed}"
+    run_dir = Path(args.run_dir) / game_id
+    human = WebHumanPlayer(args.human, ui)
+    game = asyncio.create_task(run_game(game_id, args.seed, run_dir, args, ui.on_event, human_player=human))
+    # ゲーム中の Ctrl-C ではサーバだけが止まるので、ゲームも打ち切る
+    await asyncio.wait({serving, game}, return_when=asyncio.FIRST_COMPLETED)
+    if not game.done():
+        game.cancel()
+        return
+    game.result()
+    print(f"ログ: {run_dir}")
+    await serving
 
 
 def reveal_game(run_dir: Path) -> None:
@@ -339,6 +365,10 @@ def main() -> None:
     add_game_options(p)
     p.add_argument("--reveal", action="store_true", help="秘密情報(配役・夜・投票・メモ)も表示する")
     p.add_argument("--human", default=None, help="この席を人間が端末で担当する(例: p3)。終了後に種明かしを表示")
+    w = sub.add_parser("web", help="ブラウザで 1 席を担当して遊ぶ")
+    add_game_options(w)
+    w.add_argument("--human", default="p3", help="人間が担当する席")
+    w.add_argument("--port", type=int, default=8000)
     b = sub.add_parser("bench", help="seed を変えて複数ゲームを実行し集計する")
     add_game_options(b)
     b.add_argument("--games", type=int, default=5)
@@ -352,6 +382,8 @@ def main() -> None:
     args = parser.parse_args()
     if args.command == "play":
         asyncio.run(play(args))
+    elif args.command == "web":
+        asyncio.run(web(args))
     elif args.command == "bench":
         asyncio.run(bench(args))
     elif args.command == "summarize":

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ワンナイト人狼</title>
+<style>
+  :root {
+    --bg: #f6f4ef; --panel: #ffffff; --ink: #24211c; --muted: #7a746a; --line: #e2ddd3;
+    --accent: #3d5a80; --accent-ink: #ffffff; --me: #e3ecf7; --gm: #fbf3dc; --gm-line: #ead9a6;
+    --wolf: #b23a3a; --village: #2f7d4f; --to-me: #fff0d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181d; --panel: #20232a; --ink: #e8e6e1; --muted: #9a958c; --line: #343842;
+      --accent: #7fa7d9; --accent-ink: #10131a; --me: #263447; --gm: #2d2a1f; --gm-line: #4d4530;
+      --wolf: #e07070; --village: #6cc495; --to-me: #3a3020;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 15px/1.7 system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    display: flex; flex-direction: column;
+  }
+  header { padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  header h1 { font-size: 16px; margin: 0 0 6px; }
+  #seats { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seat { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 13px; }
+  .seat.you { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .seat .role { margin-left: 4px; font-weight: 600; }
+  main { flex: 1; overflow-y: auto; padding: 16px; }
+  #log { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .gm { background: var(--gm); border: 1px solid var(--gm-line); border-radius: 8px; padding: 10px 14px; white-space: pre-wrap; }
+  .msg { max-width: 85%; }
+  .msg .who { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  .msg .body { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; white-space: pre-wrap; }
+  .msg.mine { align-self: flex-end; }
+  .msg.mine .body { background: var(--me); }
+  .msg.to-me .body { background: var(--to-me); }
+  .badge { display: inline-block; font-size: 11px; padding: 0 6px; border-radius: 4px; border: 1px solid currentColor; margin-left: 4px; }
+  .note { color: var(--muted); font-size: 13px; text-align: center; }
+  footer { border-top: 1px solid var(--line); background: var(--panel); padding: 12px 16px; }
+  #panel { max-width: 760px; margin: 0 auto; }
+  #panel .title { font-weight: 600; margin-bottom: 6px; }
+  #panel .sub { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  button {
+    font: inherit; border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    border-radius: 8px; padding: 6px 14px; cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.chosen { outline: 2px solid var(--accent); }
+  select, textarea, input {
+    font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 8px;
+  }
+  textarea { width: 100%; min-height: 64px; resize: vertical; }
+  input[type=text] { flex: 1; min-width: 200px; }
+  .thinking::after { content: ""; animation: dots 1.2s steps(4) infinite; }
+  @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  .reveal { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+  .reveal h2 { margin: 0 0 8px; font-size: 18px; }
+  .reveal table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 8px 0; }
+  .reveal th, .reveal td { border-bottom: 1px solid var(--line); padding: 4px 6px; text-align: left; vertical-align: top; }
+  .reveal details { margin-top: 6px; }
+  .reveal pre { white-space: pre-wrap; font: inherit; font-size: 13px; background: var(--bg); padding: 8px; border-radius: 6px; }
+  .wolf { color: var(--wolf); }
+  .village { color: var(--village); }
+  @media (max-width: 520px) { .msg { max-width: 100%; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>ワンナイト人狼</h1>
+  <div id="seats"></div>
+</header>
+<main><div id="log"></div></main>
+<footer><div id="panel"><div class="note">接続しています…</div></div></footer>
+<script>
+const ROLE = { villager: "村人", werewolf: "人狼", seer: "占い師", thief: "怪盗" };
+const log = document.getElementById("log");
+const panel = document.getElementById("panel");
+const seats = document.getElementById("seats");
+let players = {}, you = null, ended = false;
+const utterances = {};
+
+const name = (id) => id === "center" ? "中央の 2 枚" : players[id] ? `${id} ${players[id]}` : id;
+const roleSpan = (r) => `<span class="${r === "werewolf" ? "wolf" : "village"}">${ROLE[r]}</span>`;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function add(html, cls) {
+  const div = document.createElement("div");
+  div.className = cls;
+  div.innerHTML = html;
+  log.appendChild(div);
+  div.scrollIntoView({ block: "end" });
+  return div;
+}
+
+function idle() {
+  panel.innerHTML = ended
+    ? `<div class="note">ゲーム終了。もう一度遊ぶにはターミナルでコマンドを実行し直してください。</div>`
+    : `<div class="note thinking">ほかのプレイヤーが考えています</div>`;
+}
+
+const ws = new WebSocket(`ws://${location.host}/ws`);
+const submit = (line) => ws.send(JSON.stringify({ line }));
+ws.onclose = () => { panel.innerHTML = `<div class="note">サーバとの接続が切れました。</div>`; };
+ws.onmessage = (e) => {
+  const m = JSON.parse(e.data);
+  ({ start, gm, utterance, turn_skipped, request, done: idle, reveal })[m.type](m);
+};
+
+function start(m) {
+  you = m.you;
+  m.players.forEach((p) => { players[p.id] = p.name; });
+  seats.innerHTML = m.players
+    .map((p) => `<span class="seat${p.id === you ? " you" : ""}" data-id="${p.id}">${esc(name(p.id))}${p.id === you ? "(あなた)" : ""}</span>`)
+    .join("");
+  idle();
+}
+
+function gm(m) { if (m.text) add(esc(m.text), "gm"); }
+
+function utterance(u) {
+  utterances[u.turn] = u;
+  const mine = u.speaker === you;
+  if (u.is_pass) { add(`${esc(name(u.speaker))} はパスしました`, "note"); return; }
+  const label = u.round === 0 ? "オープニング" : `R${u.round}`;
+  const meta = [
+    u.addressed_to ? `→ ${esc(name(u.addressed_to))}` : "",
+    u.claimed_role ? `<span class="badge">CO ${ROLE[u.claimed_role]}</span>` : "",
+  ].join(" ");
+  const cls = "msg" + (mine ? " mine" : "") + (u.addressed_to === you ? " to-me" : "");
+  add(`<div class="who">#${u.turn} ${label} ${esc(name(u.speaker))} ${meta}</div><div class="body">${esc(u.content)}</div>`, cls);
+}
+
+function turn_skipped(m) { add(`${esc(name(m.player))}: ${esc(m.reason)}(自動で行動しました)`, "note"); }
+
+function request(r) {
+  if (r.kind === "night") return nightPanel(r);
+  if (r.kind === "speak") return speakPanel(r);
+  return votePanel(r);
+}
+
+function nightPanel(r) {
+  const verb = r.role === "seer" ? "占う相手を選んでください" : "カードを交換する相手を選んでください";
+  panel.innerHTML = `<div class="title">夜: ${verb}</div><div class="row" id="opts"></div>`;
+  const opts = panel.querySelector("#opts");
+  const choices = [...r.candidates, ...(r.role === "thief" ? ["none"] : [])];
+  choices.forEach((c) => {
+    const b = document.createElement("button");
+    b.textContent = c === "none" ? "交換しない" : name(c);
+    b.onclick = () => { submit(c); panel.innerHTML = `<div class="note">送信しました</div>`; };
+    opts.appendChild(b);
+  });
+}
+
+function speakPanel(r) {
+  const label = r.round === 0 ? "オープニング" : `自由ラウンド ${r.round}`;
+  let sub = "";
+  if (r.reply_to_turn !== null) {
+    const q = utterances[r.reply_to_turn];
+    sub = `<div class="sub">#${r.reply_to_turn} で ${esc(name(q ? q.speaker : "?"))} から問われています</div>`;
+  }
+  panel.innerHTML = `
+    <div class="title">あなたの発言ターン(${label})</div>${sub}
+    <textarea id="text" placeholder="発言を入力(Enter で送信、Shift+Enter で改行)"></textarea>
+    <div class="row">
+      <label>宛先 <select id="to"><option value="">全員</option>${r.others.map((o) => `<option value="${o}">${esc(name(o))}</option>`).join("")}</select></label>
+      <label>CO <select id="co"><option value="">しない</option>${Object.values(ROLE).map((n) => `<option>${n}</option>`).join("")}</select></label>
+      <button class="primary" id="send">発言する</button>
+      ${r.pass_allowed ? `<button id="pass">パス</button><button id="skip" title="以後の自由ラウンドを自動でパスします">投票まで飛ばす</button>` : `<span class="sub">このターンはパスできません</span>`}
+    </div>`;
+  const text = panel.querySelector("#text");
+  text.focus();
+  const send = () => {
+    const body = text.value.replace(/\s+/g, " ").trim();
+    if (!body) { text.focus(); return; }
+    const to = panel.querySelector("#to").value, co = panel.querySelector("#co").value;
+    submit([to && `@${to}`, co && `CO:${co}`, body].filter(Boolean).join(" "));
+  };
+  panel.querySelector("#send").onclick = send;
+  text.onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); } };
+  if (r.pass_allowed) {
+    panel.querySelector("#pass").onclick = () => submit("pass");
+    panel.querySelector("#skip").onclick = () => submit("vote");
+  }
+}
+
+function votePanel(r) {
+  panel.innerHTML = `
+    <div class="title">議論は終了しました。処刑したい相手を選んでください</div>
+    <div class="row" id="opts"></div>
+    <div class="row"><input type="text" id="reason" placeholder="理由(任意)"><button class="primary" id="send" disabled>投票する</button></div>`;
+  let target = null;
+  const opts = panel.querySelector("#opts"), sendBtn = panel.querySelector("#send");
+  r.candidates.forEach((c) => {
+    const b = document.createElement("button");
+    b.textContent = name(c);
+    b.onclick = () => {
+      target = c;
+      opts.querySelectorAll("button").forEach((x) => x.classList.toggle("chosen", x === b));
+      sendBtn.disabled = false;
+    };
+    opts.appendChild(b);
+  });
+  sendBtn.onclick = () => submit(`${target} ${panel.querySelector("#reason").value.replace(/\s+/g, " ").trim()}`.trim());
+}
+
+function reveal(d) {
+  ended = true;
+  const r = d.result, init = d.initial_roles, fin = r.final_roles, night = d.night;
+  const team = (role) => (role === "werewolf" ? "werewolf" : "village");
+  const verdict = r.winner === "none"
+    ? "人狼がいないのに処刑したので、全員の負けです"
+    : `${r.winner === "village" ? "村人" : "人狼"}陣営の勝ち — あなたの${team(fin[you]) === r.winner ? "勝ち" : "負け"}です`;
+  const votes = Object.fromEntries(d.votes.map((v) => [v.voter, v]));
+  const rows = Object.keys(fin).map((id) => {
+    const changed = init[id] !== fin[id] ? ` → ${roleSpan(fin[id])}` : "";
+    const v = votes[id];
+    return `<tr><td>${esc(name(id))}${id === you ? "(あなた)" : ""}</td><td>${roleSpan(init[id])}${changed}</td>
+      <td>${v ? esc(name(v.target)) : ""}</td><td>${v ? esc(v.reason) : ""}</td></tr>`;
+  }).join("");
+  const seer = Object.keys(init).find((id) => init[id] === "seer");
+  const thief = Object.keys(init).find((id) => init[id] === "thief");
+  const nightLines = [];
+  if (seer) {
+    const res = night.seer_result;
+    const seen = Array.isArray(res) ? res.map((x) => ROLE[x]).join("・") : res ? Object.values(res).map((x) => ROLE[x]).join("") : "なし";
+    nightLines.push(`占い師 ${esc(name(seer))} は ${esc(name(night.seer_target))} を占って「${seen}」`);
+  }
+  if (thief) {
+    nightLines.push(night.thief_target
+      ? `怪盗 ${esc(name(thief))} は ${esc(name(night.thief_target))} と交換して「${ROLE[night.thief_new_role]}」に`
+      : `怪盗 ${esc(name(thief))} は交換しなかった`);
+  }
+  const notes = Object.entries(d.notes)
+    .map(([id, text]) => `<details><summary>${esc(name(id))} の最後の推理メモ</summary><pre>${esc(text)}</pre></details>`)
+    .join("");
+  add(`<h2>${verdict}</h2>
+    <div>処刑: ${r.executed.length ? r.executed.map((x) => esc(name(x))).join("、") : "なし"}</div>
+    <table><tr><th>プレイヤー</th><th>役職</th><th>投票先</th><th>理由</th></tr>${rows}</table>
+    <div>中央: ${r.center.map(roleSpan).join("、")}</div>
+    <div>${nightLines.join("<br>")}</div>${notes}`, "reveal");
+  seats.querySelectorAll(".seat").forEach((s) => {
+    s.insertAdjacentHTML("beforeend", `<span class="role">${roleSpan(fin[s.dataset.id])}</span>`);
+  });
+  idle();
+}
+</script>
+</body>
+</html>
